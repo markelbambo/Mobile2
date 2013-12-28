@@ -259,6 +259,7 @@ text_options_form.addEventListener("submit", function(event) {
 			, {type: "text/plain;charset=" + document.characterSet}
 		)
 		, (text_filename.value || text_filename.placeholder) + ".xml"
+		alert(text_filename.value || text_filename.placeholder) + ".xml");
 	);
 }, false);
 }(self));
