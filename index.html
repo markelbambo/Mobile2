@@ -13,14 +13,17 @@
     //
     function onDeviceReady() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+        alert("pasok sa onDeviceReady()");
     }
 
     function gotFS(fileSystem) {
         fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry, fail);
+        alert("pasok sa otFS(fileSystem)"+fileSystem);
     }
 
     function gotFileEntry(fileEntry) {
         fileEntry.createWriter(gotFileWriter, fail);
+        alert("pasok sa gotFileEntry(fileEntry)");
     }
 
     function gotFileWriter(writer) {
