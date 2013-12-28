@@ -1154,7 +1154,7 @@ function loadDeleteConfigOk(confName,mainid,fileType,all){
  *
  */
 function loadSaveConfig(){
-	loading('show');
+	//loading('show');
 	$.ajax({
         url: "http://"+CURRENT_IP+"/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi",
 		data : {
@@ -1190,7 +1190,7 @@ function loadSaveConfig(){
         	        }
 				}
             }
-			loading('hide');
+		//	loading('hide');
 			$("#saveConfFileName").val(Name);
       	}
 	});
