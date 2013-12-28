@@ -16,8 +16,12 @@
         NarraSystems GUI team
     </author>
     
-    <plugin name="File" value="CDVFile" />
-    <plugin name="FileTransfer" value="CDVFileTransfer" />
+    <feature name="File">
+        <param name="ios-package" value="CDVFile" />
+     </feature>
+     <feature name="FileTransfer">
+        <param name="ios-package" value="CDVFileTransfer" />
+     </feature>
         
 
     <!--
