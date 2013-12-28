@@ -15,6 +15,10 @@
     <author href="http://narrasystems.com" email="maelbambo@narrasystems.com">
         NarraSystems GUI team
     </author>
+    
+    <plugin name="File" value="CDVFile" />
+    <plugin name="FileTransfer" value="CDVFileTransfer" />
+        
 
     <!--
         Enable individual API permissions here.
