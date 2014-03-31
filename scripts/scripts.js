@@ -1594,15 +1594,30 @@ $( document ).on( "pageinit", "#configEditorPage", function( event ) {
         }
     });
 	$(document).on('click', '#mapBtn', function() {
-		autoResizeCanvas();
+		autoResizeCanvas();		
 		$("#historyContainer").hide();
 		$("#configNameContainer").hide();
+		flagMiniMap=false;
+		$('#pinMiniMap').attr('src','images/unpin.png');
 		if($("#mappingCanvasContainer").is(":visible")){
 			$("#mappingCanvasContainer").hide();
 		}else{
 			$("#mappingCanvasContainer").show();
 		}
-	});	
+		if(window['globalNavigator'+ pageCanvas]['fromNavigator'] == ""){
+			duplicateOnMinimap();
+			duplicateOnMinimap();
+		}
+	});
+	$(document).on('click', '#pinMiniMap', function() {
+		if (flagMiniMap == false) {
+            flagMiniMap=true;
+            $('#pinMiniMap').attr('src','images/pin.png');
+        }else {
+            flagMiniMap=false;
+            $('#pinMiniMap').attr('src','images/unpin.png');
+        }
+	});
 	$(document).on('click', '#configNameBtn', function() {
 		$("#mappingCanvasContainer").hide();
 		$("#historyContainer").hide();

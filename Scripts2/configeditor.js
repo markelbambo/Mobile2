@@ -2452,6 +2452,7 @@ function drawImage(flag,newscale){
         var devices = getDevicesNodeJSON();
     }else{
         var devices = devicesArr;
+        window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
     }
     if(devices != null && devices != undefined){
         if(devices.length > 0){
@@ -2503,19 +2504,18 @@ function drawImage(flag,newscale){
                         y: newY
                     };
                }
-	});
-
+			});
             if (devices[i].UpdateFlag !="delete"){
             	group = drawOneImage(x2,y2,devices[i],group);
                 window['variable' + dynamicLayer[pageCanvas]].add(group);
                	initImages(group);
             }
-        }
-	initZoom("reload");
-        setTimeout(function(){
-		window['variable' + dynamicLayer[pageCanvas]].batchDraw();
-		window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);	
+            initZoom("reload");
+	setTimeout(function(){
+            window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
+			window['variable' + dynamicLayer[pageCanvas]].batchDraw();
 	},50);
+        }
     }else{
         $("#showTooltipInfo").hide();
     }
