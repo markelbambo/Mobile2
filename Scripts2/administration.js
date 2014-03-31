@@ -1739,7 +1739,6 @@ function checkInputAddVlan(){
 */
 function checkSingleMain(trclass, id){
 	globalSelectedAdminMain = [];
-	console.log("globalSelectedAdminMain:",globalSelectedAdminMain);
 	$("."+trclass).on("click",function(){
 		uncheckSelectedItem();
 		var val = $(this).attr(id);
@@ -1934,7 +1933,7 @@ function changeAdminPage(num){
  #  MODIFIED BY   : 
  #  REVISION DATE :
  #  REVISION #    : 
- #  DESCRIPTION   : Check all admin checkbox
+ #  DESCRIPTION   : Check all adminbleStatusAccRight checkbox
  #  PARAMETERS    : 
  #
  #######################################################################
@@ -2071,7 +2070,42 @@ function checkAllAdminTable(){
 		});
 	}
 }
-
+/*
+#######################################################################
+#
+#  FUNCTION NAME : checkAllPopUpAdminTable
+#  AUTHOR        : Krisfen G. Ducao
+#  DATE          : February 19, 2014
+#  MODIFIED BY   : 
+#  REVISION DATE :
+#  REVISION #    : 
+#  DESCRIPTION   : Check all admin checkbox
+#  PARAMETERS    : 
+#
+#######################################################################
+*/
+function checkAllPopUpAdminTable(id,tableclass,globalarray,valID){
+	var value = "";	
+	if(globalarray!=null){
+		window[globalarray].splice(0,window[globalarray].length)
+	}
+	if($('#'+id).is (':checked')){
+		$("."+tableclass).each(function(){
+			$('.'+tableclass).prop('checked',true);
+			if(globalarray!=null){
+				value = $(this).attr(valID)	
+				window[globalarray].push(value)
+			}
+	   });
+	}else{
+		$("."+tableclass).each(function(){
+			$('.'+tableclass).prop('checked',false);
+			if(globalarray!=null){
+				window[globalarray].splice(0,window[globalarray].length);
+			}
+		});
+   }
+}
 
 /*
  #######################################################################

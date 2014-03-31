@@ -52,7 +52,7 @@ function loadReserve(){
 					tableClass = "";
 				}
 //MOBILE
-				html += "<tr class='trReserved "+tableClass+"' devId='"+json.root[0].row[a].DeviceId+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"'>";
+				html += "<tr class='trReserved' devId='"+json.root[0].row[a].DeviceId+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"'>";
 				if(globalDeviceType != "Mobile"){
 					html += "<td><input type='checkbox' class='resres' iter='"+json.root[0].row[a].Recurrence+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"' did='"+json.root[0].row[a].DeviceId+"' did2='"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' id='ReservationReserve_"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' name='ReservationReserveSel' onclick='checkSingleRM(\"ReservationReserve\",this);'/></td>";
 				}
@@ -104,8 +104,8 @@ function loadReserve(){
 					html +="</ul></div></td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].UserDomainName+"</td>";
 					html += "<td>"+json.root[0].row[a].ReservedFrom+"</td>";
-					html += "<td><input style='border:none;text-align:center;' onkeypress='return checkNumberInputChar(event,this);' type='text' class='interval' value='"+json.root[0].row[a].TimeInterval+"'/></td>";
-    	            html += "<td><input style='border:none;text-align:center;' type='text' class='iteration'  onkeypress='return checkNumberInputChar(event,this);'value='"+json.root[0].row[a].Recurrence+"'</td>";
+					html += "<td><input style='border:none;text-align:center;' onkeypress='return checkNumberInputChar(event,this);' onkeyup='setIteration(this.value)' type='text' class='interval' value='"+json.root[0].row[a].TimeInterval+"'/></td>";
+    	            html += "<td><input style='border:none;text-align:center;' type='text' class='iteration' onkeyup='setIteration(this.value);' onkeypress='return checkNumberInputChar(event,this);'value='"+json.root[0].row[a].Recurrence+"'</td>";
 					html += "<td>"+json.root[0].row[a].IterNumber+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].Exclusivity+"</td>";
 					var endRes = json.root[0].row[a].EndReservation.split(" ");
@@ -376,7 +376,7 @@ function loadConnectivity(){
 				}
 				html += "<tr class='trConnectivity "+tableClass+"' pId='"+json.root[0].row[a].PortReservationId+"' >";
 				if(globalDeviceType != "Mobile"){
-					html += "<td><input type='checkbox' pId='"+json.root[0].row[a].PortReservationId+"' id='ReservationConnectivity_"+json.root[0].row[a].PortReservationId+"' name='ReservationConnectivitySel' onclick='checkSingleRM(\"ReservationConnectivity\");'/></td>";
+					html += "<td><input type='checkbox' pId='"+json.root[0].row[a].PortReservationId+"' id='"+json.root[0].row[a].PortReservationId+"' name='ReservationConnectivitySel' onclick='checkSingleRM(\"ReservationConnectivity\");'/></td>";
 				}
 //MOBILE
 				if(globalDeviceType == "Mobile"){
@@ -5206,6 +5206,7 @@ function rmHighlight(){
 					$(this).addClass('highlight');
 					ctr++
 					var deviceid = $(this).attr("devId");
+					console.log(deviceid,'deviceid');
 					$('#ReservationReserve_'+deviceid+'_'+globalResourceId[i]).prop('checked',true);
 				}	
 			}
@@ -5311,7 +5312,6 @@ function enableInputFields() {
 		if ($('#iterExt').val() == "Specific") {
 			$('input[name="specIterSel"]').each(function() {
     			if ($(this).is(':checked')) {
-        			//globDev = $(this).val();
         			if ($.inArray($(this).val(),globalIterArr) == -1) {
 						globalIterArr.push($(this).val());
 					}
@@ -6889,8 +6889,9 @@ function enableRMButtons(){
 }
 function setIteration(index,val){
 	if(index == 13 && val == 0){
-		alerts('hioy hoy');
+		alerts('Invalid Input');
 	}
+	loadDevicesHTML5();
 }
 function loadDevicesHTML5(){
 	var domain = $('#domainSelect').val();
@@ -6952,43 +6953,14 @@ function loadDevicesHTML5(){
 		        html += "<td did='td"+json.root[0].row[a].DeviceId+"' class='toolTip' onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceId+"' style='display:none'><ul>";
 				html += getTooltipInfo(json.root[0].row[a],"HostName");
 				html += "</ul></div></td>";
-				if(json.root[0].row[a].ManagementIp == undefined || json.root[0].row[a].ManagementIp ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].ManagementIp+"</td>";
-			  	}
-				if(json.root[0].row[a].ConsoleIp == undefined || json.root[0].row[a].ConsoleIp ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].ConsoleIp+"</td>";
-			  	}
-				if(json.root[0].row[a].Manufacturer == undefined || json.root[0].row[a].Manufacturer ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].Manufacturer+"</td>";
-			  	}
-				if(json.root[0].row[a].Model == undefined || json.root[0].row[a].Model ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].Model+"</td>";
-			  	}
-			  	html += "<td class='ReservationDevices'>"+json.root[0].row[a].availablePorts+"</td>";	
-				if(json.root[0].row[a].DomainName == undefined || json.root[0].row[a].DomainName ==""){
-					html+="<td>N/A</td>";
-				}else{
-					html += "<td>"+json.root[0].row[a].DomainName+"</td>";
-			  	}
-				if(json.root[0].row[a].ZoneName == undefined || json.root[0].row[a].ZoneName ==""){
-					html+="<td>N/A</td>";
-				}else{
-					html += "<td>"+json.root[0].row[a].ZoneName+"</td>";
-			  	}
-				if(json.root[0].row[a].GroupName == undefined || json.root[0].row[a].GroupName ==""){
-					html+="<td>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].GroupName+"</td>";
-			  	}
-
+				html += "<td class='ReservationDevices'>"+json.root[0].row[a].ManagementIp+"</td>";
+				html += "<td class='ReservationDevices'>"+json.root[0].row[a].ConsoleIp+"</td>";
+				html += "<td class='ReservationDevices'>"+json.root[0].row[a].Manufacturer+"</td>";
+				html += "<td class='ReservationDevices'>"+json.root[0].row[a].Model+"</td>";
+			  	html += "<td>"+json.root[0].row[a].availablePorts+"</td>";	
+				html += "<td>"+json.root[0].row[a].DomainName+"</td>";
+				html += "<td>"+json.root[0].row[a].ZoneName+"</td>";
+				html += "<td>"+json.root[0].row[a].GroupName+"</td>";
 				html += "<td><input style='border:none;text-align:center;' type='text' id='StartDate' class='datepickerdev' readonly='yes' value='"+dateToday+"'/></td>";
 		        html += "<td><input style='border:none;text-align:center;' type='text' id='StartTime' class='timepicker' readonly='yes' value='"+time+"' onchange='' /></td>";
 				html += "<td><input style='border:none;text-align:center;' id='intervalRR' class='interval' type='text' onkeyup='setIteration(this.value);' onkeypress='return checkNumberInputChar(event,this);' value='0'/></td>";
@@ -7405,63 +7377,6 @@ function openCommitRMOption(){
 	});
 
 }
-function showSaveImagePopUp(){
-	$('#Alert2').dialog({
-		autoOpen: false,
-		resizable: false,
-		height:500,
-		width:1000,
-		modal: true,
-		closeOnEscape: false,
-		open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide();  },
-		buttons:{
-			"Ok": function(){			
-				$(this).dialog("close");
-			},
-			"Cancel": function(){
-				$(this).dialog("close");
-			}
-		}	
-	});
-	$('#Alert2').dialog("open");
-	$('#Alert2').empty().load('pages/RM/SaveImageConfig.html?', function() {
-		saveImage();
-		saveImageDetail();
-		saveConfig();
-		saveConfigDetail();
-	});
-
-
-}
-
-function showLoadImagePopUp(){
-	$('#Alert2').dialog({
-		autoOpen: false,
-		resizable: false,
-		height:500,
-		width:1000,
-		modal: true,
-		closeOnEscape: false,
-		open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide();  },
-		buttons:{
-			"Ok": function(){			
-				$(this).dialog("close");
-			},
-			"Cancel": function(){
-				$(this).dialog("close");
-			}
-		}	
-	});
-	$('#Alert2').dialog("open");
-	$('#Alert2').empty().load('pages/RM/LoadImageConfig.html?', function() {
-		loadImage();
-		loadImageDetail();
-		loadConfig();
-		loadConfigDetail();
-	});
-
-
-}
 /*
  #######################################################################
  #
@@ -7491,8 +7406,6 @@ function showConfigurationInformation(src){
 		open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide();  },
 		buttons:{
 			"Cancel": function(){
-				loadHistorySched();
-				loadEventSched();
 				$(this).dialog("close");
 			}
 		}	

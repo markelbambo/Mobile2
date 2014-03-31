@@ -3989,12 +3989,6 @@ function showAutoSavePage(){
  */
 function toSaveAddInfoAutoD() {
 	var saveargs = gatherAddInfoAutoD();
-	$("#alertPopUp").dialog({
-		modal: true,
-		autoResize:false,
-		width: "auto",
-	});
-
 //	$( "#alertPopUp" ).empty().append("<center id='processingPage'><div  style='text-align:center;'>Processing Information...<br /><img src='img/ajax-loader.gif'/></div></center>");
 	if(saveAutoDAddInfoQuery(saveargs)==false){
 		return;
@@ -4374,10 +4368,10 @@ function saveAutoDAddInfoQuery(args,idx){
 						}
 					}
 					//saveAutoDFlag = 0;
-					alertUser("Process Complete.");
+					alerts("Process Complete.");
 					return true;
 				}else{
-					alertUser("Process failed.");
+					alerts("Process failed.");
 					return false;
 				}
 			}	
