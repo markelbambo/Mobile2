@@ -2508,7 +2508,9 @@ function drawImage(flag,newscale){
             if (devices[i].UpdateFlag !="delete"){
             	group = drawOneImage(x2,y2,devices[i],group);
                 window['variable' + dynamicLayer[pageCanvas]].add(group);
-                initImages(group);
+		setTimeout(function(){
+                	initImages(group);
+		},50);
             }
             initZoom("reload");
             window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
