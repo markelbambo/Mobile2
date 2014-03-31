@@ -485,28 +485,27 @@ function powerControllerAttrJSON(jsonData){
  **
  **/
 function LoadInlet(ip,id){
+	console.log(ip+"  "+id);
+	InletIP = ip;
+	InletID = id.split('_')[1];
+	InletInlet = id.split('_')[2];
 	var inlet = id.split('_')[2];
-	var qstrUser = "action=getinlet&query=Limit=20*Page=1*IP="+ip+"*Inlet="+inlet;
-	var url = "https://"+CURRENT_IP+"/cgi-bin/Final/M2_CGI/FastQueryCgi.py?"+qstrUser;
-
+	var devId = id.split('_')[1];
+	var url = getURL("Power","JSON");
+	var action = "getinlet";
+	var queryObj = {'QUERY':[{'DeviceId':devId,'Limit':'20',
+					'Page':'1','IP':ip,'Inlet':inlet}]};
+	selectedInlet = {'DeviceId':devId,'IP':ip,'Inlet':inlet};
+	var queryStr = JSON.stringify(queryObj);
 	$.ajax ({
 		url: url,
+		data: {action: action, query: queryStr},
 		dataType: 'html',
 		success: function (data) { 
 			data = $.trim(data);
-			//XML
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( data , "text/xml" );
-			var datatag = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-			/*
- 			//JSON
 			data = data.replace(/'/g,'"');
 			var jsonData = jQuery.parseJSON(data);
-			*/
-
-			inletAttr(row);
+			inletAttr(jsonData);
 		}
 	});
 	$('#divTotal').hide();
@@ -524,48 +523,12 @@ function LoadInlet(ip,id){
  **
  **/
 
-function inletAttr(row,jsonData){
+function inletAttr(jsonData){
 	var curr = "";
 	var volt = "";
 	var power = "";
-	/*
-	//JSON for loop
-	for (var a=0;a<jsonData.data[0].row.length;a++){
-		var row = jsonData.data[0].row[a];
-	*/
-		
+	var row = jsonData.data[0].row;
 	for (var a=0;a<row.length;a++){
-		//XML
-		$('#spInletLabel').text(row[a].getAttribute('InletLabel'));
-		$('#spInletName').text(row[a].getAttribute('InletName'));
-		curr += "<tr><td>Inlet RMS Current</td>";
-		curr += "<td>"+row[a].getAttribute('CurrentValue')+"</td>";
-		curr += "<td>"+row[a].getAttribute('CurrentState')+"</td>";
-		curr += "<td>"+row[a].getAttribute('CurrentRemaining')+"</td></tr>";
-		volt += "<tr><td>Inlet RMS Voltage</td>";
-		volt += "<td>"+row[a].getAttribute('VoltageValue')+"</td>";
-		volt += "<td>"+row[a].getAttribute('VoltageState')+"</td></tr>";
-		power += "<tr><td>Active Power</td>";
-		power += "<td>"+row[a].getAttribute('ActivePowerValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('ActivePowerState')+"</td></tr>";
-		power += "<tr><td>Apparent Power</td>";
-		power += "<td>"+row[a].getAttribute('ApparentPowerValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('ApparentPowerState')+"</td></tr>";
-		power += "<tr><td>Power Factor</td>";
-		power += "<td>"+row[a].getAttribute('PowerFactorValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('PowerFactorState')+"</td></tr>";
-		power += "<tr><td>Apparent Power</td>";
-		power += "<td>"+row[a].getAttribute('ApparentPowerValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('ApparentPowerState')+"</td></tr>";
-		power += "<tr><td>Power Factor</td>";
-		power += "<td>"+row[a].getAttribute('PowerFactorValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('PowerFactorState')+"</td></tr>";
-		power += "<tr><td>Active Energy</td>";
-		power += "<td>"+row[a].getAttribute('ActiveEnergyValue')+"</td>";
-		power += "<td>"+row[a].getAttribute('ActiveEnergyState')+"</td></tr>";
-
-		/*
- 		//JSON
  		$('#spInletLabel').text(row[a].InletLabel);
 		$('#spInletName').text(row[a].InletName);
 		curr += "<tr><td>Inlet RMS Current</td>";
@@ -593,9 +556,7 @@ function inletAttr(row,jsonData){
 		power += "<tr><td>Active Energy</td>";
 		power += "<td>"+row[a].ActiveEnergyValue+"</td>";
 		power += "<td>"+row[a].ActiveEnergyState+"</td></tr>";	
-		 */ 
 	}
-
 	$('#tbInletCurr > tbody').empty().append(curr);
 	setBlank('tbInletCurr');
 	$('#tbInletVolt > tbody').empty().append(volt);
@@ -603,7 +564,6 @@ function inletAttr(row,jsonData){
 	$('#tbInletPower > tbody').empty().append(power);
 	setBlank('tbInletPower');
 	setBlank2('tbInletInfo');
-	
 }
 
 /**
@@ -793,25 +753,20 @@ function PMRibbon(prnt,child){
  **  PARAMETERS    : 
  **
  **/
-function LoadOCP(ip,ocp){
-	var qstrUser = "action=getovercurrentprotectors&query=Limit=20*Page=1*IP="+ip+"*C="+ocp;
-	var url = "https://"+CURRENT_IP+"/cgi-bin/Final/M2_CGI/FastQueryCgi.py?"+qstrUser;
-
+function LoadOCP(devId,ip,ocp){
+	var url = getURL("Power","JSON");
+	var action = "getovercurrentprotectors";
+	var queryObj = {'QUERY':[{'DeviceId':devId,'Limit':'20','Page':'1','IP':ip,'C':ocp}]};
+	var queryStr = JSON.stringify(queryObj);
+	selectedInlet = {'DeviceId':devId,'IP':ip,'C':ocp};
 	$.ajax ({
 		url: url,
+		data: {action:action, query:queryStr},
 		dataType: 'html',
 		success: function (data) { 
-			data = $.trim(data);
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( data , "text/xml" );
-			var datatag = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-			/*
- 			//JSON
 			data = data.replace(/'/g,'"');
 			var jsonData = jQuery.parseJSON(data);
-			*/	
+			var row = jsonData.data[0].row;
 			OCPAttr(row);
 		}
 	});
@@ -830,28 +785,9 @@ function LoadOCP(ip,ocp){
  **
  **/
 
-function OCPAttr(row,jsonData){
+function OCPAttr(row){
 	var sensors = "";
-	
-	/*
-	//JSON for loop
-	for (var a=0;a<jsonData.data[0].row.length;a++){
-		var row = jsonData.data[0].row[a];
-	*/
 	for (var a=0;a<row.length;a++){
-		//XML
-		$('#ocpLabel').text(row[a].getAttribute('OverCurrentProtectors'));
-		$('#ocpName').text(row[a].getAttribute('Name'));
-		$('#ocpStat').text(row[a].getAttribute('state'));
-		$('#ocpLines').text(row[a].getAttribute('Lines'));
-		$('#ocpProtected').text(row[a].getAttribute('ProtectedOutlets'));
-		sensors += "<tr><td>RMS Current</td>";
-		sensors += "<td>"+row[a].getAttribute('RMSCurrentValue')+"</td>";
-		sensors += "<td>"+row[a].getAttribute('RMSCurrentState')+"</td>";
-		sensors += "<td>"+row[a].getAttribute('RemainingCurrent')+"</td></tr>";
-	
-		/*
-		//JSON
 		$('#ocpLabel').text(row[a].OverCurrentProtectors);
 		$('#ocpName').text(row[a].Name);
 		$('#ocpStat').text(row[a].state);
@@ -861,9 +797,7 @@ function OCPAttr(row,jsonData){
 		sensors += "<td>"+row[a].RMSCurrentValue+"</td>";
 		sensors += "<td>"+row[a].RMSCurrentState+"</td>";
 		sensors += "<td>"+row[a].RemainingCurrent+"</td></tr>";
-		*/
 	}
-
 	$('#tbSensors > tbody').empty().append(sensors);
 	setBlank('tbSensors');
 	setBlank2('tbOCPSettings');
@@ -1034,7 +968,7 @@ function loadOCPDevices(ip,mngip,outletnum){
 	var actionx = 'getoutletip';
 	var dObj = {};
 	var aaObj = [];
-  var qObj = {'QUERY':aaObj};
+	var qObj = {'QUERY':aaObj};
 
 	dObj['Limit']='20';
 	dObj['Page']='1';
@@ -1048,7 +982,7 @@ function loadOCPDevices(ip,mngip,outletnum){
 		dataType: 'html',
 		success: function (data) { 
 			data = data.replace(/'/g,'"');
-			var jsonData = jQuery.parseJSON(jsonData);
+			var jsonData = jQuery.parseJSON(data);
 			
 			ocpDevAttr(jsonData);
 		}
@@ -1075,100 +1009,50 @@ function ocpDevAttr(jsonData){
 	//JSON for loop
 	for (var a=0;a<jsonData.data[0].row.length;a++){
 		var row = jsonData.data[0].row[a];
-	
-//	for (var a=0;a<row.length;a++){}
-		//XML
-/*		$('#outletLabel').text(row[a].getAttribute('OutletIpLabel'));
-		$('#OutletName').text(row[a].getAttribute('OutletIpName'));
-		$('#OutletStat').text(row[a].getAttribute('OutletStatus'));
-		$('#outletState').text(row[a].getAttribute('OutletState'));
-		$('#outletLines').text(row[a].getAttribute('OutletLine'));
-		$('#outletCP').text(row[a].getAttribute('OCP'));
-		$('#stateOnStartUp').text(row[a].getAttribute('StateOnStartUp'));
-		$('#outletPowerOff').text(row[a].getAttribute('PowerOff'));
-		$('#outletNonCrit').text(row[a].getAttribute('Noncritical'));
-		$('#outletHostName').text(row[a].getAttribute('HostName'));
-		$('#OutletMIP').text(row[a].getAttribute('ManagementIp'));
-		$('#OutletManu').text(row[a].getAttribute('Manufacturer'));
-		$('#outletConsole').text(row[a].getAttribute('ConsoleIp'));
-		$('#outletModel').text(row[a].getAttribute('Model'));
-		$('#outletDevType').text(row[a].getAttribute('DeviceType'));
-		$('#outletSN').text(row[a].getAttribute('SerialNumber'));
-		$('#outletDom').text(row[a].getAttribute('DomainName'));
-		$('#outletZone').text(row[a].getAttribute('ZoneName'));
-		$('#outletGroup').text(row[a].getAttribute('GroupName'));
-		$('#outletPower').text(row[a].getAttribute('PowerPolicy'));
+		$('#outletLabel').text(row.OutletIpLabel);
+		$('#OutletName').text(row.OutletIpName);
+		$('#OutletStat').text(row.OutletStatus);
+		$('#outletState').text(row.OutletState);
+		$('#outletLines').text(row.OutletLine);
+		$('#outletCP').text(row.OCP);
+		$('#stateOnStartUp').text(row.StateOnStartUp);
+		$('#outletPowerOff').text(row.PowerOff);
+		$('#outletNonCrit').text(row.Noncritical);
+		$('#outletHostName').text(row.HostName);
+		$('#OutletMIP').text(row.ManagementIp);
+		$('#OutletManu').text(row.Manufacturer);
+		$('#outletConsole').text(row.ConsoleIp);
+		$('#outletModel').text(row.Model);
+		$('#outletDevType').text(row.DeviceType);
+		$('#outletSN').text(row.SerialNumber);
+		$('#outletDom').text(row.DomainName);
+		$('#outletZone').text(row.ZoneName);
+		$('#outletGroup').text(row.GroupName);
+		$('#outletPower').text(row.PowerPolicy);
 		str += "<tr><td>RMS Voltage</td>";
-		str += "<td>"+row[a].getAttribute('RMSVoltageValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('RMSVoltageState')+"</td></tr>";
+		str += "<td>"+row.RMSVoltageValue+"</td>";
+		str += "<td>"+row.RMSVoltageState+"</td></tr>";
 		str += "<tr><td>RMS Current</td>";
-		str += "<td>"+row[a].getAttribute('RMSCurrentValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('RMSCurrentState')+"</td>";
+		str += "<td>"+row.RMSCurrentValue+"</td>";
+		str += "<td>"+row.RMSCurrentState+"</td>";
 		str += "<tr><td>Active Power</td>";
-		str += "<td>"+row[a].getAttribute('ActivePowerValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('ActivePowerState')+"</td></tr>";
+		str += "<td>"+row.ActivePowerValue+"</td>";
+		str += "<td>"+row.ActivePowerState+"</td></tr>";
 		str += "<tr><td>Apparent Power</td>";
-		str += "<td>"+row[a].getAttribute('ApparentPowerValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('ApparentPowerState')+"</td></tr>";
+		str += "<td>"+row.ApparentPowerValue+"</td>";
+		str += "<td>"+row.ApparentPowerState+"</td></tr>";
 		str += "<tr><td>Power Factor</td>";
-		str += "<td>"+row[a].getAttribute('PowerFactorValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('PowerFactorState')+"</td></tr>";
+		str += "<td>"+row.PowerFactorValue+"</td>";
+		str += "<td>"+row.PowerFactorState+"</td></tr>";
 		str += "<tr><td>Apparent Power</td>";
-		str += "<td>"+row[a].getAttribute('ApparentPowerValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('ApparentPowerState')+"</td></tr>";
+		str += "<td>"+row.ApparentPowerValue+"</td>";
+		str += "<td>"+row.ApparentPowerState+"</td></tr>";
 		str += "<tr><td>Power Factor</td>";
-		str += "<td>"+row[a].getAttribute('PowerFactorValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('PowerFactorState')+"</td></tr>";
+		str += "<td>"+row.PowerFactorValue+"</td>";
+		str += "<td>"+row.PowerFactorState+"</td></tr>";
 		str += "<tr><td>Active Energy</td>";
-		str += "<td>"+row[a].getAttribute('ActiveEnergyValue')+"</td>";
-		str += "<td>"+row[a].getAttribute('ActiveEnergyState')+"</td></tr>";
-*/
-		
-		//JSON
-		$('#outletLabel').text(row[a].OutletIpLabel);
-		$('#OutletName').text(row[a].OutletIpName);
-		$('#OutletStat').text(row[a].OutletStatus);
-		$('#outletState').text(row[a].OutletState);
-		$('#outletLines').text(row[a].OutletLine);
-		$('#outletCP').text(row[a].OCP);
-		$('#stateOnStartUp').text(row[a].StateOnStartUp);
-		$('#outletPowerOff').text(row[a].PowerOff);
-		$('#outletNonCrit').text(row[a].Noncritical);
-		$('#outletHostName').text(row[a].HostName);
-		$('#OutletMIP').text(row[a].ManagementIp);
-		$('#OutletManu').text(row[a].Manufacturer);
-		$('#outletConsole').text(row[a].ConsoleIp);
-		$('#outletModel').text(row[a].Model);
-		$('#outletDevType').text(row[a].DeviceType);
-		$('#outletSN').text(row[a].SerialNumber);
-		$('#outletDom').text(row[a].DomainName);
-		$('#outletZone').text(row[a].ZoneName);
-		$('#outletGroup').text(row[a].GroupName);
-		$('#outletPower').text(row[a].PowerPolicy);
-		str += "<tr><td>RMS Voltage</td>";
-		str += "<td>"+row[a].RMSVoltageValue+"</td>";
-		str += "<td>"+row[a].RMSVoltageState+"</td></tr>";
-		str += "<tr><td>RMS Current</td>";
-		str += "<td>"+row[a].RMSCurrentValue+"</td>";
-		str += "<td>"+row[a].RMSCurrentState+"</td>";
-		str += "<tr><td>Active Power</td>";
-		str += "<td>"+row[a].ActivePowerValue+"</td>";
-		str += "<td>"+row[a].ActivePowerState+"</td></tr>";
-		str += "<tr><td>Apparent Power</td>";
-		str += "<td>"+row[a].ApparentPowerValue+"</td>";
-		str += "<td>"+row[a].ApparentPowerState+"</td></tr>";
-		str += "<tr><td>Power Factor</td>";
-		str += "<td>"+row[a].PowerFactorValue+"</td>";
-		str += "<td>"+row[a].PowerFactorState+"</td></tr>";
-		str += "<tr><td>Apparent Power</td>";
-		str += "<td>"+row[a].ApparentPowerValue+"</td>";
-		str += "<td>"+row[a].ApparentPowerState+"</td></tr>";
-		str += "<tr><td>Power Factor</td>";
-		str += "<td>"+row[a].PowerFactorValue+"</td>";
-		str += "<td>"+row[a].PowerFactorState+"</td></tr>";
-		str += "<tr><td>Active Energy</td>";
-		str += "<td>"+row[a].ActiveEnergyValue+"</td>";
-		str += "<td>"+row[a].ActiveEnergyState+"</td></tr>";
+		str += "<td>"+row.ActiveEnergyValue+"</td>";
+		str += "<td>"+row.ActiveEnergyState+"</td></tr>";
 		
 	}
 	$('#tbOutSensors > tbody').empty().append(str);
@@ -1665,6 +1549,7 @@ function powerCheckbox(table){
  **
  **/
 function powerSpecificOutlet(ip,mngip,outletnum){
+	powerOutletTableObj = {};
 	powerDevices = [];
 	powerDevices2 = [];
 	var ion=0;
@@ -1687,10 +1572,38 @@ function powerSpecificOutlet(ip,mngip,outletnum){
 		dataType: 'html',
 		success: function (data) { 
 			data = data.replace(/'/g,'"');
-			var jsonData = jQuery.parseJSON(jsonData);
-			var dstatus = jsonData.data[0].row[a].OutletState;
-			var dstate = jsonData.data[0].row[a].OutletStatus;
-			var oipname = jsonData.data[0].row[a].OutletIpName;
+			var jsonData = jQuery.parseJSON(data);
+			var nrow = jsonData.data[0].row[0];
+			var dstatus = jsonData.data[0].row[0].OutletState;
+			var dstate = jsonData.data[0].row[0].OutletStatus;
+			var oipname = jsonData.data[0].row[0].OutletIpName;
+			var atid= [];
+			powerOutletTableObj[nrow.DeviceId]=atid;
+			atid['ActivePower']=nrow.ActivePowerValue;
+            atid['ApparentPower']=nrow.ApparentPowerValue;
+            atid['ControllerName']=jsonData.data[0].host[0].HostName;
+            atid['CyclingPowerOffPeriod']='';
+            atid['DomainName']=nrow.DomainName;
+            atid['GroupName']=nrow.GroupName;
+            atid['HostName']=nrow.HostName;
+            atid['Lines']='';
+            atid['NonCritical']='';
+            atid['Outlet']=nrow.OutletIpLabel;
+            atid['OutletName']=nrow.OutletIpName;
+            atid['OverCurrentProtector']=nrow.OCP;
+            atid['PowerControllerIp']=nrow.ControllerIp;
+            atid['PowerFactor']=nrow.PowerFactorValue;
+            atid['PowerPolicy']=nrow.PowerPolicy;
+            atid['PowerSupply']='';
+            atid['RMSCurrent']=nrow.RMSCurrentValue;
+            atid['RMSVoltage']=nrow.RMSVoltageValue;
+            atid['State']=nrow.OutletState;
+            atid['StateOnDeviceStartUp']=nrow.StateOnStartUp;
+            atid['Status']=nrow.OutletStatus;
+            atid['ZoneName']=nrow.ZoneName;
+			atid['Model']=nrow.Model;
+
+			powerOutletTableObj[nrow.OutletIpName]=nrow.DeviceId;
 			powerDevices.push(ip+"^"+outletnum);
 			powerDevices2.push(oipname);
 			powerDevicesState.push(dstatus);
@@ -1822,179 +1735,7 @@ function setPowerDevice(action){
 		}
 	});
 }
-/*
- *
- **
- **  FUNCTION NAME : execPowerDevice
- **  AUTHOR        : Mico D. Dela Cruz
- **  DATE          : March 27,2014
- **  MODIFIED BY   :
- **  REVISION DATE :
- **  REVISION #    :
- **  DESCRIPTION   : send the query to CGI for power on,off,cycle
- **  PARAMETERS    : query,action
- **
- **/
 
-function execPowerDevice(data,action){
-	var str="";
-	var url = getURL("Power","JSON");
-	var actionx = 'checkpower'+action;
-	var devArr = data.MAINCONFIG[0].DEVICE;
-	var alertArr = [];
-	var emailFlag = false;
-	var gracefulFlag = false;
-	var conti = false;
-	var coninfo=[];
-	var manIp=[];
-	var hostname=[];
-	var nuser=[];
-	var alertStr = "";
-	for(var a=0; a<devArr.length; a++){
-	if(powerDevicesState[a] != action){
-		if(devArr[a].Continue=="true"){
-			if(action=="off"){gracefulFlag=true;}
-			coninfo.push(devArr[a].ControllerInfo);
-			manIp.push(devArr[a].ManagementIp);
-			hostname.push(devArr[a].Hostname);
-			nuser.push(devArr[a].User);
-			conti=true;
-			if(devArr[a].User!=globalUserName){emailFlag=true;}
-		
-		}else{
-			alertArr.push("<tr><td colspan=2>"+devArr[a].Alert);
-		}
-
-	}else{
-		alertArr.push("<tr><td colspan=2>"+devArr[a].Hostname+" is already "+action);
-	}
-	
-}
-	if(alertArr.length>0){
-	alertStr = alertArr.join('</td></tr>');
-	}
-	if(conti==true){
-	powerOnOffPop(action,emailFlag,gracefulFlag,coninfo,hostname,manIp,nuser,alertStr);
-	}else{
-		$( "#powOnOffPopUp" ).dialog({
-		modal: true,
-		autoResize:true,
-		width: "auto",
-		height: "auto",
-		title: "Power Device",
-	});
-	$( "#powOnOffPopUp" ).empty().load('pages/PM/PowerOutletPopUp.html',function(){
-		setTimeout(function(){
-			$(".ui-dialog").position({
-			my: "center",
-			at: "center",
-			of: window
-			});
-		},1000);
-	$("#powOnOffWindowSubmit").css("display","none");
-	$("#tblpowOnOff").empty().append(alertStr);
-    $("#powOnOffWindowSubmit").css("display","none");
-
-		$(document).on("click", "#powOnOffWindowClose",function(){
-		$("#powOnOffPopUp").dialog("close");
-
-	});
-
-	});
-}
-}
-function sendExecPowerDevice(coninfo,manIp,hostname,nuser,em,gf){
-	var atObj = {};
-		atObj['Hostname'] = hostname;
-		atObj['ManagementIP'] = manIp;
-		atObj['ControllerInfo'] = coninfo;
-		atObj['LoadConfigPath'] = '';
-		atObj['LoadImagePath'] = '';
-		atObj['SaveConfigPath'] = '';
-	//	atObj['Destination'] = '';
-		atObj['GracefulShutdown'] = gf;
-		atObj['Email'] = em;
-		atObj['NewUser']= nuser;
-	return atObj;
-}
-
-
-function powerOnOffPop(action,emailFlag,gracefulFlag,coninfo,hostname,manIp,nuser,alertStr){
-	var str=alertStr;
-	var url = getURL("Power","JSON");
-	var actionx = 'power'+action;
-	var em = 'false';
-	var gf = 'false';
-	var dArr = [];
-	var dObj = {'DEVICE':dArr,'User':globalUserName};
-	var qObj = {'MAINCONFIG':[dObj]};
-
-	if(emailFlag==true){
-		str += "<tr><td><input type='checkbox' id='cbPowerEmail'></td>";
-		str += "<td><p>Email Notification</p></td></tr>";
-	}
-	if(gracefulFlag==true){
-		str += "<tr><td><input type='checkbox' id='cbGracefulShutdown'></td>";
-		str += "<td><p>Graceful Shutdown</p></td></tr>";
-	}
-		str += "<tr><td><input type='checkbox' id='cbDeviceConfig'></td>";
-		str += "<td><p>Device Configuration</p></td></tr>";
-
-	if(action=='on'){
-		str += "<tr><td><input type='checkbox' id='cbImageConfig'></td>";
-		str += "<td><p>Image Configuration</p></td></tr>";
-
-	}
-
-	$( "#powOnOffPopUp" ).dialog({
-		modal: true,
-		autoResize:true,
-		width: "auto",
-		height: "auto",
-		title: "Power Device",
-	});
-	$( "#powOnOffPopUp" ).empty().load('pages/PM/PowerOutletPopUp.html',function(){
-		setTimeout(function(){
-			$(".ui-dialog").position({
-			my: "center",
-			at: "center",
-			of: window
-			});
-		},1000);
-	$("#tblpowOnOff").empty().append(str);
-	$(document).on("click", "#powOnOffWindowClose",function(){
-		$("#powOnOffPopUp").dialog("close");
-
-	});
-	$(document).on("click", "#powOnOffWindowSubmit",function(){
-		if($("#cbPowerEmail") && $('#cbPowerEmail').is(':checked')==true){
-			em='true'
-			
-		}
-		if($("#cbGracefulShutdown") && $('#checkbox').is(':checked')==true){
-			gf='true';
-		}
-		for(var x = 0; x<coninfo.length;x++){
-			dArr.push(sendExecPowerDevice(coninfo[x],manIp[x],hostname[x],nuser[x],em,gf));
-		}
-//		sendPowerOptionToCGI(url,actionx,qObj);
-		$("#powOnOffPopUp").dialog("close");
-	});
-	});
-
-}
-
-function sendPowerOptionToCGI(url,actionx,query){
-	$.ajax({
-		url: url,
-		data: { action: actionx, query: JSON.stringify(query) },
-		dataType: 'html',
- 		success: function(data) {
-
-		}
-	});
-
-}
 /*-------------------------------------------------------
  * FUNC: btnPMPDU
  * DESC: button function for PDU add,edit,delete
@@ -2014,8 +1755,8 @@ function btnPMPDU(btnType){
 		switch(btnType){
 			case "add":
 				if(!validateUserLevel()){return;}
-					popupContent = initAddPDUPopup();
-					queryBindedResource('selResDomAddPDU');
+				popupContent = initAddPDUPopup();
+				queryBindedResource('selResDomAddPDU');
 				break;
 			case "edit":
 			break;
@@ -2063,9 +1804,11 @@ function initAddPDUPopup(){
  * AUTHOR: kmmabignay
  * DATE: March 26, 2014
  *------------------------------------------------------ */
-function createInputTr(label,inputId,dispFlag){
+function createInputTr(label,inputId,dispFlag,wid){
 	var style = "text-align:right;100px;white-space:nowrap;";
-	style += "width:110px;padding-right:20px;";
+	var w = '110px';
+	if(wid!=undefined){w = wid;}
+	style += "width:"+w+";padding-right:20px;";
 	var disp = "";
 	if(!dispFlag){disp = "display:none";}
 	var retStr = "<tr style='"+disp+"'><td style='"+style+"'>"+label+"</td>";
@@ -2124,7 +1867,7 @@ function queryBindedResource(divId){
 			var retStr = "";
 			for(var a=0; a<domains.length; a++){
 				var domain = domains[a];
-				if(domain.toLowerCase=="default"){continue;}
+				if(/default/i.test(domain)){continue;}
 				retStr += "<option value='"+domain+"'>"+domain+"</option>";
 			}
 			$("#"+divId).append(retStr);
@@ -2612,7 +2355,7 @@ function executePowerCycle(data,aaction){
 		/*-----------------------------*/
 		alertArr.push(devAlert);
 		if(contFlag=='false'){continue;}
-		if(devUser!=globalUserName){emailFlag=true;}
+//		if(devUser!=globalUserName){emailFlag=true;}
 		if(/dut/i.test(devType) && /cisco|juniper/i.test(manu)){
 			confArr.push(devOutlet);
 		}
@@ -2622,7 +2365,7 @@ function executePowerCycle(data,aaction){
 	}
 	powerOutletTableObj['ConfigArr'] = confArr;
 	var alertStr = alertArr.join('<br/>');
-	if(devConArr.length==0){alertUser(alertStr);return;}
+//	if(devConArr.length==0){alertUser(alertStr);return;}
 	var content = "<table>";
 	if(emailFlag){
 		content += createCheckboxTr('E-mail Notification','cbpcEmainNotif','pcENotif',0);
@@ -2822,14 +2565,16 @@ function selectConfigImagePM(option,type){
 			selectConfigImagePMPopup(option,type);
 		});
 	}
-	if(globalDeviceType != "Mobile"){
-		$(".ui-dialog").position({
-			my: "center",
-			at: "center",
-			of: window
-		});
-	}
 }
+/*------------------------------------------------------ */
+
+/*-------------------------------------------------------
+ * FUNC: selectConfigImagePMPopup
+ * DESC: creation of device array for popup content
+ * PARAMS: option, type
+ * AUTHOR: kmmabignay
+ * DATE: March 28, 2014
+ *------------------------------------------------------ */
 function selectConfigImagePMPopup(option,type){
 	var devs = powerOutletTableObj['ConfigArr'];
 	var devArr = [];
@@ -2862,6 +2607,14 @@ function cancelConfigImagePMPopup(option,type){
 	$("#powerMgmtPopup").dialog('close');
 }
 /*------------------------------------------------------ */
+
+/*-------------------------------------------------------
+ * FUNC: okConfigImagePMPopup
+ * DESC: ok selectConfigImagePMPopup
+ * PARAMS: option,type
+ * AUTHOR: kmmabignay
+ * DATE: March 29, 2014
+ *------------------------------------------------------ */
 function okConfigImagePMPopup(option,type){
 	var selArr = [];
  	var confArr = powerOutletTableObj['ConfigArr'];
@@ -2992,7 +2745,6 @@ function createPMTreeViewJSON(data){
 //	var parser = new DOMParser();
 //	var xmlDoc = parser.parseFromString( data , "text/xml" );
 	var device = data.MAINCONFIG[0].DEVICE;
-	
 	var str2 = "<ul id='ulOutlet'>";
 	for(x=0; x<device.length; x++){
 		var outlet = device[x].OUTLET; 
@@ -3021,7 +2773,7 @@ function createPMTreeViewJSON(data){
 			for (var i=0; i<availOCP.length; i++){
 				var ocp = availOCP[i];
 					var str4 = "";
-					str2+="<li><a id='"+devId+"' did='"+ip+"' onclick=\"PMRibbon('"+label+"','"+ocp+"');showPMTable(4);LoadOCP('"+ip+"','"+ocp+"');\">"+ocp+"</a>";
+					str2+="<li><a id='"+devId+"' did='"+ip+"' onclick=\"PMRibbon('"+label+"','"+ocp+"');showPMTable(4);LoadOCP('"+devId+"','"+ip+"','"+ocp+"');\">"+ocp+"</a>";
 					str2+="<ul id='ulDevices"+devId+"'>";
 					str4 = createOutletTreeViewOCPJSON(outlet,ip,devId,ocp,devName,ip);
 					str2+=str4;
@@ -3148,7 +2900,7 @@ function createOutletTreeViewOCPJSON(outlet,ip,devId,ocp,devName,ip){
 }
 /*
  *
- *  FUNCTION NAME : radioPM
+ *  FUNCTION NAME : deletePM
  *  AUTHOR        : Maureen Daelo
  *  DATE          : 
  *  MODIFIED BY   :
@@ -3253,4 +3005,225 @@ function deleteDevicePDU2(){
 	});
 	$('#powerMgmtPopup').dialog('close');	
 	PMip = [];
+}
+
+/*-------------------------------------------------------
+ * FUNC: initInletEditPopup
+ * DESC: initialize InletEditPopup
+ * PARAMS: 
+ * AUTHOR: kmmabignay
+ * DATE: March 30, 2014
+ *------------------------------------------------------ */
+function initInletEditPopup(type){
+	var action = "";
+	if(type=='inlet'){action="getinletinformation";}
+	if(type=='ocp'){action="getovercurrentprotectorsinformation";}
+	var url = getURL("Power","JSON"); 
+	var queryObj = {'QUERY':[selectedInlet]};
+	var queryStr = JSON.stringify(queryObj);
+	$.ajax ({
+		url: url,
+		data: {action: action, query: queryStr},
+		dataType: 'html',
+		success: function (data) { 
+			data = data.replace(/'/g,'"');
+			var diag = "powerMgmtPopup";
+			var toLoad = "pages/PM/PowerInletPopup.html";
+			var toEval = "createInletEditPopup("+data+",'"+type+"')";
+			initPowerDialog(diag,toLoad,toEval);
+		}
+	});
+}
+/*------------------------------*/
+
+/*-------------------------------------------------------
+ * FUNC: initPowerDialog
+ * DESC: initialize dialog (reusable)
+ * PARAMS: diag,html2Load,todo
+ * AUTHOR: kmmabignay
+ * DATE: March 30, 2014
+ *------------------------------------------------------ */
+function initPowerDialog(diag,html2Load,todo){
+	$("#"+diag).dialog({
+		modal: true,
+		width: "auto",
+		autoResize: true,
+		maxHeight: "auto",
+	});	
+	$("#"+diag).empty().load(html2Load, function(){
+		eval(todo);
+	});
+}
+
+/*------------------------------*/
+
+/*-------------------------------------------------------
+ * FUNC: createInletEditPopup
+ * DESC: inlet edit popup
+ * PARAMS: json data
+ * AUTHOR: kmmabignay
+ * DATE: March 30, 2014
+ *------------------------------------------------------ */
+function createInletEditPopup(jData,type){
+	var key = ""; var label = "";
+	switch(type){
+		case 'inlet': 
+			key='InletName';
+			label="Name:";
+			break;
+		case 'ocp': 
+			key='OverCurrentProtectors';
+			label="Overcurrent Protectors:";
+			break;
+	}
+	var inletName = jData.data[0].row[0][key];
+	var content = createInputTr(label,'inletName',true,'auto');
+	$("#powerInletEditUpperBody").html(content);
+	$("#inletName").val(inletName);
+	$("#inletName").attr('disabled',true);
+	var fieldArr = ['Sensor','Lower Critical','Lower Warning'];
+	fieldArr.push('Upper Warning','Upper Critical');
+	var sensor = jData.data[0].sensor;
+	var todo = "EditInlet(this.id)";
+	createDynamicTablePM('tbInletEdit',fieldArr,sensor,'rowInletSensor',todo);
+}
+/*------------------------------*/
+
+/*-------------------------------------------------------
+ * FUNC: createDynamicTablePM
+ * DESC: create table content (reusable)
+ * PARAMS: tableId,fieldArr,rowArr,cbId
+ * AUTHOR: kmmabignay
+ * DATE: March 30, 2014
+ *------------------------------------------------------ */
+function createDynamicTablePM(tableId,fieldArr,rowArr,cbId,todo){
+	var tHead = "<thead><tr>";
+	tHead += "<th></th>";
+	for(var a=0;a<fieldArr.length; a++){	
+		var name = fieldArr[a].split(' ').join('');
+		tHead += "<th name='"+name+"'>"+fieldArr[a]+"</th>";	
+	}
+	tHead += "</tr></thead>";
+	var tBody = "<tbody>";
+	for(var x=0; x<rowArr.length; x++){
+		var id = cbId+rowArr[x]['Type'];
+		tBody += "<tr><td>";
+		tBody += "<input id='"+id+"' onclick='"+todo+"' ";
+		tBody += "type='radio'/></td>"
+		for(var y=0;y<fieldArr.length; y++){
+			var name = fieldArr[y].split(' ').join('');
+			if(name=='Sensor'){name = 'Type';}
+			tBody += "<td>"+rowArr[x][name]+"</td>";
+		}
+		tBody += "</tr>";
+	}
+	tBody += "</tbody>";
+	$("#"+tableId).html(tHead+tBody);
+}
+/*------------------------------*/
+
+
+/*
+ *
+ *  FUNCTION NAME : EditInlet
+ *  AUTHOR        : Maureen Daelo
+ *  DATE          : 
+ *  MODIFIED BY   :
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
+
+function EditInlet(id){
+	$('#PMPopUp').dialog({
+		modal: true,
+		width: "auto",
+		autoResize: true,
+		maxHeight: "auto",
+	});	
+	$("#PMPopUp").empty().load("pages/PM/PowerEditInletPopup.html", function(){
+
+		EditInlet2(id);
+	});
+	PMDeviceId = '';
+}
+function EditInlet2(InletSensor){
+	switch(InletSensor){
+		case 'rowInletSensorActivePower':
+			SType = 'ActivePower';
+		break;
+		case 'rowInletSensorApparentPower':
+			SType = 'ApparentPower';
+		break;
+		case 'rowInletSensorPowerFactor':
+			SType = 'PowerFactor';
+		break;
+		case 'rowInletSensorActiveEnergy':
+			SType = 'ActiveEnergy';
+		break;
+		case 'rowInletSensorCurrent':
+			SType = 'Curren';
+		break;
+		case 'rowInletSensorVoltage':
+			SType = 'Voltage';
+		break;
+	}
+	$.ajax ({
+		url: url,
+		data: {
+			"action": "editSensorInlet",
+			"query": "{'QUERY':[{'DeviceId':'"+InletID+"','IP':'"+InletIP+"','Inlet':'"+InletInlet+"','SType':'"+SType+"'}]}",
+		},
+		dataType: 'html',
+		success: function (data) { 
+			dat2 = data.replace(/'/g,'"');
+			var jsonData = $.parseJSON(dat2);
+//			var power = jsonData.data[0].sensor[0];
+			var LowerCritical = jsonData.data[0].sensor[0].LowerCritical;
+			var LowerWarning = jsonData.data[0].sensor[0].LowerWarning;
+			var Type = jsonData.data[0].sensor[0].Type;
+			var Unit = jsonData.data[0].sensor[0].Unit;
+			var UpperCritical = jsonData.data[0].sensor[0].UpperCritical;
+			var UpperWarning = jsonData.data[0].sensor[0].UpperWarning;
+			var aTimeout = jsonData.data[0].sensor[0].aTimeout;
+			var dHysterisis = jsonData.data[0].sensor[0].dHysterisis;
+
+			var Power = "<tr><td>LowerCritical ("+Unit+"):</td>";
+			Power = Power+"<td><input type='checkbox' id='InSenEnableLC' onclick=''/></td>";
+			Power = Power+"<td><input type='text' id='InSenEnableLCtext' onkeypress='' value='"+LowerCritical+"' disabled=''/></td>";
+			Power = Power+"<td><font color='red'> * </font></td></tr>";
+			Power = Power+"<tr><td>Lower Warning ("+Unit+"):</td>";
+			Power = Power+"<td><input type='checkbox' id='InSenEnableLW' onclick=''/></td>";
+			Power = Power+"<td><input type='text' id='InSenEnableLWtext' onkeypress='' value='"+LowerWarning+"' disabled=''/></td>";
+			Power = Power+"<td><font color='red'> * </font></td></tr>";
+			Power = Power+"<tr><td>Upper Warning ("+Unit+"):</td>";
+			Power = Power+"<td><input type='checkbox' id='InSenEnableUW' onclick=''/></td>";
+			Power = Power+"<td><input type='text' id='InSenEnableUWtext' onkeypress='' value='"+UpperWarning+"' disabled=''/></td></tr>";
+			Power = Power+"<tr><td>Upper Critical ("+Unit+"):</td>";
+			Power = Power+"<td><input type='checkbox' id='InSenEnableUC' onclick=''/></td>";
+			Power = Power+"<td><input type='text' id='InSenEnableUCtext' onkeypress='' value='"+UpperCritical+"' disabled=''/></td></tr>";
+			Power = Power+"<tr><td>Deassertion Hysterisis ("+Unit+"):</td>";
+			Power = Power+"<td> </td>";
+			Power = Power+"<td><input type='text' id='ideassertionhysterisis' onkeypress='' value='"+dHysterisis+"' disabled=''/></td>";
+			Power = Power+"<td><font color='red'> * </font></td></tr>";
+			Power = Power+"<tr><td>AssertionTimeout (Sample):</td>";
+			Power = Power+"<td> </td>";
+			Power = Power+"<td><input type='text' id='ideassertionhysterisis' onkeypress='' value='"+aTimeout+"'/></td>";
+			Power = Power+"<td></td></tr>";
+			$('#InletSensorActivePower > tbody').empty().append(Power);
+		}
+	});
+}
+
+function EditInletJSON(SType){
+	var powerdata = '';
+//	for (var a=0; a<selectedInlet.length; a++){
+			var InletID = selectedInlet.DeviceId;
+			var InletIP = selectedInlet.IP;
+			var InletInlet = selectedInlet.Inlet;
+//		}
+	console.log("powerdata: "+powerdata);
+	return powerdata;
 }

@@ -1602,7 +1602,7 @@ $( document ).on( "pageinit", "#configEditorPage", function( event ) {
 		}else{
 			$("#mappingCanvasContainer").show();
 		}
-	});
+	});	
 	$(document).on('click', '#configNameBtn', function() {
 		$("#mappingCanvasContainer").hide();
 		$("#historyContainer").hide();
@@ -1622,6 +1622,9 @@ $( document ).on( "pageinit", "#configEditorPage", function( event ) {
             $("#historyContainer").show();
         }
     });
+	$(document).on('click', '#clearHistory', function() {
+		clearCanvasHistory();
+	});
     $(document).on('click', '#Magnify', function() {
     });
 	$(document).on('click', '.kineticjs-content', function() {
@@ -1642,7 +1645,7 @@ $(document).on('click', '#cancelCommitOptions', function() {
 $(document).on('click', '#saveConfname', function() {
 	window['variableConfigName'+pageCanvas] = $("#configText").val();
 	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Name = window['variableConfigName'+pageCanvas];
-	window['variableHistory'+pageCanvas].push("Edited Configuration Name");
+	addEvent2History("Edited Configuration Name");
 	//addHistory("Edited Configuration Name");
 	error("Configuration Name saved.","Notification");
 });
@@ -1678,25 +1681,23 @@ $( document ).on( "pageinit", "#ConfigManageTestPop", function( event ) {
 });
 
 $( document ).on( "pageinit", "#ConfigManagePop", function( event ) {
-	//$(document).on("click","#DevlistGraphical", function(){
-	//     globalDevListType = "graphical";
-    //     deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
-    //});
-    $(document).on('change', '#graphical', function(){
-        loading("show");
-        globalDevListType = "graphical";
-        deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
+	$(document).on("change","#graphical", function(){
+         globalDevListType = "graphical";
+         deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
     });
-    //$(document).on("click","#DevlistTableView", function(){
-    //	globalDevListType = "tableview";
-    //    deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
-	//});
-    $(document).on('change', '#table-view', function(){
-        loading("show");
+    $(document).on("change","#table-view", function(){
         globalDevListType = "tableview";
         deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
     });
-    
+
+/*	$(document).on("click","#DevlistGraphical", function(){
+	     globalDevListType = "graphical";
+         deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
+    });
+    $(document).on("click","#DevlistTableView", function(){
+    	globalDevListType = "tableview";
+        deviceListPopupTable(globalDeviceListLoad,globalDevListTab);
+	});*/
 });
 
 $( document ).on( "pageinit", "#warning", function( event ) {
@@ -3406,17 +3407,6 @@ $(document).on("click", "#deviceSubNew", function () {
 	$('#newServerDialogContent').empty();
 	$("#deviceMain").popup("close");
 	loadNewDeviceContent("Manual","first");
-	
-/*
-	setTimeout(function(){
-    	$.mobile.changePage( "#newDeviceDialog", {
-        	transition: "pop",
-	        changeHash: true
-    	});
-		initializenewDeviceDialog("");
-	},350);
-	setAutoDVariable();
-*/
 });
 
 /*
@@ -3562,18 +3552,10 @@ function initializenewDeviceDialog(excl,loadF,prev) {
  *
  */
 function initPartnerInfosMobile() {
-	//---partner infos
 	$('#autoDPartnerInfoCont').hide();
 	$('#autoDPartInfo1').hide();
 	$('#autoDPartInfo2').hide();
 
-/*
-	$('#autoDPartTypeOpt-button > span').empty().append("Select");
-	$('#autoDPartTypeOpt > option:contains("Select")').prop('selected',true);
-
-	$('#autoDPartAddOpt-button > span').empty().append("Select");
-	$('#autoDPartAddOpt > option:contains("Select")').prop('selected',true);
-*/
 	$('#autoDOptIncMappChk').hide();
 	$('#autoDOptSrchDetailsChk').attr("checked",false);
 	$('#autoDOptSrchDetailsChk').checkboxradio("refresh");
@@ -3585,8 +3567,6 @@ function initPartnerInfosMobile() {
 	$('#newDevPartnerDevModelS').val('No Selection');
 
 	$('#autoDPartPortsSrchLblCont').hide();
-//	$('#autoDPartPortsSrchNumLbl').hide();
-//	$('#autoDPartPortsSrchNumCont').hide();
 	$('#autoDPartnerInfoTableCont').hide();
 	$('#autoDDevSlotsIncCont').hide();
 	$('#autoDDevSlotsIncCountCont').hide();
@@ -3753,10 +3733,20 @@ function initnewDeviceDialog(){
 		$('#newDeviceDialog').dialog("close");
 	});
 
-//});
 }
 
-/*----- cbobis 03/19/14 -------------------------------------------*/
+/*
+ *
+ *  FUNCTION NAME : doSaveAutoDevice
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 03/19/14
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function doSaveAutoDevice(tmpidx) {
 	console.log("try to create args");
 	var autoDArg = createDataAutoD();
@@ -3776,7 +3766,18 @@ function doSaveAutoDevice(tmpidx) {
 
 }
 
-/*----- cbobis 03/13/14 -------------------------------------------*/
+/*
+ *
+ *  FUNCTION NAME : createDevSlotTbodyAutoD
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 03/13/14
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function createDevSlotTbodyAutoD(val,type) {
 	if(parseInt(val)>0){
 		var input = "";
@@ -3810,8 +3811,18 @@ function createDevSlotTbodyAutoD(val,type) {
 
 }
 
-
-/*----- cbobis 03/13/14 -------------------------------------------*/
+/*
+ *
+ *  FUNCTION NAME : switchManuForNewDevice
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 03/13/14
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function switchManuForNewDevice(opt) {
 	var optAdd = "<option value=''>Select</option>";
 	switch(opt){
@@ -3829,6 +3840,18 @@ function switchManuForNewDevice(opt) {
 	$('#knowmanuS').empty().append(optAdd);
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 /*----- cbobis 03/12/14 -------------------------------------------*/
 function showAddManualAutoD(opt) {
 	var devtype = "<option>Select</option>"+
@@ -3864,6 +3887,18 @@ function showAddManualAutoD(opt) {
 	}
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 /*Save Auto Discovered Device*/
 /*----- cbobis 03/17/14 -------------------------------------------*/
 function autoDSaveInfo() {
@@ -3939,6 +3974,18 @@ $(document).on("click", "#testToolSubNew", function () {
 	loadTestToolServerContent("testtool","manual");
 });
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function loadTestToolServerContent(type,showOpt){
 	setTimeout(function(){
 		$('#newDeviceDialogContent').empty();
@@ -3988,6 +4035,18 @@ function loadTestToolServerContent(type,showOpt){
 
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function initializenewTestDialog(opt) {
 	if(opt=="auto"){
 		$('#addNewTestTIncPartP').show();
@@ -4007,6 +4066,18 @@ function initializenewTestDialog(opt) {
 	hideShowTestToolPartner("hide");
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function initnewTestDialogObjs(type) {
 	disEnNewTestTDlgPObjs("disable");
 	$('#addNewTestTManuOptManualTxt').attr("disabled","disabled");
@@ -4169,6 +4240,18 @@ function initnewTestDialogObjs(type) {
 }
 */
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function disEnNewTestTDlgPObjs(opt){
 	var objs = [$('#addNewTestTMmgmtIp'),$('#addNewTestTMmgmtIpPortChk'),
 		$('#addNewTestTMmgmtIpPort'),$('#addNewTestTConIp'),
@@ -4187,6 +4270,18 @@ function disEnNewTestTDlgPObjs(opt){
 	});
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function hideShowTestToolPartner(opt){
 	var objs = [$('#autoDTestTPartInfo1'),$('#autoDTestTPartInfo2'),
 		$('#autoDTestTPartnerInfoTableCont'),$('#autoDTestTPortSrch'),
@@ -4201,6 +4296,18 @@ function hideShowTestToolPartner(opt){
 	});
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 function resetautoDTestTPartInfo(excl) {
 	$('#autoDTestTPartInfo1').hide();
 	$('#autoDTestTPartInfo2').hide();
@@ -4211,6 +4318,18 @@ function resetautoDTestTPartInfo(excl) {
 	$('#autoDTestTSlotInfoTableCont').hide();
 }
 
+/*
+ *
+ *  FUNCTION NAME : 
+ *  AUTHOR        : Cathyrine C. Bobis
+ *  DATE          : 
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
 /*New Server*/
 $(document).on("click", "#serverSubNew", function () {
 	AutoDType = 'server';

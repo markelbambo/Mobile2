@@ -60,6 +60,22 @@ $(document).on('click', '#deleteAccRights', function(){
 		deleteAccRi();
 	}
 });
+$(document).on('click', '#cancelDom', function(){
+	if (globalDeviceType.toLowerCase() != "mobile"){
+        $( "#AdminPopUp" ).dialog("close");
+		globalAdminFunc = "";
+		globalDevBoundDomIds = [];
+		globalDomDevIds = [];
+		globalDPSFlag = 0;
+		globalDomDPS2Ids = [];
+		globalDomDPSIds = [];
+		globalAccActiveStatus = [];
+		globalAccInactiveStatus = [];
+		globalDomActiveStatus = [];
+		globalDomInactiveStatus = [];
+		globalDPSBoundIds = [];
+	}
+});
 $(document).on('click', '#cancelUser', function(){
 	if (globalDeviceType.toLowerCase() != "mobile"){
         $( "#AdminPopUp" ).dialog("close");
@@ -73,6 +89,7 @@ $(document).on('click', '#cancelUser', function(){
 		globalDomainBoundUserIds = [];
 		globalUserPolicyIds = [];
 		globalUserPolicy2Ids = [];
+		globalAdminFunc = "";
 		loadUserTable();
 	}
 });
@@ -317,10 +334,11 @@ function loadUserTable(){
 			var totMatch = jsonData.data[0].total;
 			$('#adminTotalMatches').empty().append(totMatch);
 			pagination(totMatch, "user");
+			if (jsonData.data[0].row){
 			for (var a=0;a<jsonData.data[0].row.length;a++){
 				var row = jsonData.data[0].row[a];
 				if(globalDeviceType != "Mobile"){
-					str += "<tr id='tr"+row.UserId+"'><td><input type='checkbox' class='trUser "+tableClass+"' uid='"+row.UserId+"' name='trUser'/></td>";
+					str += "<tr id='trUser"+row.UserId+"'><td><input type='checkbox' class='trUser "+tableClass+"' uid='"+row.UserId+"' name='trUser'/></td>";
 				}else{
 					str += "<tr class='trUser' uid='"+row.UserId+"'>";
 				}
@@ -334,6 +352,7 @@ function loadUserTable(){
 				str += "<td>"+row.UserStatus+"</td>";
 				str += "</tr>";
 				totalRow++;
+			}
 			}
 			$('#usersAdmin-table > tbody').empty().append(str);
 			if(globalDeviceType != "Mobile"){
@@ -447,13 +466,7 @@ function loadDomainTable(){
 			for (var a=0;a<jsonData.data[0].row.length;a++){
 				var row = jsonData.data[0].row[a];
 				if(globalDeviceType != "Mobile"){
-					if(a % 2 == 0){
-    			        var tableClass = 'alt';
-        			}else{
-        			    var tableClass = '';
-        			}
-
-					str += "<tr id='tr"+row.ResourceDomainId+"' class='"+tableClass+"'><td><input type='checkbox' class='trDomain' did='"+row.ResourceDomainId+"'/></td>";
+					str += "<tr id='trDomain"+row.ResourceDomainId+"' class='"+tableClass+"'><td><input type='checkbox' class='trDomain' did='"+row.ResourceDomainId+"'/></td>";
 				}else{
 					str += "<tr class='trDomain' did='"+row.ResourceDomainId+"'>";
 				}
@@ -695,11 +708,11 @@ function loadServerInfoTable(){
 				str += "<td>"+row.Status+"</td>";
 				str += "<td>"+row.BindedDomains+"</td>";
 				str += "<td>"+row.PrimaryInterface+"</td>";
-				str += "<td>"+row.PrimaryIP+"</td>";
+				str += "<td>"+row.PrimaryIp+"</td>";
 				str += "<td>"+row.PrimaryNetMask+"</td>";
 				str += "<td>"+row.PrimaryGateway+"</td>";
 				str += "<td>"+row.SecondaryInterface+"</td>";
-				str += "<td>"+row.SecondaryIP+"</td>";
+				str += "<td>"+row.SecondaryIp+"</td>";
 				str += "<td>"+row.SecondaryNetMask+"</td>";
 				str += "</tr>";
 			}
@@ -806,19 +819,73 @@ function loadVlanTableInformation(){
 				else
 					var tableClass = '';
 				str += "<tr id='tr"+jresult[a].DeviceId+"' class='"+tableClass+"'><td><input type='checkbox' class='trVlanChildren' vlanpopid='"+jresult[a].DeviceId+"'/></td>";
-				str += "<td>"+jresult[a].HostName+"</td>";
-				str += "<td>"+jresult[a].DeviceType+"</td>";
-				str += "<td><input id='popdyvlanstart"+jresult[a].DeviceId+"' disabled value='' type='text'></input></td>";
-				str += "<td><input id='popdyvlanend"+jresult[a].DeviceId+"' disabled value='' type='text'></input></td>";
-				str += "<td><input id='popstatvlanstart"+jresult[a].DeviceId+"' disabled value='' type='text'></input></td>";
-				str += "<td><input id='popstatvlanend"+jresult[a].DeviceId+"' disabled value='' type='text'></input></td>";
-				str += "<td><input id='popreservedVlan"+jresult[a].DeviceId+"' disabled value='' type='text'></input></td>";
+				str += "<td id='newvlanhostname"+jresult[a].DeviceId+"'>"+jresult[a].HostName+"</td>";
+				str += "<td id='newvlandevicetype"+jresult[a].DeviceId+"'>"+jresult[a].DeviceType+"</td>";
+				str += "<td><input id='popdyvlanstart"+jresult[a].DeviceId+"' disabled maxlength='4' onKeyPress='return checkNumberInputChar(event);' value='' type='text'></input></td>";
+				str += "<td><input id='popdyvlanend"+jresult[a].DeviceId+"' disabled maxlength='4' onKeyPress='return checkNumberInputChar(event);' value='' type='text'></input></td>";
+				str += "<td><input id='popstatvlanstart"+jresult[a].DeviceId+"' maxlength='4' onKeyPress='return checkNumberInputChar(event);' disabled value='' type='text'></input></td>";
+				str += "<td><input id='popstatvlanend"+jresult[a].DeviceId+"' maxlength='4' disabled onKeyPress='return checkNumberInputChar(event);' value='' type='text'></input></td>";
+				str += "<td><input id='popreservedVlan"+jresult[a].DeviceId+"' disabled onKeyPress='return checkInputReservedVlan(event,this);' onblur='checkInputLeave(this);' value='' type='text'></input></td>";
 			}
 			$('#AddVlanTable > tbody').empty().append(str);
 			checkPopUPMain('trVlanChildren', 'vlanpopid');	
 		}
 	})	
 }
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : unVlanSelectedItem
+ #  AUTHOR        : Krisfen G. Ducao
+ #  DATE          : Feb. 21, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   :
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function unVlanSelectedItem(trclass){
+	var vlanid = "";var id = "";var dyvlanstart = "";
+	var dyvlanend = "";var statvlanstart = ""; 
+	var statvlanend ="";
+	$("."+trclass).each(function(){
+		if ($(this).is(':checked')==true){
+			vlanid = $(this).attr('vlanpopid');
+			$("#tr"+vlanid).attr('disabled',false);
+			$("#popdyvlanstart"+vlanid).attr('disabled',false);
+			$("#popdyvlanend"+vlanid).attr('disabled',false);
+			$("#popstatvlanstart"+vlanid).attr('disabled',false);
+			$("#popstatvlanend"+vlanid).attr('disabled',false);	
+			$("#popreservedVlan"+vlanid).attr('disabled',false);	
+			console.log("vlanid: ",vlanid);	
+		}else{
+			vlanid = $(this).attr('vlanpopid');
+			$("#tr"+vlanid).attr('disabled',true);
+			$("#popdyvlanstart"+vlanid).attr('disabled',true);
+			$("#popdyvlanend"+vlanid).attr('disabled',true);
+			$("#popstatvlanstart"+vlanid).attr('disabled',true);
+			$("#popstatvlanend"+vlanid).attr('disabled',true);	
+			$("#popreservedVlan"+vlanid).attr('disabled',true);	
+			console.log("vlanid unchecked: ",vlanid);
+		}
+	})
+}
+
+/*
+		var id = "tr"+globalSelectedAdminMain[0]
+		var dyvlanstart = "dyvlanstart"+globalSelectedAdminMain[0]
+		var dyvlanend ="dyvlanend"+globalSelectedAdminMain[0]
+		var statvlanstart = "statvlanstart"+globalSelectedAdminMain[0]
+		var statvlanend = "statvlanend"+globalSelectedAdminMain[0]
+		$("#"+id).attr('disabled',true);
+		$("#"+dyvlanstart).attr('disabled',true);
+		$("#"+dyvlanend).attr('disabled',true);
+		$("#"+statvlanstart).attr('disabled',true);
+		$("#"+statvlanend).attr('disabled',true);
+		$("#editvlanrangeallocations").val("Edit");
+*/	
 /*
  #######################################################################
  #
@@ -876,7 +943,7 @@ function uncheckSelectedItem(){
 var GlobalCommadButton = "";
 function editVlanRangeAllocation(){
 	if(globalSelectedAdminMain.length!=1){
-		alerts("Please select one item only. Thank you!");
+		alerts("Please select one item only.");
 		return 0;
 	}
 	var btn = $("#editvlanrangeallocations").val();
@@ -1047,6 +1114,7 @@ function loadResDomTable(){
 				var row = jsonData.data[0].row[a];
 				var domName = row.DomainName;
 				var domId = row.ResourceDomainId;
+				enableStatusAccRight(a, 'trUserDomain');
 				if(globalDeviceType != "Mobile"){
 					str += "<tr id='trUserDomain"+row.ResourceDomainId+"'><td><input type='checkbox' class='trUserDomain' rdid='"+row.ResourceDomainId+"' rname='"+row.DomainName+"' name='trUserDomain' onclick='enableStatusAccRight("+a+", \"trUserDomain\")'/></td>";
 				}else{
@@ -1072,10 +1140,16 @@ function loadResDomTable(){
 				if(row.Status=='Active'){
 					if($.inArray(id,globalDomActiveStatus)==-1){
 						globalDomActiveStatus.push(domId);
+					}else{
+						var pos = globalDomActiveStatus.indexOf(domId);
+						globalDomActiveStatus.splice(pos,1);
 					}
 				}else{
-					if($.inArray(id,globalDomInactiveStatus)==-1){	
+					if($.inArray(domId,globalDomInactiveStatus)==-1){	
 						globalDomInactiveStatus.push(domId);
+					}else{
+						var pos = globalDomInactiveStatus.indexOf(domId);
+						globalDomInactiveStatus.splice(pos,1);
 					}
 				}
 			}
@@ -1206,7 +1280,7 @@ function loadBindedZone(rdid){
 */
 
 function loadBindedGroup(rdid,zid){
-	var url = getURL('ADMIN2','JSON') + "action=getBindedGroup&query={'QUERY':[{'limit':'"+pagelimit+"','page':'"+PerPage+"','sort':'','orderby':'','ResourceDomainId':'"+rdid+"','ZoneId':'"+zid+"','User':'"+globalUserName+"','filter':''}]}&version=3.0";
+	var                                                                                                                                                                                                                                                                  url = getURL('ADMIN2','JSON') + "action=getBindedGroup&query={'QUERY':[{'limit':'"+pagelimit+"','page':'"+PerPage+"','sort':'','orderby':'','ResourceDomainId':'"+rdid+"','ZoneId':'"+zid+"','User':'"+globalUserName+"','filter':''}]}&version=3.0";
 
 	$.ajax({
 		url: url,
@@ -1271,6 +1345,7 @@ function loadUserData(id){
 				$('#addtxtMiddleName').val(row.MiddleName);
 				$('#addtxtLastName').val(row.LastName);
 				$('#addtxtCountry').val(row.Country);
+				console.log($('#addtxtCountry').val(row.Country));
 				changeContactFormat('addtxtCountry');
 				$('#addtxtPhoneNo').val(row.BusinessPhoneNumber.replace(" ","+"));
 				$('#addtxtHomePhoneNo').val(row.HomePhoneNumber.replace(" ","+"));
@@ -1290,16 +1365,16 @@ function loadUserData(id){
 				//if (activeDom == remActiveDom){
 				//	activeDom = "";
 				//}
-				//oldpassword = row.Password;
+				oldpassword = row.Password;
 				var user = row.UserName;
-				//oldusername = user;
+				oldusername = user;
 				var userlevel = row.UserLevel;
 				if (user == 'admin' || user == 'manager') {
 					$('#addtxtUserName').textinput('disable');
 					$('#addtxtUserLevel').selectmenu('disable');
 				}
 				if (user == globalUserName) {
-					//$('#addtxtUserLevel').attr('disabled',true);
+					$('#addtxtUserLevel').attr('disabled',true);
 					if (userInformation[0].userLevel == 'Administrator' || userInformation[0].userLevel == 'Manager') {
 						$('#addtxtUserLevel').append("<option value='"+userlevel+"' >"+userlevel+"</option>");
 					}
@@ -1316,14 +1391,16 @@ function loadUserData(id){
 							$('#addtxtUserLevel').append("<option value='"+userlevel+"' >"+userlevel+"</option>");
 						} 
 					}
-				$('#addtxtUserLevel').selectmenu("refresh");
+				//$('#addtxtUserLevel').selectmenu("refresh");
 				$('#addtxtUserLevel').val(row.UserLevel);
 				var homephonenumbervalue = $('#addtxtHomePhoneNo').val();
 				if (homephonenumbervalue == 'undefined' || homephonenumbervalue == 'None'){
 					$('#addtxtHomePhoneNo').val('');
 				}
 				var rdid = row.ResourceProfileId;
+				globalUserDomainIds.push(rdid);	
 				var arid = row.SecurityProfileId;
+				globalUserPolicy2Ids.push(arid);
 				var zid = row.Zone;
 				var aid = row.Affiliation;
 				var userdom = row.UserDomain;
@@ -1512,11 +1589,28 @@ function addUserOnLoad() {
  #
  #######################################################################
 */
-function addEditVlanAdmin(){
-	
-	var url = getURL('ADMIN2','JSON') + "action=addeditvlan&query={'QUERY':[{'VlanStartRangeId':'','VlanEndRangeId':'','TimeStamp':'','ReservedVlanIds':'','VlanStaticStartRangeId':'','VlanStaticEndRangeId':'','HostName':'','DeviceId':'','Flag':''}]}&version=3.0";
+function addEditVlanAdmin(type){
+	var jsonarray = checkInputAddVlan();	
+	var query = JSON.stringify(jsonarray);
+	if(query == 0){return 0}
+	var url = getURL('ADMIN2','JSON') + "action=addeditvlan&query={'QUERY':[{'Flag':'"+type+"','query':"+query+"}]}&version=3.0";
 	$.ajax({
-		
+		url: url,
+		dataType: 'html',
+		success: function(data){
+			data = data.replace(/'/g,'"');
+			var jsonData = jQuery.parseJSON(data);
+			console.log("jsonData: ",jsonData);
+			var qresult = jsonData.RESULT[0].Result;
+			if(qresult=="1"){
+				alerts("Vlan information saved.");
+			}else{
+				alerts(qresult);
+			}			
+			loadVLANTable();
+			$( "#AdminPopUp" ).dialog("close");
+			
+		}	
 	})
 }
 /*
@@ -1534,6 +1628,7 @@ function addEditVlanAdmin(){
  #######################################################################
 */
 
+			loadDirectReport
 function loadDirectReport(flag,username,userlevel,id){
 	var qstrdr = "action=LoadDR&query={'QUERY':[{'Position':'"+userlevel+"','ToEdit':'"+username+"'}]}&version=3.0";
 	$.ajax ({
@@ -1578,55 +1673,56 @@ function loadDirectReport(flag,username,userlevel,id){
 var globalSelectAddVlanPopUp = [];
 function checkPopUPMain(trclass, id){
 	$("."+trclass).on("click",function(){
-		//uncheckSelectedItem();
+		unVlanSelectedItem(trclass);
 		var val = $(this).attr(id);
 		if($.inArray(val, globalSelectAddVlanPopUp) == -1){
 			globalSelectAddVlanPopUp.push(val);
-			/*if(globalDeviceType != "Mobile"){
-				if(trclass == "trAcc"){
-					$('#trAcc'+val).addClass('highlight');
-				}else if(trclass == "trEmail"){
-					$('#trEmail'+val).addClass('highlight');
-				}else if(trclass == "trLogs"){
-					$('#trLogs'+val).addClass('highlight');
-				}else if (trclass == "trAccRights"){
-					
-					$(this).addClass('highlight');
-				}else{
-					$('#tr'+val).addClass('highlight');
-				}
-			}else{
-				$(this).addClass('highlight');
-				if (trclass == 'trAccRights'){
-				}
-			}*/
 		}else{
 			var pos = globalSelectAddVlanPopUp.indexOf(val);
 			globalSelectAddVlanPopUp.splice(pos,1);
-			/*if(globalDeviceType != "Mobile"){
-				if(trclass == "trAcc"){
-					$('#trAcc'+val).removeClass('highlight');
-				}else if(trclass == "trEmail"){
-					$('#trEmail'+val).removeClass('highlight');
-				}else if(trclass == "trLogs"){
-					$('#trLogs'+val).removeClass('highlight');
-				}else if (trclass == "trAccRights"){
-					$(this).removeClass('highlight');
-				}else{
-					$('#tr'+val).removeClass('highlight');
-				}
-			}else{
-				$(this).removeClass('highlight');
-				if (trclass == 'trAccRights'){
-				}
-			}*/
 		}
-		checkAdminPopUpVlan();
 	});
 }
-
-
-
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : checkInputAddVlan
+ #  AUTHOR        : Krisfen G. Ducao
+ #  DATE          : February 18, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function checkInputAddVlan(){
+	var vlanid = "";var id = "";var dyvlanstart = "";
+	var dyvlanend = "";var statvlanstart = "";var hostname = "";
+	var statvlanend ="";var reserved = "";var ret =[];
+	$(".trVlanChildren").each(function(){
+		if ($(this).is(':checked')==true){
+			vlanid =  $(this).attr('vlanpopid');
+			//$("#tr"+vlanid).val();
+			hostname = $("#newvlanhostname"+vlanid).text();
+			dyvlanstart = $("#popdyvlanstart"+vlanid).val();
+			dyvlanend = $("#popdyvlanend"+vlanid).val();
+			statvlanstart = $("#popstatvlanstart"+vlanid).val();
+			statvlanend = $("#popstatvlanend"+vlanid).val();
+			//$("#popreservedVlan"+vlanid).val();
+			reserved = $("#popreservedVlan"+vlanid).val();
+			if(dyvlanstart==""||dyvlanend==""||statvlanstart==""||statvlanend==""){
+				alerts("Please complete all information before click save!");
+				return 0;
+			}else{
+				ret.push({'VlanStartRangeId':dyvlanstart,'VlanEndRangeId':dyvlanend,'TimeStamp':'','ReservedVlanIds':reserved,'VlanStaticStartRangeId':statvlanstart,'VlanStaticEndRangeId':statvlanend,'HostName':hostname,'DeviceId':vlanid})
+			}
+			
+		}
+	});
+	return ret
+}
 /*
  #######################################################################
  #
@@ -1643,6 +1739,7 @@ function checkPopUPMain(trclass, id){
 */
 function checkSingleMain(trclass, id){
 	globalSelectedAdminMain = [];
+	console.log("globalSelectedAdminMain:",globalSelectedAdminMain);
 	$("."+trclass).on("click",function(){
 		uncheckSelectedItem();
 		var val = $(this).attr(id);
@@ -1667,7 +1764,6 @@ function checkSingleMain(trclass, id){
 				}
 			}
 		}else{
-			ctr--;
 			var pos = globalSelectedAdminMain.indexOf(val);
 			globalSelectedAdminMain.splice(pos,1);
 			if(globalDeviceType != "Mobile"){
@@ -1822,6 +1918,7 @@ function changeAdminPage(num){
 
     }
 	if(num == 10){
+		genIds = [];
 		globalAdminPage = 'Device';
 	}
 	CurrentPage = "panel";
@@ -1859,6 +1956,110 @@ function checkAllAdminTable(){
 	}else{
 		$(".trUser").each(function(){
 			var val = $(this).attr('uid');
+			var pos = globalSelectedAdminMain.indexOf(val);
+			globalSelectedAdminMain.splice(pos,1);
+			if(globalDeviceType != "Mobile"){
+				$(this).prop('checked',false);
+				$('#tr'+val).removeClass('highlight');
+			}else{
+				$(this).removeClass('highlight');
+			}
+		});
+	}
+	if($('#adminGroupSelectAll').is (':checked')){
+		$(".trGroup").each(function(){
+			var val = $(this).attr('gid');	
+			if($.inArray(val, globalSelectedAdminMain) == -1){
+				globalSelectedAdminMain.push(val);
+				if(globalDeviceType != "Mobile"){
+					$(this).prop('checked',true);
+					$('#tr'+val).addClass('highlight');
+				}else{
+					$(this).addClass('highlight');
+				}
+			}
+		});
+	}else{
+		$(".trGroup").each(function(){
+			var val = $(this).attr('gid');
+			var pos = globalSelectedAdminMain.indexOf(val);
+			globalSelectedAdminMain.splice(pos,1);
+			if(globalDeviceType != "Mobile"){
+				$(this).prop('checked',false);
+				$('#tr'+val).removeClass('highlight');
+			}else{
+				$(this).removeClass('highlight');
+			}
+		});
+	}
+	if($('#adminDomainSelectAll').is (':checked')){
+		$(".trDomain").each(function(){
+			var val = $(this).attr('did');	
+			if($.inArray(val, globalSelectedAdminMain) == -1){
+				globalSelectedAdminMain.push(val);
+				if(globalDeviceType != "Mobile"){
+					$(this).prop('checked',true);
+					$('#tr'+val).addClass('highlight');
+				}else{
+					$(this).addClass('highlight');
+				}
+			}
+		});
+	}else{
+		$(".trDomain").each(function(){
+			var val = $(this).attr('did');
+			var pos = globalSelectedAdminMain.indexOf(val);
+			globalSelectedAdminMain.splice(pos,1);
+			if(globalDeviceType != "Mobile"){
+				$(this).prop('checked',false);
+				$('#tr'+val).removeClass('highlight');
+			}else{
+				$(this).removeClass('highlight');
+			}
+		});
+	}
+	if($('#adminaAccessrightSelectAll').is (':checked')){
+		$(".trAccRights").each(function(){
+			var val = $(this).attr('accrigid');	
+			if($.inArray(val, globalSelectedAdminMain) == -1){
+				globalSelectedAdminMain.push(val);
+				if(globalDeviceType != "Mobile"){
+					$(this).prop('checked',true);
+					$('#tr'+val).addClass('highlight');
+				}else{
+					$(this).addClass('highlight');
+				}
+			}
+		});
+	}else{
+		$(".trAccRights").each(function(){
+			var val = $(this).attr('accrigid');
+			var pos = globalSelectedAdminMain.indexOf(val);
+			globalSelectedAdminMain.splice(pos,1);
+			if(globalDeviceType != "Mobile"){
+				$(this).prop('checked',false);
+				$('#tr'+val).removeClass('highlight');
+			}else{
+				$(this).removeClass('highlight');
+			}
+		});
+	}
+	if($('#adminaServerInfoSelectAll').is (':checked')){
+		$(".trServerInfo").each(function(){
+			var val = $(this).attr('siid');	
+			if($.inArray(val, globalSelectedAdminMain) == -1){
+				globalSelectedAdminMain.push(val);
+				if(globalDeviceType != "Mobile"){
+					$(this).prop('checked',true);
+					$('#tr'+val).addClass('highlight');
+				}else{
+					$(this).addClass('highlight');
+				}
+			}
+		});
+	}else{
+		$(".trServerInfo").each(function(){
+			var val = $(this).attr('siid');
 			var pos = globalSelectedAdminMain.indexOf(val);
 			globalSelectedAdminMain.splice(pos,1);
 			if(globalDeviceType != "Mobile"){
@@ -1950,9 +2151,9 @@ function createZoneDynamicTab(){
 	var str = '<div data-role="navbar" id="zonenavbar"><ul>';
     for(var a = 0; a <globalUserDomainNames.length; a++){
 		if (globalDeviceType == 'Mobile'){
-	        str += "<li><a href='#' data-tab-class='liUserZone_"+globalUserDomainNames[a]+"' did='"+globalUserDomainIds[a]+"' onclick='loadBindedZone("+globalUserDomainIds[a]+")' data-mini='true'>";
+	        str += "<li><a href='#domZoneDiv' data-tab-class='liUserZone_"+globalUserDomainNames[a]+"' did='"+globalUserDomainIds[a]+"' onclick='loadBindedZone("+globalUserDomainIds[a]+")' data-mini='true'>";
 		}else{
-	        str += "<li><a href='#liUserZone_"+globalUserDomainNames[a]+"' did='"+globalUserDomainIds[a]+"' onclick='loadBindedZone("+globalUserDomainIds[a]+")' data-mini='true'>";
+	        str += "<li><a href='#domZoneDiv' did='"+globalUserDomainIds[a]+"' onclick='loadBindedZone("+globalUserDomainIds[a]+")' data-mini='true'>";
 		}
         str += globalUserDomainNames[a]+"</a></li>";
 	}
@@ -2047,15 +2248,23 @@ function addAdminPopUp(page){
 	$( "#AdminPopUp" ).dialog({
 		modal: true,
 		autoResize:true,
-		width: '1000px',
+		width: w,
 		maxHeight:600,
-		height:600,
+		height: 'auto',
 		title: pageInfo.title
 	});
 	$( "#AdminPopUp" ).empty().load( pageInfo.url,function(){
-		$('#navbar').tabs();
+		if (page == 'adduser' || page == 'edituser'){
+			$('#navbar').tabs();
+		}
 		setTimeout(function(){
-			addEditUserInit();
+			if(page=='editaccess'){
+				loadAccRiData();	
+				return 1;
+			}else if (page=='adduser' || page == 'edituser'){
+				PerPage = 1;
+				addEditUserInit();
+			}
 		}, 1000);
 
 	});
@@ -2129,6 +2338,10 @@ function domainPopUp(page){
 		$('#domaintab').tabs();
 		setTimeout(function(){
 			$('#deviceListDiv').empty().load('pages/Admin/deviceListTable.html',function(){
+				PerPage = 1;
+				timeZoneStatic();
+				defaultReserveLimitValues();
+				populateDurationCombo('');
 				loadDeviceList();
 			});
 		},1000);
@@ -2440,35 +2653,6 @@ function addServerContent(host, ntp, intr, gt){
 		});
 	});
 }
-
-/*
- #######################################################################
- #
- #  FUNCTION NAME : uncheckAdminPopUpVlan
- #  AUTHOR        : Krisfen G. Ducao
- #  DATE          : March 27, 2014
- #  MODIFIED BY   : 
- #  REVISION DATE : 
- #  REVISION #    : 
- #  DESCRIPTION   : save added server
- #  PARAMETERS    : 
- #
- #######################################################################
-*/
-function checkAdminPopUpVlan(){
-	var id = "tr"+globalSelectAddVlanPopUp[0]
-	var dyvlanstart = "popdyvlanstart"+globalSelectAddVlanPopUp[0]
-	var dyvlanend ="popdyvlanend"+globalSelectAddVlanPopUp[0]
-	var statvlanstart = "popstatvlanstart"+globalSelectAddVlanPopUp[0]
-	var statvlanend = "popstatvlanend"+globalSelectAddVlanPopUp[0]
-	var reserved = "popreservedVlan"+globalSelectAddVlanPopUp[0]
-	$("#"+id).attr('disabled',false);
-	$("#"+dyvlanstart).attr('disabled',false);
-	$("#"+dyvlanend).attr('disabled',false);
-	$("#"+statvlanstart).attr('disabled',false);
-	$("#"+statvlanend).attr('disabled',false);
-	$("#"+reserved).attr('disabled',false);
-}
 /*
  #######################################################################
  #
@@ -2653,21 +2837,21 @@ function editServer(){
 		$('#addServeInfoTab').tabs();	
 
 		var ctrlStr="";var mngtStr="";
-		$('#tr'+serverIds).each(function(){
-			hostserver = $(this).find('td').eq(3).text();
-			auth = $(this).find('td').eq(4).text();
-			ntp = $(this).find('td').eq(5).text();
-			sertype = $(this).find('td').eq(2).text();
-			stat = $(this).find('td').eq(6).text();
-			mngtInt = $(this).find('td').eq(8).text();
-			mngtIP = $(this).find('td').eq(9).text();
-	  		mngtNet = $(this).find('td').eq(10).text();
-		  	mngtGT = $(this).find('td').eq(11).text();
-		  	ctrlInt = $(this).find('td').eq(12).text();
-	  		ctrlIP = $(this).find('td').eq(13).text();
-		  	ctrlNet = $(this).find('td').eq(14).text();
+		for(var a=0;a<serverIds.length;a++){
+			hostserver = $('#tr'+serverIds[a]).find('td').eq(3).text();
+			auth = $('#tr'+serverIds[a]).find('td').eq(4).text();
+			ntp = $('#tr'+serverIds[a]).find('td').eq(5).text();
+			sertype = $('#tr'+serverIds[a]).find('td').eq(2).text();
+			stat = $('#tr'+serverIds[a]).find('td').eq(6).text();
+			mngtInt = $('#tr'+serverIds[a]).find('td').eq(8).text();
+			mngtIP = $('#tr'+serverIds[a]).find('td').eq(9).text();
+	  		mngtNet = $('#tr'+serverIds[a]).find('td').eq(10).text();
+		  	mngtGT = $('#tr'+serverIds[a]).find('td').eq(11).text();
+		  	ctrlInt = $('#tr'+serverIds[a]).find('td').eq(12).text();
+	  		ctrlIP = $('#tr'+serverIds[a]).find('td').eq(13).text();
+		  	ctrlNet = $('#tr'+serverIds[a]).find('td').eq(14).text();
+		}
 			
-		});
 		Interfaces = ["eth0", "eth1", "eth2"];		
 		ctrlStr += "<option>"+ctrlInt+"</option>";
 		mngtStr += "<option>"+mngtInt+"</option>";
@@ -3389,7 +3573,7 @@ function deleteVlanRangeAllocation(){
 		}
 		alerts(msg,"deleteVlanID();","yesno")
 	}else{
-		var msg = "Please select item in the table. Thank you!"
+		var msg = "Please select item in the table."
 		alerts(msg);
 	}	
 }
@@ -3425,8 +3609,6 @@ function addVLanRangeAllocation(){
 
 		},1000);
 		loadVlanTableInformation();
-		//$("#AddVlanTable").table();
-		
 	});
 }
 
@@ -3445,7 +3627,7 @@ function addVLanRangeAllocation(){
  #######################################################################
 */
 function loadCountry(selbox){
-	var queryObj = {'QUERY':[{'userid':userInformation[0].userId}]};
+	var queryObj = {'QUERY':[{'userid':userInformation[0].UserId}]};
 	var queryStr = JSON.stringify(queryObj);
 	$.ajax({
 		url: getURL('ADMIN2','JSON')+"action=getCountries&query="+queryStr+"&version=3.0",
@@ -4117,6 +4299,77 @@ function activateResLimits(){
 /*
  #######################################################################
  #
+ #  FUNCTION NAME : showCBPriviledge
+ #  AUTHOR        : Apple Kem E. Eguia
+ #  DATE          : December 20, 2013
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : shows checkbox for enabling/disabling domain
+ #					creation priviledge
+ #  PARAMETERS    : pos - user level
+ #
+ #######################################################################
+*/
+function showCBPriviledge(pos){	
+	if(pos=="select one"){
+		alerts('Please select User Type');
+		return;
+	}
+
+	if (pos == ""){
+		if (GlobalUserLevel == "Administrator" || GlobalUserLevel == "Manager"){
+			$('#cbdomPriv').removeAttr('style','display:none');
+		}else{
+			$('#cbdomPriv').attr('style','display:none');
+		}
+		var domPriv = getUserPriviledge();
+		if (domPriv == "disabled"){
+			$('#domPriviledge').attr('checked',false);
+		}else{
+			$('#domPriviledge').attr('checked',true);
+		}
+	}else{
+		if (pos == "Administrator" || pos == "Manager"){
+			$('#cbdomPriv').removeAttr('style','display:none');
+		}else{
+			$('#cbdomPriv').attr('style','display:none');
+		}
+	}
+}
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : getUserPriviledge
+ #  AUTHOR        : Apple Kem E. Eguia
+ #  DATE          : December 20, 2013
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : gets user domain priviledge
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function getUserPriviledge(){
+//	var cgiUrl = "https://"+CURRENT_IP+"/cgi-bin/Final/AutoCompleteAdmin/FQueryCgiAdminPy.py?action=getuserpriviledge&query=UserId="+globalUserIdArray;
+	var cgiUrl = getURL('ADMIN', 'JSON')+"action=getuserpriviledge&query{'QUERY': [{'UserId': '"+userInformation[0].userId+"'}]}";
+	var retcerd = "";
+	$.ajax({
+        url: cgiUrl,
+        dataType: 'html',
+		async: false,
+        success: function(data) {
+			
+			data = $.trim(data);
+			retcerd = data;
+        }
+    });
+	return retcerd;
+}
+/*
+ #######################################################################
+ #
  #  FUNCTION NAME : checkDeleteUser 
  #  AUTHOR        : Apple Kem E. Eguia
  #  DATE          : February 25, 2014
@@ -4133,15 +4386,13 @@ function checkDeleteUser() {
 	var msg = "";
 	var unames = new Array();
 	var header = "Delete User";
-	
-	$(".trUser").each(function(){
-		var uname = $(this).find('td').eq(2).text();
-		if ($(this).hasClass('highlight') == true){
-			if ($.inArray(uname,unames) == -1){
-				unames.push(uname);
-			}
+	var id = globalSelectedAdminMain;
+	for(var a=0; a<id.length;a++){
+		var uname = $('#trUser'+id[a]).find('td').eq(3).text();
+		if($.inArray(uname,unames) == -1){
+			unames.push(uname); 
 		}
-	});
+	}
 	msg += "<b>Are you sure you want to DELETE the following user(s)?</b><br/><br/>";
 	for (var c = 0; c < unames.length; c++){
     	msg += unames[c] + "<br/>";
@@ -4225,9 +4476,9 @@ function createGroupDynamicTab(rdid){
 	 var str = '<div data-role="navbar" id="groupnavbar"><ul id="groupTab">';
     for(var a = 0; a <globalUserZoneNames.length; a++){
 		if (globalDeviceType == 'Mobile'){
-	        str += "<li><a href='#g' data-tab-class='liUserGroup_"+globalUserZoneNames[a]+"' did='"+globalUserZoneIds[a]+"' onclick='loadBindedGroup("+rdid+","+globalUserZoneIds[a]+")' data-mini='true'>";
+	        str += "<li><a href='#domZoneGroupDiv' data-tab-class='liUserGroup_"+globalUserZoneNames[a]+"' did='"+globalUserZoneIds[a]+"' onclick='loadBindedGroup("+rdid+","+globalUserZoneIds[a]+")' data-mini='true'>";
 		} else {
-	        str += "<li><a href='#liUserGroup_"+globalUserZoneNames[a]+"' did='"+globalUserZoneIds[a]+"' onclick='loadBindedGroup("+rdid+","+globalUserZoneIds[a]+")' data-mini='true'>";
+	        str += "<li><a href='#domZoneGroupDiv' did='"+globalUserZoneIds[a]+"' onclick='loadBindedGroup("+rdid+","+globalUserZoneIds[a]+")' data-mini='true'>";
 		}
         str += globalUserZoneNames[a]+"</a></li>";
 	}
@@ -4463,26 +4714,65 @@ function enableStatusAccRight(a, type){
 	});
 
 	$(document).on('change', '#'+type+a, function(){
-		var id;
-		if($(this).val()=='Active'){
-			id=$(this).attr('ssid');
-			if(type=='trUserAccRights'){
-				globalAccActiveStatus.push(id);
-				var pos = globalAccActiveStatus.indexOf(id);
-				globalAccActiveStatus.splice(pos,1);
-			}else{
-				globalDomActiveStatus.push(id);
-				var pos = globalAccActiveStatus.indexOf(id);
-			}
-		}else{
-			id=$(this).attr('ssid');
-			if(type=='trUserAccRights'){
-				globalAccInactiveStatus.push(id);
-			}else{
-				globalDomInactiveStatus.push(id);
-			}
-		}
+		var stat=$(this).val();
+	 	var	id=$(this).attr('ssid');
+		alertStatus(stat,id, type, a);
 	});
+}
+
+function alertStatus(stat, id, type, a){
+	$("#manualAlert").dialog({
+		width: 300,
+		height: 150,
+		resizable: false,
+		modal: true,
+		closeOnEscape: false,
+		open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+		buttons: {
+			"Yes": function() {
+			if(stat=='Active'){
+				if(type=='trUserAccRights'){
+					globalAccActiveStatus.push(id);
+					if($.inArray(id,globalAccInactiveStatus)!= -1){
+						var pos = globalAccInactiveStatus.indexOf(id);
+						globalAccInactiveStatus.splice(pos,1);
+					}
+				}else{
+					globalDomActiveStatus.push(id);
+					if($.inArray(id,globalDomInactiveStatus)!= -1){
+						var pos = globalDomInactiveStatus.indexOf(id);
+						globalDomInactiveStatus.splice(pos,1);
+					}
+				}
+			}else{
+				if(type=='trUserAccRights'){
+					globalAccInactiveStatus.push(id);
+					if($.inArray(id,globalAccActiveStatus)!= -1){
+						var pos = globalAccActiveStatus.indexOf(id);
+						globalAccActiveStatus.splice(pos,1);
+					}
+				}else{
+					globalDomInactiveStatus.push(id);
+					if($.inArray(id,globalDomActiveStatus)!= -1){
+						var pos = globalDomActiveStatus.indexOf(id);
+						globalDomActiveStatus.splice(pos,1);
+					}
+				}
+			}
+			$(this).dialog('destroy');	
+			},
+			"No": function(){
+				$(this).dialog('destroy');
+				if(stat=='Active'){
+					$('#'+type+a).val('Inactive');
+				}else{
+					$('#'+type+a).val('Active');
+				}
+			}
+			}
+		});
+		$('#manualAlert').text('Are you sure you want to change the domain status to '+stat+'?');
+
 }
 /*
  #######################################################################
@@ -4664,6 +4954,7 @@ function showAccess(id,src) {
 */
 
 function saveAccessRights(){
+	console.log("globalAdminFunc",globalAdminFunc);
 	var name = $('#SecPolName').val();
 	var desc = $('#SecPolDesc').val();
 	if (globalAdminFunc == "add"){
@@ -5231,7 +5522,7 @@ function deletelogsbutton(){
 		}
 		alerts(msg,"deleteLogsUser('"+val+"');","yesno");
 	}else{
-		alerts("Please select date of logs. Thank you!");
+		alerts("Please select date of logs.");
 		return 0; 
 	}
 }
@@ -5254,7 +5545,7 @@ function showLogsbutton(){
 	if(globalSelectedAdminMain.length==1){
 		var val =$("#trLogs"+globalSelectedAdminMain[0]).text();
 	}else{
-		alerts("Please select 1 date only. Thank you!");
+		alerts("Please select 1 date only.");
 		return 0;
 	}	
 	$( "#AdminPopUp" ).dialog({
@@ -5300,7 +5591,7 @@ function deleteLogsUser(logs){
 			var jresult = jsonData.RESULT[0].Result;
 			alerts(jresult);
 			if(jresult){
-				alerts("Logs has been deleted. Thank you!")
+				alerts("Logs has been deleted.")
 				loadLogsTable();
 			}	
 		}		
@@ -5430,6 +5721,7 @@ function getpageLimit(){
 */
 
 function loadAccRiData(){
+	console.log("globalSelectedAdminMain: ",globalSelectedAdminMain);
 	if (globalAdminFunc == 'edit'){
 		getAccessRightInfo(globalSelectedAdminMain);	
 	}
@@ -5484,7 +5776,11 @@ function getAccessRightInfo(id) {
 		
 	getAccRiData(id);
 	if ($('#SecPolName').val() == "Default") {
-		 $('#SecPolName').textinput('disable');
+		if (globalDeviceType == 'Mobile'){
+			$('#SecPolName').textinput('disable');
+		} else {
+			$('#SecPolName').attr('disabled',true);
+		}
 	}
 //	var action = $('#trSecurityPolicy'+id).find('td').eq(2).text().split("/");
 //	var entity = $('#trSecurityPolicy'+id).find('td').eq(3).text().split("/");
@@ -5792,7 +6088,195 @@ function deleteSecPol(header){
 		}
 	}
 }
+/*
+ ########################################################################
+ #																	    #
+ #  FUNCTION NAME : getEmailResInfo										#
+ #  AUTHOR        : 													#
+ #  DATE          : 				 									#
+ #  MODIFIED BY   : Maricel Louise Sumulong								#
+ #  REVISION DATE : November 10, 2013 PST								#
+ #  REVISION #    : 1													#
+ #  DESCRIPTION   : gets email and/or reservation information		 	#
+ #  PARAMETERS    : user/group/domain id, table name					#
+ #																		#
+ ########################################################################
+*/
 
+function getEmailResInfo(id,table) {
+	$.ajax({
+		//url: "https://"+CURRENT_IP+"/cgi-bin/Final/AutoCompleteAdmin/FQueryCgiAdminPy.py?action=getemailresinfo&query=Id="+id+"$Table="+table,
+		url: getURL('ADMIN2', 'JSON')+"action=getemailresinfo&query={'QUERY': [{'Id': '"+id+"', 'Table': '"+table+"'}]}",
+		dataType: 'html',
+		async: false,
+		success: function(data) {
+			data = data.replace(/'/g, '"');
+			var jsonData = $.parseJSON(data);
+			var mConfig = jsonData.data[0].row;
+			var b = 0;
+			var msg = "";
+			var events = "";
+			var info = "";
+			var devnum = "";
+			var resnum = '';
+			var actres = "";
+			var resdur = "";
+			var minres = '';
+			var minext = "";
+			var maxext = "";
+			var emt = "";
+			var enmin = "";
+			var di = "";
+			var dname = "";
+			var ddesc = "";
+			var poweractive = "";
+			var powerinactive = "";
+			while(b < mConfig.length) {
+				if (table != "User") {
+					msg  = mConfig[b].getAttribute('Message');
+					events = mConfig[b].getAttribute('Event');
+					info  = mConfig[b].getAttribute('Info');
+				}
+				resnum = mConfig[b].MaxReservationPerUser;
+				actres = mConfig[b].MaxActiveReservationPerUser;
+				devnum = mConfig[b].MaxNumberOfDevicesPerReservation;
+				resdur  = mConfig[b].MaxNumberOfReservationTime;
+				emt = mConfig[b].Notification;
+				enmin = mConfig[b].NotificationMin;
+				//minext = mConfig[b].getAttribute('MinAllowedExtension');
+				maxext  = mConfig[b].MaxAllowedExtension;
+				//poweractive  = mConfig[b].getAttribute('ActivePowerPolicy');
+				//powerinactive  = mConfig[b].getAttribute('InactivePowerPolicy');
+				di = mConfig[b].DisableIteration;
+				
+				b++;
+			}
+			/*if(poweractive != null && poweractive != undefined && poweractive != ""){
+				var activePowerArr = poweractive.split(",");
+				for(var t=0; t<activePowerArr.length; t++){
+					if (activePowerArr[t] != "" && activePowerArr[t] != undefined && activePowerArr[t] != null && $.inArray(activePowerArr[t],globalPowerManagementActive) == -1) {
+						globalPowerManagementActive.push(activePowerArr[t]);
+					}
+					if (activePowerArr[t] != "" && activePowerArr[t] != undefined && activePowerArr[t] != null && $.inArray(activePowerArr[t],globalPowerManagement) == -1) {
+						globalPowerManagement.push(activePowerArr[t]);
+					}
+				}
+			}
+			if(powerinactive != null && powerinactive != undefined && powerinactive != ""){
+				var activePowerArr = powerinactive.split(",");
+				for(var t=0; t<activePowerArr.length; t++){
+					if (activePowerArr[t] != "" && activePowerArr[t] != undefined && activePowerArr[t] != null && $.inArray(activePowerArr[t],globalPowerManagementInActive) == -1) {
+						globalPowerManagementInActive.push(activePowerArr[t]);
+					}
+					if (activePowerArr[t] != "" && activePowerArr[t] != undefined && activePowerArr[t] != null && $.inArray(activePowerArr[t],globalPowerManagement) == -1) {
+						globalPowerManagement.push(activePowerArr[t]);
+					}
+				}
+			}
+
+			if (table == 'ResourceZone'){
+				updateReservationZone(actres,resnum,devnum,resdur,maxext,emt,enmin,table,di);			
+			}else{
+				updateReservation(actres,resnum,devnum,resdur,maxext,emt,enmin,table,di);			
+			}
+			$('#namePolicy').val(dname);
+			$('#descPolicy').val(ddesc);*/
+		}
+	});
+}
+function populateDurationCombo(id) {
+
+	//HOURS
+	var strHour;
+    for (var e = 0; e < 24 ; e++) {
+		if (e < 10) {
+			strHour += "<option value='0"+e+"'>0"+e+"</option>";
+		} else {
+			strHour += "<option value='"+e+"'>"+e+"</option>";
+		  }
+	}	
+	$('#durH').empty().append(strHour);
+
+	//MINUTES
+	var strMin;
+    for (var l = 0; l < 60 ; l++) {
+		if (l < 10) {
+			strMin += "<option value='0"+l+"'>0"+l+"</option>";
+		} else {
+			strMin += "<option value='"+l+"'>"+l+"</option>";
+		  }
+	}	
+	$('#durM').empty().append(strMin);
+}
+function createFtpUser(uname,pass){
+	
+	if (uname == "" || uname == undefined) {
+		uname = $("#linuxUserName").text();
+		pass = $("#addtxtPassword2").val();
+	}
+
+	var qstr = "action=createUserAccount&query={'QUERY': [{'UserName': '"+uname+"', 'Password': '"+pass+"'}]}";
+
+    $.ajax({
+        url: getURL('ADMIN2', 'JSON')+qstr+CURRENT_IP,
+        dataType: 'html',
+        success: function(data) {
+            //alerts(data);
+        }
+    });
+
+}
+/*
+ ########################################################################
+ #																		#
+ #  FUNCTION NAME : defaultReserveLimitValues							#
+ #  AUTHOR        : Leonard M. Leynes									#
+ #  DATE          :  													#
+ #  MODIFIED BY   : Maricel Louise Sumulong								#
+ #  REVISION DATE : November 10, 2013 PST								#
+ #  REVISION #    : 1													#
+ #  DESCRIPTION   : default settings for reservation limit				#
+ #  PARAMETERS    : none												#
+ #																		#
+ ########################################################################
+*/
+
+function defaultReserveLimitValues(tbl){
+	if (tbl == 'zone'){
+		$('#z-maxResNumCB').attr('checked',true);
+		$('#z-maxActResCB').attr('checked',true);
+		$('#z-maxDevNumCB').attr('checked',true);
+		$('#z-maxExtNumCB').attr('checked',true);
+		$('#z-maxResDurCB').attr('checked',true);
+		$('#z-disableIterationCB').attr('checked',true);
+		$('#z-maxResNum').attr('disabled',false).val('4');
+		$('#z-maxActRes').attr('disabled',false).val('2');
+		$('#z-maxDevNum').attr('disabled',false).val('10');
+		$('#z-maxExtNum').attr('disabled',false).val('2');
+		$('#z-UserReservationTimeInfo').attr('disabled',false);
+		$('#z-durMM').attr('disabled',false);
+		$('#z-durDD').attr('disabled',false).val('4');
+		$('#z-durH').attr('disabled',false).val('00').css('width','100px');
+		$('#z-durM').attr('disabled',false).val('00').css('width','100px');
+
+	}else{
+	$('#maxResNumCB').attr('checked',true);
+	$('#maxActResCB').attr('checked',true);
+	$('#maxDevNumCB').attr('checked',true);
+	$('#maxExtNumCB').attr('checked',true);
+	$('#maxResDurCB').attr('checked',true);
+	$('#disableIterationCB').attr('checked',true);
+	$('#maxResNum').attr('disabled',false).val('4');
+	$('#maxActRes').attr('disabled',false).val('2');
+	$('#maxDevNum').attr('disabled',false).val('10');
+	$('#maxExtNum').attr('disabled',false).val('2');
+	$('#UserReservationTimeInfo').attr('disabled',false);
+	$('#durMM').attr('disabled',false);
+	$('#durDD').attr('disabled',false).val('4');
+	$('#durH').attr('disabled',false).val('00').css('width','100px');
+	$('#durM').attr('disabled',false).val('00').css('width','100px');
+	}
+}
 /*
  #######################################################################
  #
@@ -6930,14 +7414,14 @@ function saveAddEditUser(){
 		alertUser("Please select at least 1 Resource Domain");
 		return;
 		}
-/*	if (globalAccActiveStatus.length == 0 || globalAccActiveStatus.length > 1) {
+	if (globalAccActiveStatus.length == 0 || globalAccActiveStatus.length > 1) {
 		alertUser("Please set only one status of Access Right to 'Active'");
 		return;
 	}
 	if (globalDomActiveStatus == [] || globalDomActiveStatus.length == 0 || globalDomActiveStatus.length > 1) {
 		alertUser("Please set only one status of Domain to 'Active'");
 		return;
-	}*/
+	}
 	var idContainer1 = "";
 	var idContainer2 = "";
 
@@ -7076,7 +7560,7 @@ function saveAddEditUser(){
 			var act = "";
 			var qstr = "action="+globalAdminFunc+"User&query={'QUERY':[{"+qstr1+qstr2+qstr3+",'ResourceProfileId':'"+idContainer1+"','SecurityProfileId':'"+globalUserPolicy2Ids;
 			qstr += "','SecurityProfileIdActive':'"+globalAccActiveStatus;
-			qstr += "','SecurityProfileIdInactive':'globalAccInActiveStatus";
+			qstr += "','SecurityProfileIdInactive':'"+globalAccInactiveStatus;
 			qstr += "','Zone':'"+zoneArr+"','GroupId':'"+groupArr;
 			qstr += "','MaxReservationPerUser':'"+resnum;
 			qstr += "','MaxActiveReservationPerUser':'"+actres;
@@ -7093,11 +7577,12 @@ function saveAddEditUser(){
 			}
 			qstr += "','ActiveDomain':'"+globalDomActiveStatus+"'}]}&version=3.0";
 			var uname = $('#addtxtUserName').val();
+			var pass = $('#addtxtPassword').val();
 //			addingModal = true;
 //			globalUserGroupInfoArr = [];
 //			globalUserInfoArr = [];
 //			flagHandler = 1;
-			addUserPy(qstr, /*updateUserDomainZoneInfo('add','"+idContainer1+"','"+globalUserDomainIds+"','"+lclgrpid+"','"+uname+"');loadAuthenticationTable(1);createFtpUser();*/"loadUserTable(1);$('#AdminPopUp').empty().dialog('close');");
+			addUserPy(qstr, uname, pass,/*updateUserDomainZoneInfo('add','"+idContainer1+"','"+globalUserDomainIds+"','"+lclgrpid+"','"+uname+"');loadAuthenticationTable(1);createFtpUser();*/"loadUserTable(1);$('#AdminPopUp').empty().dialog('close');");
 			//add(qstr, "loadUserTable(1);loadAuthenticationTable(1);createFtpUser();");
 			/*var uname = document.getElementsByName("addtxtUserName");
 			var qstr2 = "action=radpol&UserName="+uname[0].value+"&RprofId="+idContainer1 +"&SprofId="+idContainer2;
@@ -7109,26 +7594,18 @@ function saveAddEditUser(){
 			return;
 		  }
 	}
-/*	initAdminSort('');	
-	globalLoad = "rmUserStat";
-	globalAdminLoad = "User";
-	globalSelectedArray = [];
-	globalSelectedArray2 = [];
-	globalSelectedArray4 = [];
-	globalSelectedArray6 = [];
-	globalSelectedArray7 = [];
-	globalSelectedArray8 = [];
-	globalSelectedArray9 = [];
-	globalGroupDomainArray = [];
-	globalSelectedUserDomainArray = [];
-	globalSelAccRiActive = [];
-	globalSelectedAccessRight = [];
-	globalSelAccRiInactive = [];
-	globalGroupId = [];
-	tempActiveDom = [];
-	activeDom = "";
-	domStatFlag = false;		*/
-	
+	globalUserDomainIds = [];
+	globalUserDomainNames = [];
+	globalUserZoneIds = [];
+	globalUserZoneNames = [];
+	globalUserGroupIds = [];
+	globalDynamicSelected = [];	
+	globalUGroupPolicyIds = [];
+	globalDomainBoundUserIds = [];
+	globalUserPolicyIds = [];
+	globalUserPolicy2Ids = [];
+	globalAdminFunc = "";
+
 }
 
 function checkPolicies(header){
@@ -7583,11 +8060,14 @@ function createTableDeviceXML(data){
 	var jsonData = jQuery.parseJSON(data);
 	globaleviceInformationJSON = jsonData.data[0].DEVICE[0];
 	var str = "";
+	var name = jsonData.data[0].DEVICE[0].HostName;
 	str = createDyanamicTableAndAttribute(jsonData.data[0].DEVICE[0],str);
 	str+="<div data-role='navbar' id='devicechildTab'><ul>";
 	str= createDyanmicTabDeviceInformation(jsonData.data[0].DEVICE[0],str,false,true);
 	str+="</div></div></center>";
+	console.log("name >>>>" + name);
 	$('#DeviceInformationArea').empty().append(str);
+	$('#devicenameInformation').text(name)
 	$('#devicechildTab').tabs();
 	$('#devicechildinformation').tabs();
 	$('#devicerackTab').tabs();
@@ -7706,6 +8186,10 @@ function closeDeviceInformation(){
 	globaleviceInformationJSON = null;
 	globalDeviceInformationTab = [];
 	editDevInfoAdmin = false;
+	editedDevInfoAdmin = [];
+	editedDevInfoPerTabAdmin = [];
+	availParPortsAdmin = {};
+	partSlotsEditDevice = [];
 }
 /*
  #######################################################################
@@ -7777,9 +8261,6 @@ function createDyanmicTabDeviceInformation(data,str,flag,flg,flg2){
  #######################################################################
 */
 function createStringForDynamicTab(level,child,str,data,flg){
-	if(editDevInfoAdmin){
-		getDevEditedInfoAdmin();
-	}
 	var sub;
 	var div;
 	for(var s=0; s<child ; s++){
@@ -7858,7 +8339,7 @@ function createStringForDynamicTab(level,child,str,data,flg){
 	}else if(level.toLowerCase() == "subchannel"){
 		var strMe = createDyanmicTabDeviceInformation(sub,str,true,false,false);
 		if(strMe != "" && strMe == "partner"){
-			str = createFieldSetForPartner(sub,str,level);
+			str += createFieldSetForPartner(sub,str,level);
 		}
 		if(editDevInfoAdmin && (level.toLowerCase() == "subchannel" || level.toLowerCase() == "port") && strMe != "partner"){
 			str += showParnerAddSelectionAdmin(level,tmpid);
@@ -7883,8 +8364,29 @@ function createStringForDynamicTab(level,child,str,data,flg){
  #######################################################################
 */
 function createFieldSetForPartner(data,str,level){
+	var prevSTr = str;
 	str += "<fieldset id='partInfoField'><legend style='/*margin-left:-850px;*/text-align:center'><strong>Partner Port Information</strong></legend><div id='devpartnerinformation'>";
-	str = createDyanamicTableAndAttribute(data.PARTNER[0],str);
+	var editedpartnerflag = false; var enabledelete = true; var tP = {};
+	if(editDevInfoAdmin && editedDevInfoPerTabAdmin[0].Partner!=undefined){
+		var partners = editedDevInfoPerTabAdmin[0].Partner
+		if(partners.length>0){
+			$.each(partners, function(i,obj){
+				if(obj.Main==data.PortId){
+					editedpartnerflag = true;
+					tP = obj;
+					return false;
+				}
+			});
+		}
+	}
+	if(!editedpartnerflag){
+		str = createDyanamicTableAndAttribute(data.PARTNER[0],str); 
+	}else{
+		var partnerinfo = { HostName: tP.HostName, Manufacturer: tP.Manufacturer, Model: tP.Manufacturer, PortId: tP.Partner, PortNumber: tP.Port, SlotNumber: tP.Slot }
+		if(tP.Partner!=""){
+			str = createDyanamicTableAndAttribute(partnerinfo,str);
+		}else{ return showParnerAddSelectionAdmin(level,data.PortId,prevSTr); }
+	}
 	if(editDevInfoAdmin){
 		var found = false;
 		if(level.toLowerCase() == "port"){
@@ -7892,18 +8394,23 @@ function createFieldSetForPartner(data,str,level){
 		}else if(level.toLowerCase() == "subchannel"){
 			var target = editedDevInfoPerTabAdmin[0].SubChannel;
 		}
+		var partid = data.PARTNER[0].PortId;
+		if(tP.Partner!=undefined){
+			partid = tP.Partner;
+		}
+
 		$.each(target, function(i,obj){
 			if(obj.Id == data.PortId){
 				if(obj.Attr == "PartnerId"){
 					found = true;
-					obj.Value = data.PARTNER[0].PortId;
+					obj.Value = partid;
 				}
 			}
 		});
 		if(!found){
-			target.push({Id: data.PortId, Attr: "PartnerId", Value: data.PARTNER[0].PortId})
+			target.push({Id: data.PortId, Attr: "PartnerId", Value: partid})
 		}
-		str += "<table><tr><td style='text-align:right'><input type='button' id='deletePartInfoAdmin' value='Delete Partner Port' onclick=\"deleteDevPPortAdmin('"+level+"_"+data.PortId+"_"+data.PARTNER[0].PortId+"');\"/></td></tr></table>";
+		str += "<table><tr><td style='text-align:right'><input type='button' id='deletePartInfoAdmin' value='Delete Partner Port' onclick=\"deleteDevPPortAdmin('"+level+"_"+data.PortId+"_"+partid+"');\"/></td></tr></table>";
 	}
 	str += "</div></fieldset>";
 	return str;
@@ -8074,6 +8581,9 @@ function updateNewDisplay(obj,id,level,tabid){
 	str+="</center>";
 	var name = "device" + level.toLowerCase() + "childinformation";
 	$('#'+name).empty().append(str);
+	if(editDevInfoAdmin){
+		getDevEditedInfoAdmin();
+	}
 	$('#devicechildTab').tabs();
 	$('#devicechildinformation').tabs();
 	$('#devicerackTab').tabs();
@@ -8104,28 +8614,33 @@ function changeAdminLabel(label,main){
 }
 
 function addEditUserInit(){
+	loadCountry('addtxtCountry');
+	loadCompany('addtxtCompany');
+	populateDurationCombo();
+	defaultReserveLimitValues();
+
 	if (globalAdminFunc == "add"){
-			if ($.inArray('1',globalUserDomainIds) == -1){
-				globalUserDomainIds.push('1');
-			}
-			if ($.inArray('1',globalUserPolicy2Ids) == -1){
-				globalUserPolicy2Ids.push('1');
-			}
-			addUserOnLoad();
-		}else if (globalAdminFunc == "edit"){
-			loadUserData(globalSelectedAdminMain);
+		if ($.inArray('1',globalUserDomainIds) == -1){
+			globalUserDomainIds.push('1');
 		}
-		userTextInputs();
-		loadCountry('addtxtCountry');
-		loadCompany('addtxtCompany');
-		activateResLimits();
-		if (globalDeviceType == 'Mobile'){
-			$( ".inputDesign" ).textinput({ wrapperClass: "input-design" });
-			changeTab();
-			changeZoneTab();
-			changeUserAccRiTab();
-			$('#addUserPopUp').trigger('create');
-		}	
+		if ($.inArray('1',globalUserPolicy2Ids) == -1){
+			globalUserPolicy2Ids.push('1');
+		}
+		addUserOnLoad();
+	}else if (globalAdminFunc == "edit"){
+		loadDirectReport('edit','','',globalSelectedAdminMain);
+		loadUserData(globalSelectedAdminMain);
+		getEmailResInfo(globalSelectedAdminMain,'User');
+	}
+	userTextInputs();
+	activateResLimits();
+	if (globalDeviceType == 'Mobile'){
+		$( ".inputDesign" ).textinput({ wrapperClass: "input-design" });
+		changeTab();
+		changeZoneTab();
+		changeUserAccRiTab();
+		$('#addUserPopUp').trigger('create');
+	}	
 }
 
 function userTextInputs(){
@@ -8229,9 +8744,6 @@ function showEditGroupPopUp(type){
 	$('#AdminAlert').empty().load('pages/Admin/AddGroupPopUp.html?', function() {
 	if(type == 'showinfo'){
 		setTimeout(function(){
-	//		loadDevicesInZone();
-	//		loadUserResourceDom();
-	//		loadUserPolicy();
 			initResourceDropDown(type);
 			$('#unbindAddPopUp').hide();
 			$('#unbindRemovePopUp').hide();
@@ -8241,12 +8753,7 @@ function showEditGroupPopUp(type){
 		},1000);
 	}
 	$("#tabsEdit").tabs();
-		setTimeout(function(){
-	//		loadUserResourceDom();
-			//loadDevicesInZone();
-	//		loadUserPolicy();
-			initResourceDropDown(type);
-		},1000);
+
 	});
 
 
@@ -8575,7 +9082,7 @@ function initResourceDropDown(type){
 //		loadUserGroupTable(1,resourcename);	
 		loadUserResourceDom();
 		initZoneDropDown(resourcename,'edit');	
- 	    loadDevicesInZone();
+ //	    loadDevicesInZone();
 	}
 	if(type == 'add'){
 //		globalResourceDomainId = '0';
@@ -8998,7 +9505,7 @@ function getAddUserPolId() {
 	});
 }
 
-function addUserPy(qstr, todo) {
+function addUserPy(qstr,uname,pass,todo) {
 
     $.ajax({
         url: getURL('ADMIN2','JSON') + qstr,
@@ -9009,6 +9516,7 @@ function addUserPy(qstr, todo) {
 			if(jsonData.RESULT[0].Result.toLowerCase()=="add successful"){
 				var str = jsonData.RESULT[0].Result;
 	            alertUser(str);
+				createFtpUser(uname,pass);
 //			var uname = $("#addtxtUserName").val();
 //			var fname = $("#addtxtFirstName").val()+" "+$("#addtxtLastName").val();
 //			var email = $("#addtxtEmail").val();
@@ -9655,22 +10163,24 @@ function getDomDPSIds() {
 }
 
 function addDomDPS(){
-	for(var i=0;i<globalDPSBoundDomIds.length;i++){
-		if ($.inArray(globalDPSBoundDomIds[i],globalDomDPS2Ids) == -1){
-			globalDomDPS2Ids.push(globalDPSBoundDomIds[i]);
+	for(var i=0;i<globalDPSBoundIds.length;i++){
+		if ($.inArray(globalDPSBoundIds[i],globalDomDPS2Ids) == -1){
+			globalDomDPS2Ids.push(globalDPSBoundIds[i]);
 		}
 	}
 	$( "#addDomDPSPopUp" ).dialog('close');
+	globalDPSFlag = 1;
 	loadDomDPS();
 }
 
-function removeDomDPS(){
+function remDomDPS(){
 	for(var i=0;i<globalDomDPSIds.length;i++){
 		var pos = globalDomDPS2Ids.indexOf(globalDomDPSIds[i]);
 		globalDomDPS2Ids.splice(pos,1);
 		$('#trDomDPS'+globalDomDPSIds).children().find('input').attr('checked',false);
 	}
 	globalDomDPSIds = [];
+	globalDPSFlag = 1;
 	loadDomDPS();
 }
 
@@ -9691,7 +10201,7 @@ function loadDPSBoundtoDom(){
 					var row = jsonData.data[0].row[a];
 					var id = row.ServerInformationId;
 					if(globalDeviceType != "Mobile"){
-						str += "<tr id='trDomAddDPS"+row.ServerInformationId+"'><td><input type='checkbox' class='trDomDPS' siid='"+row.ServerInformationId+"'/></td>";
+						str += "<tr id='trDomAddDPS"+row.ServerInformationId+"'><td><input type='checkbox' class='trDomAddDPS' siid='"+row.ServerInformationId+"'/></td>";
 					}else{
 						str += "<tr class='trDomAddDPS' siid='"+row.ServerInformationId+"'>";
 					}
@@ -9715,6 +10225,7 @@ function loadDPSBoundtoDom(){
 			if (globalDeviceType == 'Mobile'){
 				$("#domainAddDPSAdmin-table").table("refresh");
 			}
+			console.log('sasddff');
 			getDomAddDPSIds();
 		}
 	});
@@ -9736,7 +10247,9 @@ function loadDPSBoundtoDom(){
  #######################################################################
 */
 function getDomAddDPSIds() {
+	console.log('asdasdf');
 	$(".trDomAddDPS").on("click",function(){
+		console.log('aaaaaaaaa');
 		var id = $(this).attr('siid');
 		if (globalDeviceType == 'Mobile'){
 			var cond = $('.trDomAddDPS').hasClass('highlight');
@@ -9744,8 +10257,10 @@ function getDomAddDPSIds() {
 			var cond = $('#trDomAddDPS'+id).children().find('input').is(':checked');
 		}
 		if (cond){
+			console.log('cond',cond);
 			if($.inArray(id, globalDPSBoundIds) == -1){
 				globalDPSBoundIds.push(id);
+				console.log('globalDPSBoundIds',globalDPSBoundIds);
 				if(globalDeviceType != "Mobile"){
 					$('#trDomAddDPS'+id).addClass('highlight');
 				}else{
@@ -9764,14 +10279,86 @@ function getDomAddDPSIds() {
 	});
 }
 
-// -------cbobis
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : editDevInfosPopUp
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+
 function editDevInfosPopUp(){
 	if(genIds.length<1){ alertUser("Please select a device to edit"); return; }
 	if(genIds.length<1){ return; }
 	editDevInfoAdmin = true;
 	setvariableEditDevice();
 	showEditDevInfoAdmin(genIds[0]);
+	//checkDeviceResStatus(genIds[0]);
 }
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : checkDeviceResStatus
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 1, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+
+function checkDeviceResStatus(id) {
+	var url = getURL("ADMIN2")+'action=isDeviceRes&query={"QUERY":[{"deviceid":"'+id+'"}]}';
+	$.ajax({
+        url: url,
+        dataType: 'html',
+		async: false,
+        success: function(data) {
+		if(!data){
+				alertUser("Process failed.");
+				return false;
+			}
+			var dat = data.replace(/'/g,'"');
+	        var dat2 = $.parseJSON(dat);
+			var RESULT = dat2.RESULT;
+			var Result = RESULT[0].Result
+
+			if(Result=="1"){
+				alertUser("Device is currently Reserved.");
+				return false;
+			}else{
+				return true;
+				showEditDevInfoAdmin(id);
+			}	
+        }
+    });
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : showEditDevInfoAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 31, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 
 function showEditDevInfoAdmin(device){
 	var url = getURL("RM4")+'action=deviceinfo&query={"QUERY":[{"deviceid":"'+device+'"}]}&version=3.0';
@@ -9789,6 +10376,61 @@ function showEditDevInfoAdmin(device){
 
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : saveEditDeviceInfoQuery
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 31, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function saveEditDeviceInfoQuery(args){
+	var url = getURL("RM")+'action=updatedeviceinfo&query='+args;
+	$.ajax({
+		url: url,
+		dataType: 'html',
+		async: false,
+		success: function(data) {
+			if(!data){
+				alertUser("Process failed.");
+				return false;
+			}
+			var dat = data.replace(/'/g,'"');
+	        var dat2 = $.parseJSON(dat);
+			var RESULT = dat2.RESULT;
+			var Result = RESULT[0].Result
+
+			if(Result=="1"){
+				alertUser("Process Complete.");
+				return true;
+			}else{
+				alertUser("Process failed.");
+				return false;
+			}		
+		}
+	});
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : editDevInfoAdminPopUp
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function editDevInfoAdminPopUp(data){
 	var h = $(window).height();
 	$( "#showInformationDeviceDiv" ).dialog({
@@ -9807,6 +10449,20 @@ function editDevInfoAdminPopUp(data){
 	});
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : createTableEditDeviceXML
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function createTableEditDeviceXML(data){
 	data = data.replace(/'/g,'"');
 	var jsonData = jQuery.parseJSON(data);
@@ -9818,6 +10474,7 @@ function createTableEditDeviceXML(data){
 	str= createDyanmicTabDeviceInformation(jsonData.data[0].DEVICE[0],str,false,true);
 	str+="</div></div></center>";
 	$('#EditInfoAreAdmin').empty().append(str);
+	getDevEditedInfoAdmin();
 	$('#devicechildTab').tabs();
 	$('#devicechildinformation').tabs();
 	$('#devicerackTab').tabs();
@@ -9826,12 +10483,67 @@ function createTableEditDeviceXML(data){
 	$('#devicesubchannelTab').tabs();
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : getNodeValueByIdOnEditDev
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function getNodeValueByIdOnEditDev(attr,val,level,id){
+	var target = editedDevInfoPerTabAdmin[0].Device;
+	var tmpVal = "";
+	switch(level.toLowerCase()){
+		case "port":
+			target = editedDevInfoPerTabAdmin[0].Port
+		break;
+		case "subchannel":
+			target = editedDevInfoPerTabAdmin[0].SubChannel
+		break;
+	}
+	if(target.length>0){
+		var found = false;
+		$.each(target, function(i,obj){
+			if(obj.Id == id && obj.Attr== attr){
+				tmpVal = obj.Value;
+				found = true;
+			}
+		});
+		if(found){
+			return tmpVal;
+		}else{
+			return val;
+		}
+	}else{ return val; }
+	
+}
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : createDynamicEditDevTable
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function createDynamicEditDevTable(str,attrname,attrval,ctr,device,t,level,nodeid){
 	var toedit = ["username","password","tftpgateway","rp1port","subnetmask","technicalsupport","systemconfigname","systemimagefile"];
 	if(level){
 		if(level.toLowerCase()=="port"){
-			toedit = ["description","mediatype","physicalporttype"];
+			toedit = ["description","mediatype"];
 		}
 	}
 	if(attrval != "" && attrval != undefined && attrval.toLowerCase() != "none"){
@@ -9839,57 +10551,70 @@ function createDynamicEditDevTable(str,attrname,attrval,ctr,device,t,level,nodei
 			str += "<tr>";
 			str += "<td>" + attrname + " :</td>";	
 			if(attrname.toLowerCase() == "password"){
-				str += "<td><input type='password' value='"+ attrval +"'";	
+				str += "<td><input type='password'";	
 			}else{
 				str += "<td><input type='text' value='"+ attrval +"'";	
 			}
 			if(toedit.indexOf(attrname.toLowerCase())==-1){
-				str += " disabled='disabled'/></td>";
+				str += " value='"+ attrval +"' disabled='disabled'/></td>";
 			}else{
 				var idtmp = nodeid+"_"+attrname;
 				if(level){
 					idtmp = level+"_"+idtmp;
 				}
-				editedDevInfoAdmin.push(idtmp);
-				str += " id='"+idtmp+"'/></td>";
+				var idx = editedDevInfoAdmin.indexOf(idtmp);
+				if(idx==-1){
+					editedDevInfoAdmin.push(idtmp);
+				}else{
+					attrval = getNodeValueByIdOnEditDev(attrname,attrval,level,nodeid);
+				}
+				str += " value='"+ attrval +"' id='"+idtmp+"'/></td>";
 			}
 		}else if(ctr%3 == 0){
 			str += "<td>" + attrname + " :</td>";	
 			if(attrname.toLowerCase() == "password"){
-				str += "<td><input type='password' value='"+ attrval +"'";	
+				str += "<td><input type='password'";	
 			}else{
 				str += "<td><input type='text' value='"+ attrval +"'";	
 			}
 			if(toedit.indexOf(attrname.toLowerCase())==-1){
-				str += " disabled='disabled'/></td>";
-			}else{ 
+				str += " value='"+ attrval +"' disabled='disabled'/></td>";
+			}else{
 				var idtmp = nodeid+"_"+attrname;
 				if(level){
 					idtmp = level+"_"+idtmp;
 				}
-				editedDevInfoAdmin.push(idtmp);
-				str += " id='"+idtmp+"'/></td>";
-				//str += "/></td>";
+				var idx = editedDevInfoAdmin.indexOf(idtmp);
+				if(idx==-1){
+					editedDevInfoAdmin.push(idtmp);
+				}else{
+					attrval = getNodeValueByIdOnEditDev(attrname,attrval,level,nodeid);
+				}
+				str += " value='"+ attrval +"' id='"+idtmp+"'/></td>";
 			}
 			str += "</tr>";
 			str += "<tr>";
 		}else{
 			str += "<td>" + attrname + " :</td>";	
 			if(attrname.toLowerCase() == "password"){
-				str += "<td><input type='password' value='"+ attrval +"'";	
+				str += "<td><input type='password'";	
 			}else{
 				str += "<td><input type='text' value='"+ attrval +"'";	
 			}
 			if(toedit.indexOf(attrname.toLowerCase())==-1){
-				str += " disabled='disabled'/></td>";
-			}else{ 
+				str += " value='"+ attrval +"' disabled='disabled'/></td>";
+			}else{
 				var idtmp = nodeid+"_"+attrname;
 				if(level){
 					idtmp = level+"_"+idtmp;
 				}
-				editedDevInfoAdmin.push(idtmp);
-				str += " id='"+idtmp+"'/></td>";
-				//str += "/></td>";
+				var idx = editedDevInfoAdmin.indexOf(idtmp);
+				if(idx==-1){
+					editedDevInfoAdmin.push(idtmp);
+				}else{
+					attrval = getNodeValueByIdOnEditDev(attrname,attrval,level,nodeid);
+				}
+				str += " value='"+ attrval +"' id='"+idtmp+"'/></td>";
 			}
 			if(t == device -1){
 				str += "</tr>";
@@ -9899,15 +10624,45 @@ function createDynamicEditDevTable(str,attrname,attrval,ctr,device,t,level,nodei
 	return str;
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : setvariableEditDevice
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function setvariableEditDevice(){
 	editedDevInfoPerTabAdmin = []
 	editedDevInfoPerTabAdmin.push({Device: [], Port: [], SubChannel: [], Partner: []});
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : 
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function getDevEditedInfoAdmin(){
 	var d = editedDevInfoPerTabAdmin[0];
 	if(editedDevInfoAdmin.length<1){ return; }
 	$.each(editedDevInfoAdmin, function(index,object){
+		var target = d.Device;
+		var nodeid = genIds[0];
 		if(object.split("_").length>2){
 			var node = object.split("_")[0];
 			var nodeid = object.split("_")[1];
@@ -9919,7 +10674,6 @@ function getDevEditedInfoAdmin(){
 			var nodeattr = object.split("_")[1];
 			var nodeval = $("#"+object).val();
 		}
-		var target = d.Device;
 		switch(node.toLowerCase()){
 			case "port":
 				target = d.Port;
@@ -9929,24 +10683,110 @@ function getDevEditedInfoAdmin(){
 			break;
 		}
 		if(target.length>0){
+			var found = false;
 			$.each(target, function(i,obj){
 				if(obj.Id == nodeid && obj.Attr == nodeattr){
-					obj.Value = nodeval;
-				}else{
-					target.push({ Id: nodeid, Attr: nodeattr, Value: nodeval})
+					if(nodeval!=undefined){
+						obj.Value = nodeval;
+						found = true;
+						return false;
+					}
 				}
 			});
+			if(!found){
+				if(nodeval!=undefined){
+					target.push({ Id: nodeid, Attr: nodeattr, Value: nodeval});
+				}
+			}
 		}else{
-			target.push({ Id: nodeid, Attr: nodeattr, Value: nodeval})
+			if(nodeval!=undefined){
+				target.push({ Id: nodeid, Attr: nodeattr, Value: nodeval});
+			}
 		}
 	});
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : saveEditedDeviceInformation
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function saveEditedDeviceInformation(){
 	getDevEditedInfoAdmin();
+	var d = editedDevInfoPerTabAdmin[0];
+	var editstr = "{ 'DEVICE': [{ 'DeviceId': '"+genIds[0]+"'";
+	if(d.Device!=undefined){
+		$.each(d.Device, function(i,obj){
+			editstr += " '"+obj.Attr+"': '"+obj.Value+"',"
+		});
+	}
+	if(d.Port!=undefined){
+		editstr += " 'PORT': [{";
+		var portinfo = [];
+		$.each(d.Port, function(i,obj){
+			if(portinfo.length>0){
+				var found = false;
+				$.each(portinfo, function(pi,info){
+					if(obj.Id==info.id){
+						found = true;
+						portinfo[pi].attr.push({ item: obj.Attr, value: obj.Value})
+					}
+				});
+				if(!found){
+					portinfo.push({ id: obj.Id , attr: []})
+					portinfo[portinfo.length-1].attr.push({ item: obj.Attr, value: obj.Value})
+				}
+			}else{
+				portinfo.push({ id: obj.Id , attr: []})
+				portinfo[0].attr.push({ item: obj.Attr, value: obj.Value})
+			}
+		});
+		if( portinfo.length>0){
+			$.each(portinfo, function(pi,info){
+				editstr += "{ 'PortId': '"+info.id+"',";
+				$.each(info.attr, function(ii,attrs){
+					if(attrs.item != "PartnerId"){
+						editstr += " '"+attrs.item+"': '"+attrs.value+"',";
+					}else{
+						editstr += " 'PARTNER': [{'PortId': '"+attrs.value+"'}],"
+					}
+				});
+				editstr += "}, ";
+			});
+		}
+		editstr += "}] ,";
+	}
+	editstr += "}] }";
+	console.log(editstr);
+	if(saveEditDeviceInfoQuery(editstr)){
+		closeDeviceInformation();
+	}
 
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : deleteDevPPortAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function deleteDevPPortAdmin(id) {
 	var level = id.split("_")[0];
 	var portid = id.split("_")[1];
@@ -9960,26 +10800,104 @@ function deleteDevPPortAdmin(id) {
 	$.each(target, function(i,obj){
 		if(obj.Id == portid){
 			if(obj.Attr == "PartnerId" && obj.Value == partid){
+				obj.Value = "";				
 				tmpidx = i;
 			}
 		}
 	});
-	if(tmpidx>-1){
-		target.splice(tmpidx,1);
-	}
+//	if(tmpidx>-1){
+//		target.splice(tmpidx,1);
+//	}
 	$('#partInfoField').remove();
-	var str = showParnerAddSelectionAdmin(level,portid);
+	setNewPortPartnerInfo(portid);
+	var str = "";
+	str = showParnerAddSelectionAdmin(level,portid,str);
 	$('#device'+level.toLowerCase()+"childinformation").append(str);
 }
 
-function showParnerAddSelectionAdmin(level,tmpid){
-	var str = "<table><tr><td style='text-align:center;'><input type='button' id='addPartInfoAdmin' value='Add Partner Port' onclick=\"showAvailPartAddAdmin('"+level+"_"+tmpid+"');\"/></td></tr><tr><div id='"+level.toLowerCase()+"partaddInclude'></div></tr></table>";
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : showParnerAddSelectionAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function showParnerAddSelectionAdmin(level,tmpid,str){
+	var editedpartnerflag = false;
+	var tP = {};
+	if(editedDevInfoPerTabAdmin[0].Partner!=undefined){
+		var partners = editedDevInfoPerTabAdmin[0].Partner
+		if(partners.length>0){
+			$.each(partners, function(i,obj){
+				if(obj.Main==tmpid){
+					editedpartnerflag = true;
+					tP = obj;
+					return false;
+				}
+			});
+		}
+	}
+	if(!editedpartnerflag){
+		var str = "<table><tr><td style='text-align:center;'><input type='button' id='addPartInfoAdmin' value='Add Partner Port' onclick=\"showAvailPartAddAdmin('"+level+"_"+tmpid+"');\"/><input type='button' id='canceladdPartInfoAdmin' value='Cancel' onclick=\"removeAddedPartOptAdmin('"+level+"_"+tmpid+"');\" style='display:none;'/></td></tr><tr><div id='"+level.toLowerCase()+"partaddInclude'></div></tr></table>";
+	}else{
+		var partnerinfo = { HostName: tP.HostName, Manufacturer: tP.Manufacturer, Model: tP.Manufacturer, PortId: tP.Partner, PortNumber: tP.Port, SlotNumber: tP.Slot }
+		if(tP.Partner!=""){
+			if(str==undefined){ var str = ""; }
+			str += "<fieldset id='partInfoField'><legend style='/*margin-left:-850px;*/text-align:center'><strong>Partner Port Information</strong></legend><div id='devpartnerinformation'>";
+			str = createDyanamicTableAndAttribute(partnerinfo,str);
+		}else{ 
+			str += "<table><tr><td style='text-align:center;'><input type='button' id='addPartInfoAdmin' value='Add Partner Port' onclick=\"showAvailPartAddAdmin('"+level+"_"+tmpid+"');\"/><input type='button' id='canceladdPartInfoAdmin' value='Cancel' onclick=\"removeAddedPartOptAdmin('"+level+"_"+tmpid+"');\" style='display:none;'/></td></tr><tr><div id='"+level.toLowerCase()+"partaddInclude'></div></tr></table>";
+			return str; 
+		}
+
+		var found = false;
+		if(level.toLowerCase() == "port"){
+			var target = editedDevInfoPerTabAdmin[0].Port;
+		}else if(level.toLowerCase() == "subchannel"){
+			var target = editedDevInfoPerTabAdmin[0].SubChannel;
+		}
+		partid = tP.Partner;
+		$.each(target, function(i,obj){
+			if(obj.Id == tmpid){
+				if(obj.Attr == "PartnerId"){
+					found = true;
+					obj.Value = partid;
+				}
+			}
+		});
+		if(!found){
+			target.push({Id: tmpid, Attr: "PartnerId", Value: partid})
+		}
+		str += "<table><tr><td style='text-align:right'><input type='button' id='deletePartInfoAdmin' value='Delete Partner Port' onclick=\"deleteDevPPortAdmin('"+level+"_"+tmpid+"_"+partid+"');\"/></td></tr></table>";
+	}
 	return str;
 }
 
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : showAvailPartAddAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
 function showAvailPartAddAdmin(tag) {
 	var level = tag.split("_")[0];
 	var targetid = tag.split("_")[1];
+	var divappend = level.toLowerCase()+"partaddInclude";
 	var urlx = getURL("ADMIN2","JSON");
 	$.ajax({
 		url: urlx,
@@ -9993,13 +10911,1025 @@ function showAvailPartAddAdmin(tag) {
 		        var dat2 = $.parseJSON(dat);
 				var MAIN = dat2.MAINCONFIG[0];
 				var DEVICE = MAIN.DEVICE;
+				availParPortsAdmin = {};
+				var devtypeopt = {Layer1: [], Layer2: [], NetworkingDevice: []};
 				$.each(DEVICE, function(i,obj) {
-					var SLOT = obj.SLOT;
-					
+					var type = obj.Type;
+					var manu = obj.Manufacturer;
+					var model = obj.Model;
+					var host = obj.HostName;
+					var ipadd = obj.IpAddress;
+					if(obj.SLOT!=undefined){ var SLOT = obj.SLOT; }
+					if(obj.PORT!=undefined){ var PORT = obj.PORT; }
+					var target;
+					var tmpval = { Type: type, Manufacturer: manu, Model: model, Host: host, Ip: ipadd };
+					if(obj.SLOT!=undefined){ tmpval.Slot = SLOT; }
+					if(obj.PORT!=undefined){ tmpval.Port = PORT; }
+					switch(type.toLowerCase()){
+						case "layer 1 switch": case "l1 switch":
+							target = devtypeopt.Layer1;
+						break;
+						case "layer 2 switch": case "l2 switch":
+							target = devtypeopt.Layer2;
+						break;
+						case "networking device":
+							target = devtypeopt.NetworkingDevice;
+						break;
+					}
+					target.push(tmpval);
 				});
+				availParPortsAdmin = devtypeopt;
+				var str = "<fieldset id='partInfoField'><legend style='/*margin-left:-850px;*/text-align:center'><strong>Partner Port Information</strong></legend><div id='devpartnerinformation'>";
+				str += "<table style='margin-left:auto;width:95%;' cellspacing='10'><tr>";
+				str += "<td>Device Type</td>";
+				str += "<td><select id='parttypeselectAdmin' style='width:180px;' onchange='changePartIpSelect();'>"
+				var optaddtype = "<option>Select</option>";
+				if(devtypeopt.Layer1.length>0){ optaddtype += "<option>L1 Switch</option>"; }
+				if(devtypeopt.Layer2.length>0){ optaddtype += "<option>L2 Switch</option>"; }
+				if(devtypeopt.NetworkingDevice.length>0){ optaddtype += "<option>Networking device</option>"; }
+				str += optaddtype+"</select></td>";
+				str += "<td>Partner Address</td>";
+				str += "<td><select id='partIpAddAdmin' style='width:180px;' onclick='getPartIpAddInfoAdmin();' disabled><option>Select</optgion></select></td>";
+				str += "<td>Slot Number</td>";
+				str += "<td><select id='partSlotNumAdmin' style='width:180px;' onclick='changeSlotPortInfoAdmin();' disabled><option>Select</optgion></select></td>";
+				str += "<td>Port Number</td>";
+				str += "<td><select id='partPortNumAdmin' style='width:180px;' onclick=\"assignNewPortPartnerAdmin('"+level+"','"+targetid+"');\" disabled><option>Select</optgion></select></td>";
+				str += "</tr>";
+				str += "</table>";
+				str += "<table style='margin-left:auto;width:95%;display:none;' cellspacing='10' id='partAddHostManuModel'>";
+				str += "<tr>";
+				str += "<td>HostName:</td>"
+				str += "<td><input id='partnerHostAdmin' type='text' value='' disabled/></td>"
+				str += "<td>Manufacturer:</td>"
+				str += "<td><input id='partnerManuAdmin' type='text' value='' disabled/></td>"
+				str += "<td>Model:</td>"
+				str += "<td><input id='partnerModelAdmin' type='text' value='' disabled/></td>"
+				str += "</tr>";
+				str += "</table>";
+				str += "</div></fieldset>";
+				$("#"+divappend).empty().append(str);
+				$('#addPartInfoAdmin').hide();
+				$('#canceladdPartInfoAdmin').show();
 			}
 		}
 	});
-//	var str = "";
-//	$('#'+level.toLowerCase()+'partaddInclude').append(str);
 }
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : changePartIpSelect
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function changePartIpSelect(){
+	var type = $('#parttypeselectAdmin > option:selected').text();
+	switch(type.toLowerCase()){
+		case "l1 switch":
+			var target = availParPortsAdmin.Layer1;
+		break;
+		case "l2 switch":
+			var target = availParPortsAdmin.Layer2;
+		break;
+		case "networking device":
+			var target = availParPortsAdmin.NetworkingDevice;
+		break;
+	}
+	var optadd = "<option>Select</option>";
+	if(target){
+		$.each(target, function(i,obj){
+			optadd += "<option>"+obj.Host+" > "+obj.Ip+"</option>";
+			
+		});
+	}
+	$('#partIpAddAdmin').attr('disabled',false);
+	$('#partSlotNumAdmin').attr('disabled',true);
+	$('#partPortNumAdmin').attr('disabled',true);
+	$('#partIpAddAdmin').empty().append(optadd);
+	$('#partSlotNumAdmin').empty().append('<option>Select</option>');
+	$('#partPortNumAdmin').empty().append('<option>Select</option>');
+	$('#partnerHostAdmin').val('');
+	$('#partnerManuAdmin').val('');
+	$('#partnerModelAdmin').val('');
+	$('#partAddHostManuModel').hide();
+	
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : getPartIpAddInfoAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function getPartIpAddInfoAdmin(){
+	var tmpiph = $('#partIpAddAdmin > option:selected').text();
+	var tmphost = $.trim(tmpiph.split(">")[0]);
+	var ip = $.trim(tmpiph.split(">")[1]);
+	var type = $('#parttypeselectAdmin > option:selected').text();
+	switch(type.toLowerCase()){
+		case "l1 switch":
+			var target = availParPortsAdmin.Layer1;
+		break;
+		case "l2 switch":
+			var target = availParPortsAdmin.Layer2;
+		break;
+		case "networking device":
+			var target = availParPortsAdmin.NetworkingDevice;
+		break;
+	}
+	var optadd = "<option>Select</option>";
+	if(target){
+		$.each(target, function(i,obj){
+			if(ip == obj.Ip && tmphost == obj.Host){
+				if(obj.Slot!=undefined){
+					partSlotsEditDevice = [];
+					$.each(obj.Slot, function(si,slot){
+						optadd += "<option value='"+slot.SlotId+"'>"+slot.SlotNumber+"</option>";
+						var portopt = "<option>Select</option>";
+						if(slot.PORT != undefined){
+							$.each(slot.PORT, function(pi,port){
+								portopt += "<option value='"+port.PortId+"'>"+port.PortNumber+"</option>";
+							});
+						}
+						partSlotsEditDevice.push({ Id: slot.SlotId, Number: slot.SlotNumber, Ports: portopt });
+					});
+					$('#partSlotNumAdmin').attr('disabled',false);
+					$('#partPortNumAdmin').attr('disabled',true);
+					$('#partSlotNumAdmin').empty().append(optadd);
+					$('#partPortNumAdmin').empty().append('<option>Select</option>');
+				}else if(obj.Port!=undefined){
+					$.each(obj.Port, function(pi,port){
+						optadd += "<option value='"+port.PortId+"'>"+port.PortNumber+"</option>";	
+					});
+					$('#partSlotNumAdmin').attr('disabled',true);
+					$('#partPortNumAdmin').attr('disabled',false);
+					$('#partSlotNumAdmin').empty().append('<option>Select</option>');
+					$('#partPortNumAdmin').empty().append(optadd);
+				}
+				$('#partnerHostAdmin').val(obj.Host);
+				$('#partnerManuAdmin').val(obj.Manufacturer);
+				$('#partnerModelAdmin').val(obj.Model);
+				$('#partAddHostManuModel').show();
+			}
+		});
+	}else{
+		$('#partnerHostAdmin').val('');
+		$('#partnerManuAdmin').val('');
+		$('#partnerModelAdmin').val('');
+		$('#partAddHostManuModel').hide();
+	}
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : changeSlotPortInfoAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function changeSlotPortInfoAdmin(){
+	var slot = $('#partSlotNumAdmin > option:selected').text();
+	var slotid = $('#partSlotNumAdmin > option:selected').val();
+	$.each(partSlotsEditDevice, function(i,obj){
+		if(obj.Id == slotid && obj.Number == slot){
+			$('#partPortNumAdmin').empty().append(obj.Ports);
+			$('#partPortNumAdmin').attr('disabled',false);
+		}
+	});
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : removeAddedPartOptAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function removeAddedPartOptAdmin(tag){
+	var level = tag.split("_")[0];
+	var targetid = tag.split("_")[1];
+	var divappend = level.toLowerCase()+"partaddInclude";
+	$('#'+divappend).empty();
+	$('#addPartInfoAdmin').show();
+	$('#canceladdPartInfoAdmin').hide();
+	var idx = -1;
+	if(level.toLowerCase() == "port"){
+		var target = editedDevInfoPerTabAdmin[0].Port;
+	}else if(level.toLowerCase() == "subchannel"){
+		var target = editedDevInfoPerTabAdmin[0].SubChannel;
+	}
+	$.each(target, function(i,obj){
+		if(obj.Id == targetid){
+			if(obj.Attr == "PartnerId"){
+				obj.Value = "";
+			}
+		}
+	});
+	$('#portpartaddInclude').empty();
+	showParnerAddSelectionAdmin(level,targetid);
+	setNewPortPartnerInfo(targetid);
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : assignNewPortPartnerAdmin
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function assignNewPortPartnerAdmin(level,portid){
+	var partid = $('#partPortNumAdmin > option:selected').val();
+	
+	var found = false;
+	if(level.toLowerCase() == "port"){
+		var target = editedDevInfoPerTabAdmin[0].Port;
+	}else if(level.toLowerCase() == "subchannel"){
+		var target = editedDevInfoPerTabAdmin[0].SubChannel;
+	}
+	$.each(target, function(i,obj){
+		if(obj.Id == portid){
+			if(obj.Attr == "PartnerId"){
+				found = true;
+				obj.Value = partid; 
+			}
+		}
+	});
+	if(!found){
+		target.push({Id: portid, Attr: "PartnerId", Value: partid});
+	}
+	setNewPortPartnerInfo(portid);
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : setNewPortPartnerInfo
+ #  AUTHOR        : Cathyrine C. Bobis
+ #  DATE          : March 30, 2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function setNewPortPartnerInfo(portid){
+	var partners = editedDevInfoPerTabAdmin[0].Partner;
+	var id = $('#partPortNumAdmin > option:selected').val();
+	var port = $('#partPortNumAdmin > option:selected').text();
+	var slot = "";
+	if($('#partSlotNumAdmin > option:selected').text()!="Select"){
+		slot = $('#partSlotNumAdmin > option:selected').text();
+	}
+	var host = $('#partnerHostAdmin').val();
+	var manu = $('#partnerManuAdmin').val();
+	var model = $('#partnerModelAdmin').val();
+	if(id==undefined){ id = ""; }
+
+	if(partners.length>0){
+		var found = false;
+		$.each(partners, function(i,obj){
+			if(obj.Main == portid){
+				obj.Partner = id;
+				obj.Port = port;
+				obj.Slot = slot;
+				obj.HostName = host;
+				obj.Manufacturer = manu;
+				obj.Model = model;
+				found = true;
+				return false;
+			}
+		});
+		if(!found){
+			partners.push({Main: portid, Partner: id, Port: port, Slot: slot, HostName: host, Manufacturer: manu, Model: model})
+		}
+	}else{
+		partners.push({Main: portid, Partner: id, Port: port, Slot: slot, HostName: host, Manufacturer: manu, Model: model})
+	}
+	editedDevInfoPerTabAdmin[0].Partner = partners;
+}
+
+function saveAddEditDom(){
+	var Name=$('#namePolicy').val();
+	var Desc=$('#descPolicy').val();
+	
+	var valReq = checkDomFields(Name,Desc);
+	if (valReq){
+		return;
+	}
+
+	var emailres = checkDomEmail();
+	
+	switch (globalAdminFunc){
+		case "add":
+			qstr  = "action=addRpol";
+			qstr += "&query={'QUERY':[{'DomainName':'"+Name;
+			qstr += "','Devices':'"+globalDomDev2Ids.length;
+			qstr += "','DeviceId':'"+globalDomDev2Ids;
+			qstr += "','DomainDescription':'"+Desc;
+			qstr += "','ServerInformationId':'"+globalDomDPS2Ids;
+			qstr += "','User':'"+globalUserName;
+			qstr += "','AffiliateId':'"/*+affiliateIds*/;
+			qstr += "','Event':'"+emailres[0].events;
+			qstr += "','Message':'"+emailres[0].emailMsg;
+			qstr += "','Info':'"+emailres[0].info;
+			qstr += "','MaxReservationPerUser':'"+emailres[0].resnum;
+			qstr += "','MaxActiveReservationPerUser':'"+emailres[0].actres;
+			qstr += "','MaxNumberOfDevicesPerReservation':'"+emailres[0].devnum;
+			qstr += "','MaxNumberOfReservationTime':'"+emailres[0].resdur;
+			qstr += "','MaxAllowedExtension':'"+emailres[0].maxext;
+			qstr += "','Notification':'"+emailres[0].emt;
+			qstr += "','NotificationMin':'"+emailres[0].enmin;
+			qstr += "','PowerPolicy':'"+emailres[0].p;
+			qstr += "','DomainAdmin':'"/*+globalCurrDomainAdminArray*/;
+			qstr += "','StartDateTime':'"/*+sdatetime*/;
+			qstr += "','EndDateTime':'"/*+edatetime*/;		
+			qstr += "','DisableIteration':'"+emailres[0].di;		
+			qstr += "','ActivePowerPolicy':'"/*+globalPowerManagementActive*/;		
+			qstr += "','InactivePowerPolicy':'"/*+globalPowerManagementInActive*/;		
+			qstr += "','TimeZone':'"+$('#cbtimeZone').val();		
+			qstr += emailres[0].servequery+"'}]}&version=3.0";
+		break;
+		case "edit":
+			var domName = $('trDomain'+globalSelectedAdminMain[0]).find('td').eq(1).text();
+			var todo = "";
+			if ( domName == "Default" ) {
+				qstr  = "action=editRDomain";
+				qstr += "&query={'QUERY':[{'ResourceDomainId':'"+globalSelectedAdminMain[0];
+				qstr += "','DomainName':'"+Name;
+				qstr += "','DomainDescription':'"+Desc;
+				qstr += "','ServerInformationId':'"+globalDomDPS2Ids;
+				qstr += "','User':'"+globalUserId;
+				qstr += "','AffiliateId':'"/*+affiliateIds*/;
+				qstr += "','Event':'"+emailres[0].events;
+				qstr += "','Message':'"+emailres[0].emailMsg;
+				qstr += "','Info':'"+emailres[0].info;
+				qstr += "','MaxReservationPerUser':'"+emailres[0].resnum;
+				qstr += "','MaxActiveReservationPerUser':'"+emailres[0].actres;
+				qstr += "','MaxNumberOfDevicesPerReservation':'"+emailres[0].devnum;
+				qstr += "','MaxNumberOfReservationTime':'"+emailres[0].resdur;
+				qstr += "','MaxAllowedExtension':'"+emailres[0].maxext;
+				qstr += "','Notification':'"+emailres[0].emt;
+				qstr += "','NotificationMin':'"+emailres[0].enmin;
+				qstr += "','PowerPolicy':'"+emailres[0].p;
+				qstr += "','DisableIteration':'"+emailres[0].di;		
+				qstr += "','TimeZone':'"+$('#cbtimeZone').val();		
+				qstr += "','ActivePowerPolicy':'"/*+globalPowerManagementActive*/;		
+				qstr += "','InactivePowerPolicy':'"/*+globalPowerManagementInActive*/;		
+				qstr += emailres[0].servequery+"'}]}&version=3.0";
+			} else {
+				qstr  = "action=editRDomain";
+				qstr += "&query={'QUERY':[{'ResourceDomainId':'"+globalSelectedAdminMain[0];
+				qstr += "','DomainName':'"+Name;
+				qstr += "','NumDevices':'"+globalDomDev2Ids.length;
+				qstr += "','DeviceId':'"+globalDomDev2Ids;
+				qstr += "','DomainDescription':'"+Desc;
+				qstr += "','ServerInformationId':'"+globalDomDPS2Ids;
+				qstr += "','User':'"+globalUser;
+				qstr += "','AffiliateId':'"/*+affiliateIds*/;
+				qstr += "','Event':'"+emailres[0].events;
+				qstr += "','Message':'"+emailres[0].emailMsg;
+				qstr += "','Info':'"+emailres[0].info;
+				qstr += "','MaxReservationPerUser':'"+emailres[0].resnum;
+				qstr += "','MaxActiveReservationPerUser':'"+emailres[0].actres;
+				qstr += "','MaxNumberOfDevicesPerReservation':'"+emailres[0].devnum;
+				qstr += "','MaxNumberOfReservationTime':'"+emailres[0].resdur;
+				qstr += "','MaxAllowedExtension':'"+emailres[0].maxext;
+				qstr += "','Notification':'"+emailres[0].emt;
+				qstr += "','NotificationMin':'"+emailres[0].enmin;
+				qstr += "','PowerPolicy':'"+emailres[0].p;
+				qstr += "','DomainAdmin':'"/*+globalCurrDomainAdminArray*/;
+				qstr += "','AccessOption':'"/*+accessOpt*/;
+				qstr += "','StartDateTime':'"/*+sdatetime*/;
+				qstr += "','EndDateTime':'"/*+edatetime*/;		
+				qstr += "','Days':'"/*+daysAvailable*/;		
+				qstr += "','DisableIteration':'"+emailres[0].di;		
+				qstr += "','ActivePowerPolicy':'"/*+globalPowerManagementActive*/;		
+				qstr += "','InactivePowerPolicy':'"/*+globalPowerManagementInActive*/;		
+				qstr += "','TimeZone':'"+$('#cbtimeZone').val();		
+				qstr += "','flag':'commit";		
+				qstr += emailres[0].servequery+"'}]}&version=3.0";
+			}
+		break;
+	}
+
+	savePy(qstr,"$('#AdminPopUp').dialog('close');loadDomainTable();");
+}
+
+function checkDomFields(Name,Desc,tzone){
+	
+	if (Name == "" && Desc == "") {
+		alertUser("Please provide a domain name and description.");
+		return true;
+	} else if (Name == "") {
+		alertUser("Please provide a domain name.");
+		return true;
+	} else if (Desc == "") {
+		alertUser("Please provide a domain description.");
+		return true;
+	} else if ( /\&/.test(Name) == true) {
+		alertUser("Cannot use Ampersand(&) for domain name");
+		return true;
+	} else if ( /\&/.test(Desc) == true) {
+		alertUser("Cannot use Ampersand(&) for domain description");
+		return true;
+	}else if(tzone == ''){
+		alertUser("Please Select Time Zone");
+		return true;
+	} else if ( /\'/.test(Desc) == true ) {
+		alertUser("Cannot use single quotes or apostrophe in the domain description");
+		return true;
+	} 
+	var lcName = Name.toLowerCase();
+	var lcDesc = Desc.toLowerCase();
+	if ( lcName == "domain" || lcName == "name" ) {
+		var msg = "Cannot use " + Name + " as domain name.";
+		alertUser(msg);
+		return true;
+	} else if ( lcDesc == "domain" || lcDesc == "description" ) {
+		var msg = "Cannot use " + Desc + " as domain description.";
+		alertUser(msg);
+		return true;
+	}
+
+	if ($('#cbtimeZone').val() == "" || $('#cbtimeZone').val() == null){
+		alertUser("Please select a time zone.");
+		return true;
+	}
+
+	if (globalDomDPS2Ids.length == 0){
+		alertUser("Please ")
+	}
+}
+
+
+function checkDomEmail(){
+	//EMAIL
+	var info = new Array();
+	var events = new Array();
+	var emailMsg = "";
+
+	if ($('#ReserveInfo').is(':checked') == true) {
+		info.push("Reservation");
+	}
+	if ($('#ReleaseInfo').is(':checked') == true) {
+		info.push("Release");
+	}
+	if ($('#DeviceInfo').is(':checked') == true) {
+		info.push("Device");
+	}
+	if ($('#ReserveOpt').is(':checked') == true) {
+		events.push("Reservation");
+	}
+	if ($('#ReleaseOpt').is(':checked') == true) {
+		events.push("Release");
+	}
+	if ($('#UponCompOpt').is(':checked') == true) {
+		events.push("UponCompletion");
+	}
+	if ($('#msgText').val() != undefined || $('#msgText').val() != ""){
+		emailMsg = $('#msgText').val();
+	}	
+
+	//RESERVATION
+	var resnum ="";
+	var actres ="";
+	var devnum ="";
+	var resdur ="";
+	var minres ="";
+	var minext ="";
+	var maxext ="";
+	var emt = "";
+	var enmin = "";
+	var di = "0";
+	if ($('#maxResNumCB').is(':checked') == true) {
+		resnum = $('#maxResNum').val()+"::1";
+	}else{
+		resnum = $('#maxResNum').val()+"::0";
+	}
+	if ($('#maxActResCB').is(':checked') == true) {
+		actres = $('#maxActRes').val()+"::1";
+	}else{
+		actres = $('#maxActRes').val()+"::0";
+	}
+	if ($('#maxDevNumCB').is(':checked') == true) {
+		devnum = $('#maxDevNum').val()+"::1";
+	}else{
+		devnum = $('#maxDevNum').val()+"::0";
+	}
+	if ($('#disableIterationCB').is(':checked') == true) {
+		di = "1";
+	}
+	if ($('#maxResDurCB').is(':checked') == true) {
+		if ($('#UserReservationTimeInfo').val() == "Limited") {
+			var month;
+			var day;
+			if ($('#durMM').val() == "") {
+				month = "00";
+			} else if ($('#durMM').val() < 10 && $('#durMM').val().length == 1) {
+				month = "0"+$('#durMM').val();
+			  } else {
+					var newmonth = $('#durMM').val();
+					month = "";
+					//remove leading zeroes
+					if (newmonth != "00") {
+						for (l=0; l < newmonth.length; l++) {
+							if (newmonth[l] != 0) {
+				                for (j=l; j < newmonth.length; j++) {
+	        	                    month += newmonth[j];
+                	            }
+                    	        break;
+                        	}
+                    	}
+					} else {
+						month = newmonth;
+					  }
+					if (month == "") {
+						month = "00";
+					} else if (month < 10 && month.length == 1) {
+						month = "0"+month;
+					  }
+				}
+			if ($('#durDD').val() == "") {
+				day = "00";
+			} else if ($('#durDD').val() < 10 && $('#durDD').val().length == 1) {
+				day = "0"+$('#durDD').val();
+			  } else {
+					var newday = $('#durDD').val();
+					day = "";
+					//remove leading zeroes
+					if (newday != "00") {
+						for (l=0; l < newday.length; l++) {
+							if (newday[l] != 0) {
+				                for (j=l; j < newday.length; j++) {
+	        	                    day += newday[j];
+                	            }
+                    	        break;
+                        	}
+                    	}
+					} else {
+						day = newday;
+					  }
+					if (day == "") {
+						day = "00";
+					} else if (day < 10 && day.length == 1) {
+						day = "0"+day;
+					  }
+				}
+			resdur = month+":"+day+":"+$('#durH').val()+":"+$('#durM').val()+"::1";
+		} else {
+			resdur = "00:00:00:00"+"::0";
+		  }
+	}
+
+	if ($('#maxExtNumCB').is(':checked') == true) {
+		maxext = $('#maxExtNum').val()+"::1";
+	}else{
+		maxext = $('#maxExtNum').val()+"::0";
+	}
+	if ($('#emailNotCB').is(':checked') == true) {
+		if ($('#emailNotNum').val() != undefined || $('#emailNotNum').val() != ""){
+			emt = $('#emailNotNum').val();
+		}
+		if ($('#emailNot').val() != undefined || $('#emailNot').val() != ""){
+			enmin = $('#emailNot').val();
+		}
+	}else{
+		emt = $('#emailNotNum').val();
+		enmin = $('#emailNot').val();
+	}
+
+	//var pid = getSelectedArr('AdminPower2');
+	var p = "";
+	//p = globalPowerManagementActive.concat(globalPowerManagementInActive);
+
+	var tftpquery = new Array("TftpHostName","TftpIp","GatewayHostName","GatewayIp","TACACSHostName","TACACSIp","Access","ConfigMethod","ConfigName","ConfigFile","ConfigPath","ClearType","Community","ConnectivityId","DatabaseName","DatabaseTable","DatabaseType","DeviceList","ExtIp","EnablePassword","Features","IPv6","NRCMD","NRCMDUser","Port","ServerId","UserName","RadiusHostName","RadiusIp","Administrator","Password","TFTPKey","Function","BEHost","RootDirectory","Account","Authentication","LogDirectory","AccountPort","AuthenticationPort","DefaultSM","VendorType","COAPort","RedirectPort","RedirectLogPort");
+	var tftpval = new Array("tftpHost","tftp","gatewayHost","gateway","tacacsHost","tacacs","access","cfgmethod","cfgname","cfgfile","cfgpath","clrtype","community","conn","dbname","dbtable","dbtype","dlist","extIp","enpass","features","ipv6","nrcmd","nrcmduser","port","svrid","uname","radiusHost","radius","admin","passpol","key","function","behost","rootdir","account","authen","logdir","accountport","aport","defsm","vtype","cport","rport","rlogport");
+	var servequery = "";
+	for (var y = 0; y < tftpquery.length; y++) {
+		servequery += "','"+tftpquery[y]+"':'"/*+$('#'+tftpval[y]+'Policy').val()*/;
+	}
+	var emailRes = new Array();	
+	emailRes.push({'events':events,'resnum':resnum,'actres':actres,'devnum':devnum,'resdur':resdur,'maxext':maxext,'emt':emt,'enmin':enmin,'p':p,'di':di,'servequery':servequery});
+
+	return emailRes;
+}
+
+function savePy(qstr, todo) {
+
+    var cgiURL= getURL('ADMIN2','JSON')+qstr;
+
+    $.ajax({
+        url: cgiURL,
+        dataType: 'html',
+        success: function(data) {
+			data = data.replace(/'/g,'"');
+	        var jsonData = $.parseJSON(data);
+            if (jsonData != "") {
+                if (/edit/i.test(qstr) == true) {
+                    alerts("Edit Successful");
+                } else if (/add/i.test(qstr) == true) {
+                    alerts("Add Successful");
+                  } else {
+                        alerts("Process Completed!");
+                    }
+            } else {
+                alerts(data);
+            }
+            eval(todo);
+        }
+    });
+
+}
+
+function timeZoneStatic(val){
+	var opt = "<option value=''>SELECT</option>";
+	opt += "<option value='(GMT-12:00)::International Date Line West'>(GMT-12:00) International Date Line West</option>";
+	opt += "<option value='(GMT-11:00)::Coordinated Universal Time-11'>(GMT-11:00) Coordinated Universal Time-11</option>";
+	opt += "<option value='(GMT-10:00)::Hawaii'>(GMT-10:00) Hawaii</option>";
+	opt += "<option value='(GMT-09:00)::Alaska'>(GMT-09:00) Alaska</option>";
+	opt += "<option value='(GMT-08:00)::Baja California'>(GMT-08:00) Baja California </option>";
+	opt += "<option value='(GMT-08:00)::Pacific Time(US & Canada)'>(GMT-08:00) Pacific Time(US & Canada)</option>";
+	opt += "<option value='(GMT-07:00)::Arizona'>(GMT-07:00) Arizona </option>";
+	opt += "<option value='(GMT-07:00)::Chihuahua, La Paz, Mazatlan - New'>(GMT-07:00) Chihuahua, La Paz, Mazatlan - New </option>";
+	opt += "<option value='(GMT-07:00)::Chihuahua, La Paz, Mazatlan - old'>(GMT-07:00) Chihuahua, La Paz, Mazatlan - old </option>";
+	opt += "<option value='(GMT-07:00)::Mountain Time (US & Canada'>(GMT-07:00) Mountain Time (US & Canada</option>";
+	opt += "<option value='(GMT-06:00)::Central America'>(GMT-06:00) Central America</option>";
+	opt += "<option value='(GMT-06:00)::Central Time(US & Canada)'>(GMT-06:00) Central Time(US & Canada) </option>";
+	opt += "<option value='(GMT-06:00)::Guadalajara, Mexico City, Monterrey - New'>(GMT-06:00) Guadalajara, Mexico City, Monterrey - New </option>";
+	opt += "<option value='(GMT-06:00)::Guadalajara, Mexico City, Monterrey - Old'>(GMT-06:00) Guadalajara, Mexico City, Monterrey - Old </option>";
+	opt += "<option value='(GMT-06:00)::Saskatchewan'>(GMT-06:00) Saskatchewan </option>";
+	opt += "<option value='(GMT-05:00)::Bogota, Lima, Quito'>(GMT-05:00) Bogota, Lima, Quito </option>";
+	opt += "<option value='(GMT-05:00)::Eastern Time (US & Canada)'>(GMT-05:00) Eastern Time (US & Canada) </option>";
+	opt += "<option value='(GMT-05:00)::India(East) '>(GMT-05:00) India(East)</option>";
+	opt += "<option value='(GMT-04:30)::Caracas'>(GMT-04:30) Caracas </option>";
+	opt += "<option value='(GMT-04:00)::Asuncion'>(GMT-04:00) Asuncion</option>";
+	opt += "<option value='(GMT-04:00)::Atlantic Time(Canada)'>(GMT-04:00) Atlantic Time(Canada)</option>";
+	opt += "<option value='(GMT-04:00)::Cuiaba'>(GMT-04:00) Cuiaba </option>";
+	opt += "<option value='(GMT-04:00)::Georgetown, La Paz, Manaus, San Juan'>(GMT-04:00) Georgetown, La Paz, Manaus, San Juan</option>";
+	opt += "<option value='(GMT-04:00)::Santiago'>(GMT-04:00) Santiago</option>";
+	opt += "<option value='(GMT-03:30)::Newfoundland'>(GMT-03:30) Newfoundland </option>";
+	opt += "<option value='(GMT-03:00)::Brasilia'>(GMT-03:00) Brasilia </option>";
+	opt += "<option value='(GMT-03:00)::Buenos Aires'>(GMT-03:00) Buenos Aires</option>";
+	opt += "<option value='(GMT-03:00)::Cayenne, Fortaleza '>(GMT-03:00) Cayenne, Fortaleza </option>";
+	opt += "<option value='(GMT-03:00)::Greenland'>(GMT-03:00) Greenland </option>";
+	opt += "<option value='(GMT-03:00)::Montevideo'>(GMT-03:00) Montevideo </option>";
+	opt += "<option value='(GMT-03:00)::Salvador'>(GMT-03:00) Salvador</option>";
+	opt += "<option value='(GMT-02:00)::Coordinated Universal Time-02'>(GMT-02:00) Coordinated Universal Time-02 </option>";
+	opt += "<option value='(GMT-02:00)::Mid-Atlantic'>(GMT-02:00) Mid-Atlantic </option>";
+	opt += "<option value='(GMT-01:00)::Azores'>(GMT-01:00) Azores</option>";
+	opt += "<option value='(GMT-01:00)::Cape Verde Is.'>(GMT-01:00) Cape Verde Is.</option>";
+	opt += "<option value='(GMT)::Casablanca'>(GMT) Casablanca</option>";
+	opt += "<option value='(GMT)::Coordinated Universal Time'>(GMT) Coordinated Universal Time</option>";
+	opt += "<option value='(GMT)::Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London'>(GMT) Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London </option>";
+	opt += "<option value='(GMT)::Monrovia, Reykjavik'>(GMT) Monrovia, Reykjavik </option>";
+	opt += "<option value='(GMT+01:00)::Amsterdam, Berlin, Rome, Stockholm, Vienna'>(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna </option>";
+	opt += "<option value='(GMT+01:00)::Belgrade, Bratislava, Budapest, Ljubljana, Prague'>(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>";
+	opt += "<option value='(GMT+01:00)::Brussels, Copenhagen, Madrid, Paris'>(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>";
+	opt += "<option value='(GMT+01:00)::Sarajevo, Skopje, Warsaw, Zagreb'>(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>";
+	opt += "<option value='(GMT+01:00)::Tripoli'>(GMT+01:00) Tripoli</option>";
+	opt += "<option value='(GMT+01:00)::West Central Africa'>(GMT+01:00) West Central Africa </option>";
+	opt += "<option value='(GMT+01:00)::Windhoek'>(GMT+01:00) Windhoek </option>";
+	opt += "<option value='(GMT+02:00)::Athens,Bucharest'>(GMT+02:00) Athens,Bucharest </option>";
+	opt += "<option value='(GMT+02:00)::Beirut'>(GMT+02:00) Beirut</option>";
+	opt += "<option value='(GMT+02:00)::Cairo'>(GMT+02:00) Cairo</option>";
+	opt += "<option value='(GMT+02:00)::Damascus'>(GMT+02:00) Damascus </option>";
+	opt += "<option value='(GMT+02:00)::E.Europe'>(GMT+02:00) E.Europe </option>";
+	opt += "<option value='(GMT+02:00)::Harare, Pretoria'>(GMT+02:00) Harare Pretoria </option>";
+	opt += "<option value='(GMT+02:00)::Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius'>(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius  </option>";
+	opt += "<option value='(GMT+02:00)::Istanbul'>(GMT+02:00) Istanbul</option>";
+	opt += "<option value='(GMT+02:00)::Jerusalem'>(GMT+02:00) Jerusalem</option>";
+	opt += "<option value='(GMT+03:00)::Amman'>(GMT+02:00) Amman</option>";
+	opt += "<option value='(GMT+03:00)::Baghdad'>(GMT+03:00) Baghdad </option>";
+	opt += "<option value='(GMT+03:00)::Kaliningrad, Minsk'>(GMT+03:00) Kaliningrad, Minsk </option>";
+	opt += "<option value='(GMT+03:00)::Kuwait, Riyadh'>(GMT+03:00) Kuwait, Riyadh </option>";
+	opt += "<option value='(GMT+03:00)::Nairobi'>(GMT+03:00) Nairobi</option>";
+	opt += "<option value='(GMT+03:30)::Tehrain'>(GMT+03:30) Tehrain </option>";
+	opt += "<option value='(GMT+04:00)::Abu Dhabi, Muscat'>(GMT+04:00) Abu Dhabi, Muscat </option>";
+	opt += "<option value='(GMT+04:00)::Baku'>(GMT+04:00) Baku</option>";
+	opt += "<option value='(GMT+04:00)::Caucasus Standard Time'>(GMT+04:00) Caucasus Standard Time </option>";
+	opt += "<option value='(GMT+04:00)::Moscow, St. Petersburg, Volgograd'>(GMT+04:00) Moscow, St. Petersburg, Volgograd </option>";
+	opt += "<option value='(GMT+04:00)::Port Louis'>(GMT+04:00) Port Louis </option>";
+	opt += "<option value='(GMT+04:00)::Tbilisi'>(GMT+04:00) Tbilisi </option>";
+	opt += "<option value='(GMT+04:00)::Yerevan'>(GMT+04:00) Yerevan </option>";
+	opt += "<option value='(GMT+04:30)::Kabul'>(GMT+04:30) Kabul </option>";
+	opt += "<option value='(GMT+05:00)::Ashgabat, Tashkinet'>(GMT+05:00) Ashgabat, Tashkinet  </option>";
+	opt += "<option value='(GMT+05:00)::Islamabad, Karachi'>(GMT+05:00) Islamabad, Karachi  </option>";
+	opt += "<option value='(GMT+05:30)::Chennai, Kolkata, Mumbai, New Delhi'>(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi  </option>";
+	opt += "<option value='(GMT+05:30)::Sri Jayawadenepura'>(GMT+05:30) Sri Jayawadenepura  </option>";
+	opt += "<option value='(GMT+05:45)::Kathmandu'>(GMT+05:45) Kathmandu </option>";
+	opt += "<option value='(GMT+06:00)::Astana'>(GMT+06:00) Astana </option>";
+	opt += "<option value='(GMT+06:00)::Dhaka'>(GMT+06:00) Dhaka</option>";
+	opt += "<option value='(GMT+06:00)::Ekaterinburg'>(GMT+06:00) Ekaterinburg </option>";
+	opt += "<option value='(GMT+06:30)::Yangon(Rangoon)'>(GMT+06:30) Yangon(Rangoon) </option>";
+	opt += "<option value='(GMT+07:00)::Bangkok, Hanoi, Jakarta'>(GMT+07:00) Bangkok, Hanoi, Jakarta </option>";
+	opt += "<option value='(GMT+07:00)::Novosibirsk'>(GMT+07:00) Novosibirsk </option>";
+	opt += "<option value='(GMT+08:00)::Beijing, Chongging, Hong Kong, Urumqi'>(GMT+08:00) Beijing, Chongging, Hong Kong, Urumqi </option>";
+	opt += "<option value='(GMT+08:00)::Krasnoyarsk'>(GMT+08:00) Krasnoyarsk </option>";
+	opt += "<option value='(GMT+08:00)::Kuala Lumpur, Singapore'>(GMT+08:00) Kuala Lumpur, Singapore </option>";
+	opt += "<option value='(GMT+08:00)::Perth'>(GMT+08:00) Perth </option>";
+	opt += "<option value='(GMT+08:00)::Taipei'>(GMT+08:00) Taipei </option>";
+	opt += "<option value='(GMT+08:00)::Ulaanbaatar'>(GMT+08:00) Ulaanbaatar</option>";
+	opt += "<option value='(GMT+09:00)::Irkutsk'>(GMT+09:00) Irkutsk </option>";
+	opt += "<option value='(GMT+09:00)::Osaka, Singapore, Tokyo'>(GMT+09:00) Osaka, Singapore, Tokyo </option>";
+	opt += "<option value='(GMT+09:00)::Seoul'>(GMT+09:00) Seoul </option>";
+	opt += "<option value='(GMT+09:30)::Adelaide'>(GMT+09:30) Adelaide </option>";
+	opt += "<option value='(GMT+09:30)::Darwin'>(GMT+09:30) Darwin </option>";
+	opt += "<option value='(GMT+10:00)::Brisbane'>(GMT+10:00) Brisbane </option>";
+	opt += "<option value='(GMT+10:00)::Canberra, Melbourne, Sydney'>(GMT+10:00) Canberra, Melbourne, Sydney </option>";
+	opt += "<option value='(GMT+10:00)::Guam, Port Moresby'>(GMT+10:00) Guam, Port Moresby</option>";
+	opt += "<option value='(GMT+10:00)::Hobart'>(GMT+10:00) Hobart </option>";
+	opt += "<option value='(GMT+10:00)::Yakutsk'>(GMT+10:00) Yakutsk </option>";
+	opt += "<option value='(GMT+11:00)::Solomon Is., New Caledonia'>(GMT+11:00) Solomon Is., New Caledonia </option>";
+	opt += "<option value='(GMT+11:00)::Vladivostok'>(GMT+11:00) Vladivostok</option>";
+	opt += "<option value='(GMT+12:00)::Auckland, Wellington'>(GMT+12:00) Auckland, Wellington </option>";
+	opt += "<option value='(GMT+12:00)::Coordinated Universal Time+12'>(GMT+12:00) Coordinated Universal Time+12 </option>";
+	opt += "<option value='(GMT+12:00)::Fiji'>(GMT+12:00) Fiji </option>";
+	opt += "<option value='(GMT+12:00)::Magadan'>(GMT+12:00) Magadan</option>";
+	opt += "<option value='(GMT+12:00)::Petrapavlovsk-Kamchatsky - Old'>(GMT+12:00) Petrapavlovsk-Kamchatsky - Old </option>";
+	opt += "<option value='(GMT+13:00)::Nuku`alofa'>(GMT+13:00) Nuku`alofa </option>";
+	opt += "<option value='(GMT+13:00)::Samao'>(GMT+13:00) Samao </option>";
+	$('#cbtimeZone').empty().append(opt);
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : checkresCB
+ #  AUTHOR        : Apple Kem E. Eguia
+ #  DATE          :  
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : changes the value of button for enabling/disabling
+ #					reservation checkbox
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+
+function checkresCB(){
+	var resCB = new Array('maxActResCB','maxResNumCB','maxDevNumCB','maxResDurCB','maxExtNumCB','disableIterationCB');
+	var counter = 0;
+	for (var i=0;i<resCB.length;i++){
+		if ($('#'+resCB[i]).is(':checked') == true){
+			counter++;
+		}
+	}
+	if (counter < 6 || counter == 0){
+		$('#resCB').val('Enable All');
+	}else if (counter == 6){
+		$('#resCB').val('Disable All');
+	}
+	return counter;
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : resetResDefault
+ #  AUTHOR        : Apple Kem E. Eguia
+ #  DATE          : December 28, 2013
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : reset reservation default values
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function resetResDefault() {
+	var resInput = new Array('maxActRes','maxResNum','maxDevNum','durDD','maxExtNum');
+	var defaultRes = new Array('2','4','10','4','2');
+	for (var i=0;i<resInput.length;i++){
+		$('#'+resInput[i]).val(defaultRes[i]);
+	}
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : EDresCB
+ #  AUTHOR        : Apple Kem E. Eguia
+ #  DATE          : December 28, 2013
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : enable/disable reservation checkbox
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function EDresCB(){
+	var resCB = new Array('maxActResCB','maxResNumCB','maxDevNumCB','maxResDurCB','maxExtNumCB','disableIterationCB');
+	var resInput = new Array('maxActRes','maxResNum','maxDevNum','maxResDur','maxExtNum');
+	if ($('#resCB').val() == 'Enable All'){
+		for (var i=0;i<resCB.length;i++){
+			if (i == 5){
+				$('#'+resCB[i]).attr('checked',true);
+				i = resCB.length;
+			}else{
+				$('#'+resCB[i]).attr('checked',true);
+			}
+			if (resInput[i] != 'maxResDur' && resInput[i] != 'minResDur') {
+				$('#'+resInput[i]).attr('disabled',false);
+			} else if (resInput[i] == 'maxResDur') {
+				$('#UserReservationTimeInfo').attr('disabled',false);
+				if ($('#UserReservationTimeInfo').val() == "Limited") {
+					$('#durH').attr('disabled',false);
+					$('#durM').attr('disabled',false);
+					$('#durMM').attr('disabled',false);
+					$('#durDD').attr('disabled',false);
+				} else {
+					$('#durH').attr('disabled',true);
+					$('#durM').attr('disabled',true);
+					$('#durMM').attr('disabled',true);
+					$('#durDD').attr('disabled',true);
+					}
+			} else {
+				$('#durH2').attr('disabled',false);
+				$('#durM2').attr('disabled',false);
+				$('#durS2').attr('disabled',false);
+			}
+		}
+		$('#resCB').val('Disable All');
+	}else{
+		for (var i=0;i<resCB.length;i++){
+			if (i == 5){
+				$('#'+resCB[i]).attr('checked',false);
+				i = resCB.length;
+			}else{
+				$('#'+resCB[i]).attr('checked',false);
+			}
+			if (resInput[i] != 'maxResDur' && resInput[i] != 'minResDur') {
+				$('#'+resInput[i]).attr('disabled',true);
+			} else if (resInput[i] == 'maxResDur') {
+				$('#durH').attr('disabled',true);
+				$('#durM').attr('disabled',true);
+				$('#durMM').attr('disabled',true);
+				$('#durDD').attr('disabled',true);
+				$('#UserReservationTimeInfo').attr('disabled',true);
+				populateDurationCombo('');
+			} else {
+				$('#durH2').attr('disabled',true);
+				$('#durM2').attr('disabled',true);
+				$('#durS2').attr('disabled',true);
+				populateDurationCombo('1');
+			}
+		}	
+		$('#resCB').val('Enable All');
+	}
+}
+
+/*
+ ########################################################################
+ #																		#
+ #  FUNCTION NAME : loadDomainAdmin										#
+ #  AUTHOR        : Leonard M. Leynes									#
+ #  DATE          :  													#
+ #  MODIFIED BY   : 													#
+ #  REVISION DATE : 													#
+ #  REVISION #    : 													#
+ #  DESCRIPTION   : loads Domain Administrators in Adding/Editing 		#
+ #					Resource Domain										#
+ #  PARAMETERS    : 													#
+ #																		#
+ ########################################################################
+
+
+function loadDomainAdmin(){
+	
+	loadDAFlag = true;
+	var qstr = "action=LoadDomainAdmin&query={'QUERY':[{'ResourceDomainId':'"+globalSelectedAdminMain[0]+"','Filter':'Sort':'FirstName','Orderby':'asc'}]}&version=3.0";
+	$.ajax ({
+		url: getURL('ADMIN','JSON') + qstr,
+		dataType: 'html',
+		success: function (data) {
+			data = data.replace(/'/g,'"');
+	        var jsonData = $.parseJSON(data);
+		    globalPrevDomainAdminArray = [];
+		    globalCurrDomainAdminArray = [];
+		  	var mConfig = xmlDoc.getElementsByTagName('data');
+			var mConfig1 = xmlDoc.getElementsByTagName('row');
+		    var b = 0;
+			var c = 0;
+			xmlString  = "<select multiple='multiple' name='selectDomainAdmin[]' title='Select Domain Administrator' id='selectDomainAdmin' onchange='changeDomainAdmin()' disabled='true' style='width: 200px; border: solid 1px #989898' >";
+		    while(b < mConfig.length) {
+		        var daid  = mConfig[b].getAttribute('DomainAdminId');
+		        b++;
+		    }
+		    while(c < mConfig1.length) {
+		        var uname  = mConfig1[c].getAttribute('Username');
+				var uid = mConfig1[c].getAttribute('UserId');
+				var first = mConfig1[c].getAttribute('Firstname');
+				var last = mConfig1[c].getAttribute('Lastname');
+					xmlString += "<option value='"+uid+"' >"+first+" "+last+" ("+uname+")</option>";
+		        c++;
+				
+		    }
+			xmlString += "</select>";
+			$('#editDomainAdmin').empty().append(xmlString);
+			if(daid != "" && daid != undefined && daid != null){
+				var tempdaid = daid.split(",");
+				for(var a = 0; a < tempdaid.length; a++){
+				    if ($.inArray(tempdaid[a],globalPrevDomainAdminArray) == -1) {
+				        globalPrevDomainAdminArray.push(tempdaid[a]);
+				        globalCurrDomainAdminArray.push(tempdaid[a]);
+				    }
+				}
+			}
+			$('#selectDomainAdmin').children().each(function(){
+				for(var t = 0; t < globalCurrDomainAdminArray.length; t++){
+					if($(this).val() == globalCurrDomainAdminArray[t]){
+						$(this).attr("selected","selected");
+					}
+				}
+			});
+			selectDomAdmin(daid);
+			adjustResPolPopUp();
+		}
+	});
+//	timeZoneStatic(); // for time zone static data
+}*/
+
+/*
+ ########################################################################
+ #																	    #
+ #  FUNCTION NAME : selectDomAdmin										#
+ #  AUTHOR        : Leonard M. Leynes									#
+ #  DATE          :  													#
+ #  MODIFIED BY   : 													#
+ #  REVISION DATE : 													#
+ #  REVISION #    : 													#
+ #  DESCRIPTION   : for selected Domain Administrator 					#
+ #  PARAMETERS    : 													#
+ #																		#
+ ########################################################################
+
+
+
+function selectDomAdmin(daid){
+
+	$("#selectDomainAdmin").asmSelect({
+		addItemTarget: 'bottom',
+		animate: true,
+		highlight: true,
+		sortable: true
+	});
+	$('#asmSelect0').css('width','400px');
+	$('#asmSelect0').children().each(function(){
+		if($(this).val() == daid){
+		//	$(this).attr("selected","selected");
+		}
+	});
+	disableDomAdm();
+	if(globalTimeZone == '' || globalTimeZone == undefined){
+		return
+	}
+	var tzone='';
+	$('#cbtimeZone').children().each(function(){
+		tzone = $(this).val().replace('::',' ');
+		if(tzone.substring(0,14) == globalTimeZone.substring(0,14)){
+			$(this).attr("selected","selected");
+		}
+	});
+	loadEmailInfoDomain();
+
+}*/

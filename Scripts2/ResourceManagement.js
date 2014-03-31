@@ -20,8 +20,6 @@ function loadReserve(){
 		limit = showMoreInfo;
 		var page = 1;
 	}
-//	var url = 'https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESOURCEMANAGEMENT/NFastRMCGI.py?action=ReservationReserve&query=limit='+limit+'`page='+page+'`sort=`orderby=`user='+globalUserName+'`filter=`domain=`start=`status=`timezone='+timezone[0]+timezone[1]+timezone[2]+'^'+timezone[3]+'&version=3.0';
-//
 	var url ='https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESOURCEMANAGEMENT/NFastRMCGI.py?action=ReservationReserve&query={"QUERY":[{"limit":"'+limit+'","page":"'+page+'","sort":"","orderby":"","user":"'+globalUserName+'","filter":"","domain":"","start":"","status":"","timezone":"'+timezone[0]+timezone[1]+timezone[2]+'^'+timezone[3]+'"}]}&version="3.0"';
 	if(globalDeviceType == "Mobile"){
 		loading('show');
@@ -56,7 +54,7 @@ function loadReserve(){
 //MOBILE
 				html += "<tr class='trReserved "+tableClass+"' devId='"+json.root[0].row[a].DeviceId+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"'>";
 				if(globalDeviceType != "Mobile"){
-					html += "<td><input type='checkbox' class='resres' iter='"+json.root[0].row[a].Recurrence+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"' did='"+json.root[0].row[a].DeviceId+"' did2='"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' id='ReservationReserve_"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' name='ReservationReserveSel' onclick='checkSingleRM(\"ReservationReserve\");'/></td>";
+					html += "<td><input type='checkbox' class='resres' iter='"+json.root[0].row[a].Recurrence+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"' did='"+json.root[0].row[a].DeviceId+"' did2='"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' id='ReservationReserve_"+json.root[0].row[a].DeviceId+"_"+json.root[0].row[a].ResourceId+"' name='ReservationReserveSel' onclick='checkSingleRM(\"ReservationReserve\",this);'/></td>";
 				}
 
 				if(globalDeviceType == "Mobile"){
@@ -90,24 +88,29 @@ function loadReserve(){
 //HTML5
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].DeviceId+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].QueueTime+"</td>";
-					html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"</td>";
+					html += "<td did='td"+json.root[0].row[a].DeviceId+"' class='toolTip' onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceId+"' style='display:none'><ul>";
+					html += getTooltipInfo(json.root[0].row[a],"HostName");
+					html += "</ul></div></td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].DomainName+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].ManagementIp+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].ConsoleIp+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].Model+"</td>";
 					var startRes = json.root[0].row[a].StartReservation.split(" ");
-					html += "<td><input style='border:none; text-align:center;' type='text' class='datepickerdev' value='"+startRes[0]+"' onchange='getResLimit(); getServerTime();'/></td>";
-					html += "<td><input style='border:none;text-align:center;' type='text' class='timepicker' value='"+startRes[1]+"' onchange='getResLimit(); getServerTime();'/></td>";
-        	        html += "<td>"+json.root[0].row[a].DeviceReservationUserId+"</td>";
+					html += "<td><input style='border:none; text-align:center;' type='text' class='datepickerdev' readonly='yes' value='"+startRes[0]+"' onchange='getResLimit(); getServerTime();'/></td>";
+					html += "<td><input style='border:none;text-align:center;' type='text' class='timepicker' readonly='yes' value='"+startRes[1]+"' onchange='getResLimit(); getServerTime();'/></td>";
+        	        html += "<td did='td"+json.root[0].row[a].DeviceReservationUserId+a+"' class='toolTip'>"+json.root[0].row[a].DeviceReservationUserId+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceReservationUserId+a+"' style='display:none;'><ul>";
+
+					html += getTooltipInfo(json.root[0].row[a],"User");
+					html +="</ul></div></td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].UserDomainName+"</td>";
 					html += "<td>"+json.root[0].row[a].ReservedFrom+"</td>";
-					html += "<td><input style='border:none;text-align:center;' type='text' class='interval' value='"+json.root[0].row[a].TimeInterval+"'/></td>";
-    	            html += "<td><input style='border:none;text-align:center;' type='text' class='iteration' value='"+json.root[0].row[a].Recurrence+"'</td>";
+					html += "<td><input style='border:none;text-align:center;' onkeypress='return checkNumberInputChar(event,this);' type='text' class='interval' value='"+json.root[0].row[a].TimeInterval+"'/></td>";
+    	            html += "<td><input style='border:none;text-align:center;' type='text' class='iteration'  onkeypress='return checkNumberInputChar(event,this);'value='"+json.root[0].row[a].Recurrence+"'</td>";
 					html += "<td>"+json.root[0].row[a].IterNumber+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].Exclusivity+"</td>";
 					var endRes = json.root[0].row[a].EndReservation.split(" ");
-					html += "<td><input style='border:none;text-align:center;' type='text' value='"+endRes[0]+"' class='datepickerdev'/></td>";
-					html += "<td><input style='border:none;text-align:center;' type='text' value='"+endRes[1]+"' class='timepicker'/></td>";
+					html += "<td><input style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[0]+"' class='datepickerdev'/></td>";
+					html += "<td><input style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[1]+"' class='timepicker'/></td>";
         	        html += "<td>"+json.root[0].row[a].Status+"</td>";
 					html +="</tr>";
 				}
@@ -143,6 +146,7 @@ function loadReserve(){
 			rmExpandedView();
 			rmHighlight();
 			disableRMButtons();
+			hoverTable();
 			if(globalDeviceType != 'Mobile'){
 			$('.datepickerdev').datepicker();
 			$('.timepicker').timepicker({
@@ -198,31 +202,9 @@ function loadReserveRelease(){
 
             var html ='',startRes='',endRes='';
 //			rmPagination(json.root[0].pages,json.root[0].page,json.root[0].total);
-//			$('#totalMatchesRelease').html(root[0].getAttribute('total'));
-			$('#totalMatchesRelease').html(json.root[0].total);
+			$('#ReservationReservReleaseTotalMatches').html(json.root[0].total);
 			
-/*            for(var a =0; a< row.length; a++){
-				html += "<tr class='trReservedRelease' devId='"+row[a].getAttribute('DeviceId')+"' rId='"+row[a].getAttribute('ResourceId')+ row[a].getAttribute('DeviceReservationUserId')+"'>";
-				if(globalDeviceType != "Mobile"){
-					html += "<td><input type='checkbox' id='"+row[a].getAttribute('ResourceId')+"'  devId='"+row[a].getAttribute('DeviceId')+"' rId='"+row[a].getAttribute('ResourceId')+ row[a].getAttribute('DeviceReservationUserId')+"'  name='ReservationReserveReleaseSel' onclick='checkSingleRM(\"ReservationReserveRelease\"); '/></td>";
-				}
 
-				html += "<td>"+row[a].getAttribute('HostName')+"</td>";
-				var startRes = row[a].getAttribute('StartReservation').split(" ");
-				html += "<td>"+startRes[0]+"</td>";
-				html += "<td>"+startRes[1]+"</td>";
-                html += "<td>"+row[a].getAttribute('User')+"</td>";
-				html += "<td>"+row[a].getAttribute('ReservedFrom')+"</td>";
-				html += "<td>"+row[a].getAttribute('TimeInterval')+"</td>";
-                html += "<td>"+row[a].getAttribute('Recurrence')+"</td>";
-				html += "<td>"+row[a].getAttribute('IterNumber')+"</td>";
-				var endRes = row[a].getAttribute('EndReservation').split(" ");
-				html += "<td>"+endRes[0]+"</td>";
-				html += "<td>"+endRes[1]+"</td>";
-                html += "<td>"+row[a].getAttribute('Status')+"</td>";
-				html +="</tr>";
-				
-			}*/
 			for(var a = 0; a< json.root[0].row.length; a++){
 				html += "<tr class='trReservedRelease' devId='"+json.root[0].row[a].DeviceId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"'>";
 				if(globalDeviceType != "Mobile"){
@@ -262,6 +244,7 @@ function loadReserveRelease(){
 				}
 				selectedRow();
 			});
+				globalPageRM = "ReserveRelease";
 		}
 	});
 }
@@ -1529,7 +1512,6 @@ function loadHistorySched(){
  *  */
 
 function loadManageDevice(Page){
-		genIds = [];
 		var limit = $('#limitOption').val();
 		//var url = getURL("RM2","JSON") + 'action=ManageDevice&query=limit='+showMoreInfo+'`page=1`sort=`orderby=`user='+globalUserName+'`filter=`domain=`start=`status=`timezone='+timezone[0]+timezone[1]+timezone[2]+'^'+timezone[3]+'&version=3.0';
 		var url = getURL("RM","JSON") + "action=ManageDevice&query={'QUERY':[{'limit':'"+limit+"','page':'"+Page+"','sort':'','orderby':'','user':'"+globalUserName+"','filter':'domain','start':'','status':'','timezone':'"+timezone[0]+timezone[1]+timezone[2]+"^"+timezone[3]+"'}]}&version=3.0";
@@ -1786,15 +1768,15 @@ function loadHistoryScheduler2(){
 				}else{
 		        	html += "<td id='RMDeviceLogs' style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"' onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].HostName+"</td>";
 				}
-					if(json.data[0].row[a].ManagementIP == undefined || json.data[0].row[a].ManagementIP ==""){
+					if(json.data[0].row[a].ManagementIp == undefined || json.data[0].row[a].ManagementIp ==""){
 						html+="<td  style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"' onclick='showDeviceLinkLogs(this);'>N/A</td>";
 					}else{
-						html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"' onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].ManagementIP+"</td>";
+						html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"' onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].ManagementIp+"</td>";
 			  		}
-					if(json.data[0].row[a].ConsoleIP == undefined || json.data[0].row[a].ConsoleIP ==""){
+					if(json.data[0].row[a].ConsoleIp == undefined || json.data[0].row[a].ConsoleIp ==""){
 						html+="<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"'  onclick='showDeviceLinkLogs(this);'>N/A</td>";
 					}else{
-						html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"'  onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].ConsoleIP+"</td>";
+						html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"'  onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].ConsoleIp+"</td>";
 				  	}
 					html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"' onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].Manufacturer+"</td>";
 					html += "<td style='cursor:pointer;' class='showLogs' deviceId='"+json.data[0].row[a].DeviceId+"' hostname='"+json.data[0].row[a].HostName+"'  onclick='showDeviceLinkLogs(this);'>"+json.data[0].row[a].Model+"</td>";
@@ -1867,785 +1849,7 @@ function loadHistoryScheduler3(){
 		}
 	});
 }
-/*
- *  #######################################################################
- *  #
- *  #  FUNCTION NAME : loadImage
- *  #  AUTHOR        : Angeline Bringas
- *  #  DATE          : January 15,2014
- *  #  MODIFIED BY   : 
- *  #  REVISION DATE : 
- *  #  REVISION #    : 
- *  #  DESCRIPTION   : function to load image on reservation devices
- *  #  PARAMETERS    :
- *  #
- *  #######################################################################
- *  */
-function loadImage(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompletePythonCGI/FastQueryCgi.py?action=getLoadImage&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			//$('#totalMatchesLoadImage').html(data[0].getAttribute('total'));
-		    if(globalDeviceType != "Mobile"){
-				for(var a =0; a< row.length; a++){
-					if( a % 2 == 0){
-						tableClass = "alt";
-					}else{
-						tableClass = "";
-					}
-					html += "<tr class='trloadImage "+tableClass+"' deviceId='"+row[a].getAttribute('DeviceId')+"'>";
-								
-					html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-					html += "<td>"+row[a].getAttribute('Model')+"</td>";
-					html += "<td><select class=typeSaveImage'' id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-					if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-						html+="<td class='loadImageTable'><input type='text' id='ProtocolImage"+row[a].getAttribute('DeviceId')+"' class='protocolLoadImage'/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input type='text' class='protocolLoadImage' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-					}
-					if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-						html+="<td class='loadImageTable'><input type='text' class='serverLoadImage' id='ServerImage'"+row[a].getAttribute('DeviceId')+"/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input type='text' class='serverLoadImage' id='ServerImage' value='"+row[a].getAttribute('Server')+"'/></td>";
-					}
-					if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-						html+="<td><input type='text' class='pathLoadImage' id='PathImage"+row[a].getAttribute('DeviceId')+"'/></td>";
-					}else{
-						html += "<td><input type='text' class='pathLoadImage' id='PathImage' value='"+row[a].getAttribute('Path')+"'/></td>";
-					}
-					if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-						html+="<td class='loadImageTable'><input type='text' class='filenameLoadImage' id='FilenameImage"+row[a].getAttribute('DeviceId')+"'/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input class='filenameLoadImage' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-					}
-					html += "<td><select><option>boot-image</option><option>bootflash</option><option>bootflash0</option><option>bootflash1</option><option>flash</option><option>flash1</option><option>flash2</option><option>disk0</option><option>disk1</option><option>disk1</option><option>disk2</option><option>slot0</option><option>slot1</option><option>slot2</option></select></td>";
-					html +="</tr>";
-					
-					}
-			}else{
-				for(var a =0; a< row.length; a++){
-					if( a % 2 == 0){
-						tableClass = "alt";
-					}else{
-						tableClass = "";
-					}
-					html += "<tr class='trloadImage "+tableClass+"' deviceId='"+row[a].getAttribute('DeviceId')+"'>";
-					html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-					html += "<td>"+row[a].getAttribute('Model')+"</td>";
-					html += "<td><select class=typeSaveImage'' id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-					if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-						html+="<td><input type='text' id='ProtocolImage"+row[a].getAttribute('DeviceId')+"' class='protocolLoadImage'/></td>";
-					}else{
-						html += "<td><input type='text' class='protocolLoadImage' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-					}
-					if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-						html+="<td><input type='text' class='serverLoadImage' id='ServerImage'"+row[a].getAttribute('DeviceId')+"/></td>";
-					}else{
-						html += "<td><input type='text' class='serverLoadImage' id='ServerImage' value='"+row[a].getAttribute('Server')+"'/></td>";
-						}
-					if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-						html+="<td><input type='text' class='pathLoadImage' id='PathImage"+row[a].getAttribute('DeviceId')+"'/></td>";
-					}else{
-						html += "<td><input type='text' class='pathLoadImage' id='PathImage' value='"+row[a].getAttribute('Path')+"'/></td>";
-					}
-					if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-						html+="<td><input type='text' class='filenameLoadImage' id='FilenameImage"+row[a].getAttribute('DeviceId')+"'/></td>";
-					}else{
-						html += "<td><input class='filenameLoadImage' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-					}
-					html += "<td><select><option>boot-image</option><option>bootflash</option><option>bootflash0</option><option>bootflash1</option><option>flash</option><option>flash1</option><option>flash2</option><option>disk0</option><option>disk1</option><option>disk1</option><option>disk2</option><option>slot0</option><option>slot1</option><option>slot2</option></select></td>";
-					html +="</tr>";
-				}
-			}
-			$("#loadImage-table1 > tbody").empty().append(html);
-			$("#loadImage-table1").table("refresh");
-			globalPageRM = "LoadImage";
-			$('#RMLoadImage').trigger('create');
-			disableColumn();
-			var ctr;
-			ctr = 0;	
-			$(".trloadImage").on("tap",function(){
-				var iter = $(this).attr('deviceId');	
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					$('.typeLoadImage'+iter).selectmenu('enable');
-					$('.protocolLoadImage'+iter).textinput('enable');
-					$('.serverLoadImage'+iter).textinput('enable');
-					$('.pathLoadImage'+iter).textinput('enable');
-					$('.filenameLoadImage'+iter).textinput('enable');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					$('.typeLoadImage'+iter).selectmenu('disable');
-					$('.protocolLoadImage'+iter).textinput('disable');
-					$('.serverLoadImage'+iter).textinput('disable');
-					$('.pathLoadImage'+iter).textinput('disable');
-					$('.filenameLoadImage'+iter).textinput('disable');
-					ctr--;	
-				}
-				selectedRow();
-			//	if(ctr == 0){
-			//		$('#ReserveButtons').hide();
-			//	}	
-			});
-		}
-	});
-	
-}
-/*
- *  #######################################################################
- *  #
- *  #  FUNCTION NAME : loadImageDetail
- *  #  AUTHOR        : Angeline Bringas
- *  #  DATE          : January 15,2014
- *  #  MODIFIED BY   : 
- *  #  REVISION DATE : 
- *  #  REVISION #    : 
- *  #  DESCRIPTION   : function to load image detail on reservation devices
- *  #  PARAMETERS    :
- *  #
- *  #######################################################################
- *  */
 
-function loadImageDetail(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompletePythonCGI/FastQueryCgi.py?action=getLoadImageDetail&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			//$('#totalMatchesLoadImage').html(data[0].getAttribute('total'));
-			if(globalDeviceType != "Mobile"){
-				for(var a =0; a< row.length; a++){
-					if( a % 2 == 0){
-						tableClass = "alt";
-					}else{
-						tableClass = "";
-					}
-					html += "<tr class='trloadConfig "+tableClass+"' >";
-					if(globalDeviceType != "Mobile"){
-						html += "<td><input type='checkbox' id='loadImageCheckbox'/></td>"
-					}
-					html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-					html += "<td>"+row[a].getAttribute('Model')+"</td>";
-					html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-					if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-						html+="<td class='loadImageTable'><input type='text' id='ProtocolImage'/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-						html+="<td class='loadImageTable'><input type='text' id='ServerImage'/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-						html+="<td><input type='text' id='PathImage'/></td>";
-					}else{
-						html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-						html+="<td class='loadImageTable'><input type='text' id='FilenameImage'/></td>";
-					}else{
-						html += "<td class='loadImageTable'><input type='text' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-				  	}
-            	    html += "<td><select><option>boot-image</option><option>bootflash</option><option>bootflash0</option><option>bootflash1</option><option>flash</option><option>flash1</option><option>flash2</option><option>disk0</option><option>disk1</option><option>disk1</option><option>disk2</option><option>slot0</option><option>slot1</option><option>slot2</option></select></td>";
-					html +="</tr>";
-					
-				}
-			}else{
-				for(var a =0; a< row.length; a++){
-					if( a % 2 == 0){
-						tableClass = "alt";
-					}else{
-						tableClass = "";
-					}
-					html += "<tr class='trloadConfig "+tableClass+"' >";
-					if(globalDeviceType != "Mobile"){
-						html += "<td><input type='checkbox' id='loadImageCheckbox'/></td>"
-					}
-					html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-					html += "<td>"+row[a].getAttribute('Model')+"</td>";
-					html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-					if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-						html+="<td><input type='text' id='ProtocolImage'/></td>";
-					}else{
-						html += "<td><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-						html+="<td><input type='text' id='ServerImage'/></td>";
-					}else{
-						html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-						html+="<td><input type='text' id='PathImage'/></td>";
-					}else{
-						html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-				  	}
-					if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-						html+="<td><input type='text' id='FilenameImage'/></td>";
-					}else{
-						html += "<td><input type='text' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-				  	}
-	                html += "<td><select><option>boot-image</option><option>bootflash</option><option>bootflash0</option><option>bootflash1</option><option>flash</option><option>flash1</option><option>flash2</option><option>disk0</option><option>disk1</option><option>disk1</option><option>disk2</option><option>slot0</option><option>slot1</option><option>slot2</option></select></td>";
-					html +="</tr>";
-				}
-			}
-            for(var a =0; a< row.length; a++){
-				if( a % 2 == 0){
-					tableClass = "alt";
-				}else{
-					tableClass = "";
-				}
-				html += "<tr class='trloadConfig "+tableClass+"' >";
-				if(globalDeviceType != "Mobile"){
-					html += "<td><input type='checkbox' id='loadImageCheckbox'/></td>"
-				}
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				html += "<td>"+row[a].getAttribute('Model')+"</td>";
-				html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td class='loadImageTable'><input type='text' id='ProtocolImage'/></td>";
-				}else{
-					html += "<td class='loadImageTable'><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td class='loadImageTable'><input type='text' id='ServerImage'/></td>";
-				}else{
-					html += "<td class='loadImageTable'><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td class='loadImageTable'><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td class='loadImageTable'><input type='text' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-                html += "<td><select><option>boot-image</option><option>bootflash</option><option>bootflash0</option><option>bootflash1</option><option>flash</option><option>flash1</option><option>flash2</option><option>disk0</option><option>disk1</option><option>disk1</option><option>disk2</option><option>slot0</option><option>slot1</option><option>slot2</option></select></td>";
-				html +="</tr>";
-				
-			}
-			$("#loadImage-table1 > tbody").empty().append(html);
-			//$("#loadImage-table1").table("refresh");
-			globalPageRM = "LoadImage";
-			$('#RMLoadImage').trigger('create');
-			var ctr;
-			ctr = 0;	
-			$(".trloadConfig").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-}
-/*
- *  #######################################################################
- *  #
- *  #  FUNCTION NAME : loadConfigDetail
- *  #  AUTHOR        : Angeline Bringas
- *  #  DATE          : January 15,2014
- *  #  MODIFIED BY   : 
- *  #  REVISION DATE : 
- *  #  REVISION #    : 
- *  #  DESCRIPTION   : function to load configuration detail on reservation devices
- *  #  PARAMETERS    :
- *  #
- *  #######################################################################
- *  */
-
-function loadConfigDetail(){
-//	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getLoadConfigDetail&query=deviceid='+DeviceId;	
-
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompletePythonCGI/FastQueryCgi.py?action=getLoadConfigDetail&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			//$('#totalMatchesLoadConfig').html(data[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				if( a % 2 == 0){
-					tableClass = "alt";
-				}else{
-					tableClass = "";
-				}
-				html += "<tr class='trloadConfig "+tableClass+"' deviceId='"+row[a].getAttribute('DeviceId')+"'>";
-				if(globalDeviceType != "Mobile"){
-					html += "<td><input type='checkbox'/></td>"
-				}
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				html += "<td>"+row[a].getAttribute('Model')+"</td>";
-				html += "<td><select id='TypeConfig' class='typeLoadConfig'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' id='ProtocolImage' class='protocolLoadConfig'/></td>";
-				}else{
-					html += "<td><input type='text' id='ProtocolImage' class='protocolLoadConfig' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-					html+="<td><input type='text' id='PathImage'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td><input id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-                html += "<td><select><option>running-config</option></select></td>";
-				html +="</tr>";
-				
-			}
-			$("#loadConfig-table1 > tbody").empty().append(html);
-			$("#loadConfig-table1").table("refresh");
-			$('#RMLoadImage').trigger('create');
-			var ctr;
-			ctr = 0;	
-			$(".trloadConfig").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-}
-/*
- *  #######################################################################
- *  #
- *  #  FUNCTION NAME : loadConfig
- *  #  AUTHOR        : Angeline Bringas
- *  #  DATE          : January 15,2014
- *  #  MODIFIED BY   : 
- *  #  REVISION DATE : 
- *  #  REVISION #    : 
- *  #  DESCRIPTION   : function to load configuration option on reservation devices
- *  #  PARAMETERS    :
- *  #
- *  #######################################################################
- *  */
-function loadConfig(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompletePythonCGI/FastQueryCgi.py?action=getLoadConfig&query=deviceid='+DeviceId;	
-//	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getLoadConfig&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			//$('#totalMatchesLoadConfig').html(data[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				if( a % 2 == 0){
-					tableClass = "alt";
-				}else{
-					tableClass = "";
-				}
-				html += "<tr class='trloadConfig "+tableClass+"' deviceId='"+row[a].getAttribute('DeviceId')+"'>";
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' class='protocolLoadConfig' id='ProtocolConfig"+row[a].getAttribute('DeviceId')+"'/></td>";
-				}else{
-					html += "<td><input type='text' id='ProtocolConfig"+row[a].getAttribute('DeviceId')+"' class='protocolLoadConfig' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerConfig"+row[a].getAttribute('DeviceId')+"' class='serverLoadConfig'/></td>";
-				}else{
-					html += "<td><input type='text' id='ServerConfig"+row[a].getAttribute('DeviceId')+"' class='serverLoadConfig'value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathConfig"+row[a].getAttribute('DeviceId')+"' class='pathLoadConfig'/></td>";
-				}else{
-					html += "<td><input type='text' id='PathConfig"+row[a].getAttribute('Deviceid')+"' class='pathLoadConfig' value='"+row[a].getAttribute('Path')+"'/></td>";
-			  	}
-               html += "<td><select><option>running-config</option></select></td>";
-			   html +="</tr>";
-				
-			}
-			$("#loadConfig-table1 > tbody").empty().append(html);
-			$("#loadConfig-table1").table("refresh");
-			$('#RMLoadImage').trigger('create');
-			disableColumn();
-			var ctr;
-			ctr = 0;	
-			$(".trloadConfig").on("tap",function(){
-				var iter = $(this).attr('deviceId');	
-				if($(this).hasClass('highlight') == false){
-
-					$(this).addClass('highlight');
-					$('.typeLoadConfig'+iter).selectmenu('enable');
-					$('.protocolLoadConfig'+iter).textinput('enable');
-					$('.serverLoadConfig'+iter).textinput('enable');
-					$('.pathLoadConfig'+iter).textinput('enable');
-					$('.filenameLoadConfig'+iter).textinput('enable');
-			
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					$('.typeLoadConfig'+iter).selectmenu('disable');
-					$('.protocolLoadConfig'+iter).textinput('disable');
-					$('.serverLoadConfig'+iter).textinput('disable');
-					$('.pathLoadConfig'+iter).textinput('disable');
-					$('.filenameLoadConfig'+iter).textinput('disable');
-					ctr--;	
-				}
-				selectedRow();
-	
-			});
-		}
-	});
-	
-}
-/*
- #######################################################################
- #
- #  FUNCTION NAME : saveImage
- #  AUTHOR        : Angeline Bringas
- #  DATE          : January 15,2014
- #  MODIFIED BY   : 
- #  REVISION DATE : 
- #  REVISION #    :
- #  DESCRIPTION   : loads save image option on reservation devices 
- #  PARAMETERS    :
- #
- #######################################################################
-*/
-function saveImage(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getSaveImage&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			$('#totalMatchesSaveImage').html(root[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				html += "<tr class='trsaveImage' >";
-
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-                html += "<td>"+row[a].getAttribute('Model')+"</td>";
-				html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' id='ProtocolImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td><input value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-				html +="</tr>";
-				
-			}
-			$("#saveImage-table1 > tbody").empty().append(html);
-			$("#saveImage-table1").table("refresh");
-			var ctr;
-			ctr = 0;	
-			$(".trsaveImage").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-}
-/*
- #######################################################################
- #
- #  FUNCTION NAME : saveConfig
- #  AUTHOR        : Angeline Bringas
- #  DATE          : January 15,2014
- #  MODIFIED BY   : 
- #  REVISION DATE : 
- #  REVISION #    :
- #  DESCRIPTION   : loads save configuration option on reservation devices 
- #  PARAMETERS    :
- #
- #######################################################################
-*/
-function saveConfig(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getSaveConfig&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			$('#totalMatchesSaveConfig').html(root[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				html += "<tr class='trsaveConfig' >";
-				
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' id='ProtocolImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td><input id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-				html +="</tr>";
-				
-			}
-			$("#saveConfig-table1 > tbody").empty().append(html);
-			if(globalDeviceType=="Mobile"){
-				$("#saveConfig-table1").table("refresh");
-			}
-			$('#RMSaveImage').trigger('create');
-			var ctr;
-			ctr = 0;	
-			$(".trsaveConfig").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-}
-/*
- #######################################################################
- #
- #  FUNCTION NAME : saveImageDetail
- #  AUTHOR        : Angeline Bringas
- #  DATE          : January 15,2014
- #  MODIFIED BY   : 
- #  REVISION DATE : 
- #  REVISION #    :
- #  DESCRIPTION   : loads save image details on reservation devices 
- #  PARAMETERS    :
- #
- #######################################################################
-*/
-function saveImageDetail(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getSaveImageDetail&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			$('#totalMatchesSaveImage').html(root[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				html += "<tr class='trsaveImage'>";
-				if(globalDeviceType != 'Mobile'){
-					html += "<td><input type='checkbox' name='SaveImageSel'/></td>";
-				}
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				html += "<td>"+row[a].getAttribute('Model')+"</td>";
-				html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' id='ProtocolImage'/></td>";
-				}else{
-					html += "<td><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerImage'/></td>";
-				}else{
-
-					html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-
-					html += "<td><input value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td><input type='text' id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-				html +="</tr>";
-				
-			}
-			$("#saveImage-table1 > tbody").empty().append(html);
-			$("#saveImage-table1").table("refresh");
-			$('#RMSaveImage').trigger('create');
-			var ctr;
-			ctr = 0;	
-			$(".trSaveImage").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-}
-/*
- #######################################################################
- #
- #  FUNCTION NAME : saveConfigDetail
- #  AUTHOR        : Angeline Bringas
- #  DATE          : January 15,2014
- #  MODIFIED BY   : 
- #  REVISION DATE : 
- #  REVISION #    :
- #  DESCRIPTION   : loads save configuraton on reservation devices 
- #  PARAMETERS    :
- #
- #######################################################################
-*/
-function saveConfigDetail(){
-	var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/AutoCompleteCgiQuerry_withDb/querYCgi.fcgi?action=getSaveConfigDetail&query=deviceid='+DeviceId;	
-	$.ajax({
-        url: url,
-		dataType: 'html',
-        success: function(data) {
-            var mydata = data;
-            var parser = new DOMParser();
-            var xmlDoc;
-            xmlDoc = parser.parseFromString( mydata , "text/xml" );
-			var root = xmlDoc.getElementsByTagName('data'); 
-            var row = xmlDoc.getElementsByTagName('row');
-            var html ='',startRes='',endRes='';
-			$('#totalMatchesSaveConfig').html(root[0].getAttribute('total'));
-			for(var a =0; a< row.length; a++){
-				html += "<tr class='trsaveConfig' >";
-				if(globalDeviceType != 'Mobile'){
-					html += "<td><input type='checkbox' id='saveConfig' name='saveConfigSel'/></td>"
-				}
-				html += "<td>"+row[a].getAttribute('Hostname')+"</td>";
-				html += "<td>"+row[a].getAttribute('Model')+"</td>";
-				html += "<td><select id='TypeImage'><option>Custom</option><option>Primary</option><option>Secondary</option></select></td>";
-				if(row[a].getAttribute('Protocol') == undefined || row[a].getAttribute('Protocol') ==""){
-					html+="<td><input type='text' id='ProtocolImage'/></td>";
-				}else{
-
-					html += "<td><input type='text' value='"+row[a].getAttribute('Protocol')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Server') == undefined || row[a].getAttribute('Server') ==""){
-					html+="<td><input type='text' id='ServerImage'/></td>";
-				}else{
-
-					html += "<td><input type='text' value='"+row[a].getAttribute('Server')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('Path') == undefined || row[a].getAttribute('Path') ==""){
-					html+="<td><input type='text' id='PathImage'/></td>";
-				}else{
-
-					html += "<td><input type='text' value='"+row[a].getAttribute('Path')+"'/></td>";
-			  	}
-				if(row[a].getAttribute('SystemImageFile') == undefined || row[a].getAttribute('SystemImageFile') ==""){
-					html+="<td><input type='text' id='FilenameImage'/></td>";
-				}else{
-					html += "<td><input id='FilenameImage' value='"+row[a].getAttribute('SystemImageFile')+"'/></td>";
-			  	}
-				html +="</tr>";
-				
-			}
-			$("#saveConfig-table1 > tbody").empty().append(html);
-			$("#saveConfig-table1").table("refresh");
-			$('#RMSaveImage').trigger('create');
-			var ctr;
-			ctr = 0;	
-			$(".trReserved").on("tap",function(){
-				if($(this).hasClass('highlight') == false){
-					$(this).addClass('highlight');
-					ctr++;
-				}else{
- 	        		$(this).removeClass('highlight');
-					ctr--;	
-				}
-				selectedRow();
-			});
-		}
-	});
-
-}
 function changeType(){
 	var url ='https://'+CURRENT_IP+'/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=getImageConfigInfo&query=option'+op2+'&deviceid='+DeviceId+'&location='+val;
 	$.ajax({
@@ -2725,24 +1929,33 @@ function changeType(){
  #
  #######################################################################
 */
-function groupHighlight(val,devId){
-/*	$('.trReserved').each(function(){
-		if (val == $(this).attr('rId')){
-			$(this).addClass('highlight');
-		}
-		if($(this).hasClass('highlight')){
-			globalResourceId.push($(this).attr('rIds'));
-		}
-	});*/
-	$('#reservationRM-table input:checkbox[name="ReservationReserveSel"]').each(function() {
-		var rid = $(this).attr('rId');
-		if (val == rid){
-			if(devId != $(this).attr('did')){
-				$(this).attr('disabled',true);
+function groupHighlight(val,devId,flag){
+	if(globalDeviceType == "Mobile"){
+		$('.trReserved').each(function(){
+			if (val == $(this).attr('rId')){
+				$(this).addClass('highlight');
 			}
-			$(this).parent().parent().addClass('highlight');
+			if($(this).hasClass('highlight')){
+				globalResourceId.push($(this).attr('rIds'));
+			}
+		});
+		return
+	}
+
+    $('#reservationRM-table input:checkbox[name="ReservationReserveSel"]').each(function() {
+        var rids = $(this).attr('rIds');
+        var devids = $(this).attr('did');
+		if(val == rids){ 	
+	        $(this).attr('disabled',false);
 		}
-	});
+		for(var i = 0 ; i <  globalResourceId.length; i++){
+            if(globalResourceId[i] == rids){
+                if(devId != $(this).attr('did')){
+                    $(this).attr('disabled',true);
+                }
+            }
+		}
+    });
 }
 /*
  #######################################################################
@@ -3123,22 +2336,18 @@ function showAllConnections() {
  *  */
 function RMGenerateReport(){
 	if(globalPageRM == "ReservationReserve"){// Generate Report for Reservation Reserved
-       var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforreserve&query=resourceid="+globalResourceId;
-       //var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforreserve&query={'QUERY':[{'resourceid':'"+globalResourceId+"'}]}";
+       var a =window.location.href = getURL('RM4')+'action=generatereportforreserve&query={"QUERY":[{"resourceid":"'+globalResourceId+'"}]}';
 	globalResourceId = [];
 	$('#ReserveButtons').hide();
 	}else if(globalPageRM == "ReservationPort"){// Generate Report for Reservation Port
-		var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforport&query=ReservedPortId="+genIds;
-		//var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforport&query={'QUERY':[{'ReservedPortId':'"+genIds+"'}]}";
+		var a =window.location.href = getURL('RM4')+'action=generatereportforport&query={"QUERY":[{"ReservedPortId":"'+genIds+'"}]}';
 	$('#PortButtons').hide();
 	}else if(globalPageRM == "ReservationConnectivity"){// Generate Report for Reservation Connectivity
-		var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforconnectivity&query=PortReservationId="+genIds;
-		//var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportforconnectivity&query={'QUERY':[{'PortReservationId':'"+genIds+"'}]}";
+		var a =window.location.href = getURL('RM4')+'action=generatereportforconnectivity&query={"QUERY":[{"PortReservationId":"'+genIds+'"}]}';
 	genIds = [];
 	$('#ConnectivityButtons').hide();
 	}else if(globalPageRM == "ManageDevice"){// Generate Report for Manage Devices
-		var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportformanagedevices&query=deviceid="+genIds;
-		//var a =window.location.href = "https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=generatereportformanagedevices&query={'QUERY':[{'deviceid':'"+genIds+"'}]}";
+		var a =window.location.href = getURL('RM4')+'action=generatereportformanagedevices&query={"QUERY":[{"deviceid":"'+genIds+'"}]}';
 	genIds = [];
 	$('#ManageButtons').hide();
 	}
@@ -3253,7 +2462,7 @@ function toggleIterationOptions(val) {
         var newHt = parseInt(tabHt) + parseInt(origHt);
 		$('#Alert').height(newHt);	
 		$('input[value="same"]').attr('disabled',true);
-		$('input[value="extend"]').attr('checked',true);
+		$('input[value="extend"]').prop('checked',true);
     } else {
        	var tabHt = $('#specificIterTable').height();
         var origHt = $('#Alert').height();
@@ -4083,9 +3292,9 @@ function checkUnprovisioningStatus() {
  *
  *  FUNCTION NAME : deleteManageDevice
  *  AUTHOR        : Angeline Bringas
- *  DATE          : January 3,2013
- *  MODIFIED BY   : 
- *  REVISION DATE : 
+ *  DATE          : January 3,2014
+ *  MODIFIED BY   : Cathyrine C. Bobis
+ *  REVISION DATE : March 30, 2014
  *  REVISION #    : 
  *  DESCRIPTION   : delete device in Manage devices table
  *  PARAMETERS    : 
@@ -4394,9 +3603,12 @@ function getDeviceAccess(id) {
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data);
 			if (json.RESULT[0].Result == "0") {
+				$('#tabsDevices').tabs();
 				$('#liImported').hide();
+				$('#liTabImported').hide();
 			} else {
 				$('#liImported').show();
+				$('#liTabImported').show();
 			}
 		}
 		
@@ -4824,7 +4036,7 @@ function setManufacturer(value){
 		$('#devicetype').append('<option value="glx">Curtiss-Wright</option>');
 		$('#devicetype').append('<option value="mrv">MRV</option>');
 		$('#devicetype').append('<option value="onpath">OnPath</option>');
-		$("#hasPartnerDevice").attr('checked',false);
+		$("#hasPartnerDevice").prop('checked',false);
 		$("#hasPartnerDevice").attr('disabled',true);
 		$('#partnerDevice').hide();
 		$('#SlotTable').attr('style','display:none');
@@ -4835,7 +4047,7 @@ function setManufacturer(value){
 		$('#devicetype').empty();
 		$('#devicetype').append('<option>Select</option>');
 		$('#devicetype').append('<option value="ciscoswitch">Cisco</option>');
-		$("#hasPartnerDevice").attr('checked',false);
+		$("#hasPartnerDevice").prop('checked',false);
 		$("#hasPartnerDevice").attr('disabled',true);
 		$('#partnerDevice').hide();
 		$('#SlotTable').attr('style','display:none');
@@ -4847,7 +4059,7 @@ function setManufacturer(value){
 		$('#devicetype').empty();
 		$('#devicetype').append('<option>Select</option>');
 		$('#devicetype').append('<option value="terminalserver">Cisco</option>');
-		$("#hasPartnerDevice").attr('checked',false);
+		$("#hasPartnerDevice").prop('checked',false);
 		$("#hasPartnerDevice").attr('disabled',true);
 		$('#partnerDevice').hide();
 		$('#SlotTable').attr('style','display:none');
@@ -4858,7 +4070,7 @@ function setManufacturer(value){
 	} else if ( value == "empty" ) {
 		$('#devicetype').attr("disabled",true);
 		$('#devicetype').empty().append('<option>Select</option>');
-		$("#hasPartnerDevice").attr('checked',false);
+		$("#hasPartnerDevice").prop('checked',false);
 		$("#hasPartnerDevice").attr('disabled',true);
 		$('#partnerDevice').hide();
 		$('#SlotTable').attr('style','display:none');
@@ -5087,15 +4299,15 @@ function enDisObjAutoD(val){
 	}
 	$('#hostname').val('');
 	$('#chassisIp').val('');
-	$('#checkIpAutoD').attr('checked',false);
+	$('#checkIpAutoD').prop('checked',false);
 	$('#chassisIpPort').val('');
 	$('#chassisConIp').val('');
 	$('#chassisConPort').val('');
 	$('#addusername').val('');
 	$('#addpassword').val('');
 	$('#devdomainAutoD > option:contains("Select")').prop('selected',true);
-	$('#checkPartPAdmin').attr('checked',false);
-	$('#checkOptVAdmin').attr('checked',false);
+	$('#checkPartPAdmin').prop('checked',false);
+	$('#checkOptVAdmin').prop('checked',false);
 	$('#adminHTypeAutoD > option:contains("Select")').prop('selected',true);
 	showHOptValAutoDAdmin();
 	switch(slct){
@@ -5877,17 +5089,6 @@ function getPortInfo(){
 	return retVal;
 
 }
-function InvalidIteration(){
-	var iterationR;
-	var intervalR;
-	iterationR = $('#iterationRR');
-	intervalR = $('#intervalRR');
-	if(iterationR == "1" || iterationR == 1 && (iterationR == "")){
-		alert('Invalid Iteration');
-	}else if(iterationR > 1 && (intervalR == "" || intervalR < 10)){
-		alert('Invalid Interval. Interval is minimum of 10 for multiple Iterations.');
-	}
-}
 /*
  *  #######################################################################
  *  #
@@ -6005,7 +5206,7 @@ function rmHighlight(){
 					$(this).addClass('highlight');
 					ctr++
 					var deviceid = $(this).attr("devId");
-					$('#ReservationReserve_'+deviceid+'_'+globalResourceId[i]).attr('checked',true);
+					$('#ReservationReserve_'+deviceid+'_'+globalResourceId[i]).prop('checked',true);
 				}	
 			}
 		
@@ -6025,7 +5226,7 @@ function rmHighlight(){
 				if(val == PortReservationId[i]){
 					$(this).addClass('highlight');
 					ctr++
-					$('#ReservationConnectivity_'+PortReservationId).attr('checked',true);
+					$('#ReservationConnectivity_'+PortReservationId).prop('checked',true);
 
 				}	
 			}
@@ -6210,7 +5411,7 @@ function enableInputFields() {
 						}
 					}
 				} else if ($(this).parent().parent().hasClass('highlight') == false) {
-					if ($(this).attr('checked',false)) {
+					if ($(this).prop('checked',false)) {
 						$(this).attr('disabled',true);
 					}
 				  } 
@@ -6246,7 +5447,7 @@ function enableInputFields() {
 					$(this).parent().parent().find('td').eq(11).find('input').attr('disabled',false);
 					$(this).parent().parent().find('td').eq(12).find('input').attr('disabled',false);*/
 				} else { 
-					if ($(this).attr('checked',false)) {
+					if ($(this).prop('checked',false)) {
 						$(this).attr('disabled',true);
 					}
 				  } 
@@ -6277,7 +5478,7 @@ function enableInputFields() {
 						$(this).parent().parent().find('td').eq(14).find('input').attr('disabled',false);
 					}
 				} else if ($(this).parent().parent().hasClass('highlight') == false) {
-					if ($(this).attr('checked',false)) {
+					if ($(this).prop('checked',false)) {
 						$(this).attr('disabled',true);
 					}
 				  } 
@@ -6578,7 +5779,7 @@ function sendReserveApply(qstr,todo) {
 					$('#reservationRM-table').find('input').removeAttr('checked');
 					//$('.ResReserveonselection').parent().removeClass('highlight');
 					$('.ResReserveonselection').each(function() {
-						$(this).attr('checked',false);
+						$(this).prop('checked',false);
 						$(this).parent().removeClass('highlight');
 						$(this).parent().find('td').eq(7).find('input').attr('disabled','true');
 		    	    	$(this).parent().find('td').eq(8).find('input').attr('disabled','true');
@@ -6892,6 +6093,18 @@ function changePageRM(num){
 
 
 function checkAllRM(table){
+	DeviceId = [];
+	$('input:checkbox[name="ReservationReserveReleaseSel"]').each(function(){
+			console.log('checkbox');
+		if($('#'+table).is(":checked")){
+			DeviceId.push($(this).attr('devId'));
+			$(this).parent().parent().addClass('highlight');
+			$(this).prop('checked',true);
+		}else{
+			$(this).prop('checked',false);
+			$(this).parent().parent().removeClass('highlight');
+		}
+	});
 	$('input:checkbox[name="ReservationReserveSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			globalResourceId.push($(this).attr('id'));	
@@ -6902,91 +6115,98 @@ function checkAllRM(table){
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();
+	PortId = [];	
 	$('input:checkbox[name="TesttoolSel"]').each(function(){
 			
 		if($('#'+table).is(":checked")){
 			PortId.push($(this).attr('portId'));	
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();	
+	genIds = [];
 	$('input:checkbox[name="ReservationPortSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			genIds.push($(this).attr('id'));
 			$("#ReservationConnectivity").trigger('click');
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
 			var idgen = genIds.indexOf($(this).attr('id'));
 			if(idgen>-1){
 				genIds.splice(idgen,1);
 			}
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();	
+	genIds = [];
 	$('input:checkbox[name="ReservationConnectivitySel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			genIds.push($(this).attr('id'));
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
 			var idgen = genIds.indexOf($(this).attr('id'));
 			if(idgen>-1){
 				genIds.splice(idgen,1);
 			}
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();	
+	DeviceId = [];
 	$('input:checkbox[name="ReservationDevicesSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			$(this).parent().parent().addClass('highlight');
 
 			DeviceId.push($(this).attr('devId'));
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();
+	deviceHistoryId = [];	
 	$('input:checkbox[name="ReservationHistorySel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			deviceHistoryId.push($(this).attr('id'));	
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();
+	scheventid = [];	
 	$('input:checkbox[name="EventSchedulerSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			scheventid.push($(this).attr('id'));	
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();
+	mainConfigHistoryId = [];	
 	$('input:checkbox[name="HistorySchedulerSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			mainConfigHistoryId.push($(this).attr('id'));	
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
@@ -6995,9 +6215,9 @@ function checkAllRM(table){
 		if($('#'+table).is(":checked")){
 			genIds.push($(this).attr('id'));	
 			$(this).parent().parent().addClass('highlight');
-			$(this).attr('checked',true);
+			$(this).prop('checked',true);
 		}else{
-			$(this).attr('checked',false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
@@ -7018,41 +6238,32 @@ function checkAllRM(table){
  *  */
 
 
-function checkSingleRM(table){
+function checkSingleRM(table,src){
 	var ctr = 0;
 	var ctrtotal = 0;
 	if(table == "ReservationReserve"){
 		globalResourceId = [];
-		$('input:checkbox[name="ReservationReserveSel"]').each(function() {
-			if($(this).is(':checked')){
-				$(this).parent().parent().addClass('highlight');
-				$(this).parent().parent().removeClass('alt');
-				globalResourceId.push($(this).attr('rIds'));
-				ResId = $(this).attr('rIds');
-				var val = $(this).attr('rId');
-				var devId = $(this).attr('did');
-				groupHighlight(val,devId);
-			}else{
-				var val = $(this).attr('rId');
-				$(this).parent().parent().removeClass('highlight');
-				if( ctr % 2 == 0){
-					$(this).parent().parent().addClass('alt');
-				}
-				$(this).parent().parent().removeAttr('checked');
-				$(this).removeAttr('disabled');
-				//disableRMButtons();
-				//groupRemoveHighlight(val);
-			}
-				ctr++;
-		});
-
+		if($(src).is(':checked')){
+			$(src).parent().parent().addClass('highlight');
+			globalResourceId.push($(src).attr('rIds'));
+			ResId = $(src).attr('rIds');
+			var devId = $(src).attr('did');
+			groupHighlight('',devId);
+			ctr++;
+		}else if($(src).is(':checked') == false){
+			var val = $(src).attr('rIds');
+			var devId = $(src).attr('did');
+			groupHighlight(val,devId);
+			ctr--;
+		}
+		ctrtotal++;
+		console.log(globalResourceId.length,'asddasd');
 		enableRMButtons();	
 	}else if(table == "ReservationReserveRelease"){
 		DeviceId = [];
 		$('input:checkbox[name="ReservationReserveReleaseSel"]').each(function(){
 			if($(this).is(':checked')){
 				$(this).parent().parent().addClass('highlight');
-				globalResourceId.push($(this).attr('rId'));	
 				DeviceId.push($(this).attr('devId'));	
 				ctr++;
 			}else{
@@ -7061,15 +6272,14 @@ function checkSingleRM(table){
 			}
 			ctrtotal++;
 		});	
+		enableRMButtons();
 	}else if(table == "ReservationConnectivity"){
 		$('input:checkbox[name="ReservationConnectivitySel"]').each(function(){
 			if($(this).is(':checked')){
-				enableRMButtons();
 				$(this).parent().parent().addClass('highlight');
 				genIds.push($(this).attr('pId'));
 				ctr++;
 			}else{
-				disableRMButtons();
 				$(this).parent().parent().removeClass('highlight');
 				ctr--;
 			}
@@ -7132,7 +6342,6 @@ function checkSingleRM(table){
 				
 				RMLoadObject.push({"HostName":gethost,"Model":getmodel});
 				DeviceId.push($(this).attr('devId'));
-				
 				StartDate.push($.trim($(this).parent().parent().find('td').eq(11).find('input').val()));
 				TimeInterval.push($.trim($(this).parent().parent().find('td').eq(13).find('input').val()));
 				Recurrence.push($.trim($(this).parent().parent().find('td').eq(14).find('input').val()));
@@ -7232,9 +6441,9 @@ function checkSingleRM(table){
 		
 	}
 	if(ctr == ctrtotal){
-		$('#cb'+globalPageRM).attr('checked',true);
+		$('#cb'+globalPageRM).prop('checked',true);
 	}else{
-		$('#cb'+globalPageRM).attr('checked',false);
+		$('#cb'+globalPageRM).prop('checked',false);
 	}
 
 
@@ -7460,6 +6669,7 @@ function clearSchedHistory(){
 
 
 function deleteMDevices(){
+	if(genIds.length<1){ alertUser("No device selected."); return; }
 	prompts='Are you sure you want to Delete device(s)?'
 	$('#Alert').dialog({
 		autoOpen: false,
@@ -7613,6 +6823,9 @@ function enableRMButtons(){
 		$('#ReserveReleaseButton').removeClass('ui-state-disabled');
 		$('#ReserveGenerateReportButton').removeAttr('disabled');
 		$('#ReserveGenerateReportButton').removeClass('ui-state-disabled');
+	}else if(globalResourceId.length > 1){
+		$('#ReserveEditButton').attr('disabled',true);
+		$('#ReserveEditButton').addClass('ui-state-disabled');
 	}else{
 		$('#ReserveEditButton').attr('disabled',true);
 		$('#ReserveEditButton').addClass('ui-state-disabled');
@@ -7621,14 +6834,14 @@ function enableRMButtons(){
 		$('#ReserveGenerateReportButton').attr('disabled',true);
 		$('#ReserveGenerateReportButton').addClass('ui-state-disabled');
 	}
-	if(globalResourceId < 1){
-		$('#ReserveEditButton').attr('disabled');
-		$('#ReserveEditButton').addClass('ui-state-disabled');
+	if(DeviceId.length == 1){
+		$('#ReleaseButton').removeAttr('disabled');
+		$('#ReleaseButton').removeClass('ui-state-disabled');
 	}else{
-		$('#ReserveEditButton').removeAttr('disabled');
-		$('#ReserveEditButton').removeClass('ui-state-disabled');
+		$('#ReleaseButton').attr('disabled',true);
+		$('#ReleaseButton').addClass('ui-state-disabled');
 
-	}
+	}	
 //Connectivity Button
 	if(genIds.length > 0){
 		$("#ConnectivityGenReport").removeAttr('disabled');
@@ -7672,6 +6885,11 @@ function enableRMButtons(){
 	}else{
 		$("#CancelEvent").attr('disabled',true);
 		$('#CancelEvent').addClass('ui-state-disabled');
+	}
+}
+function setIteration(index,val){
+	if(index == 13 && val == 0){
+		alerts('hioy hoy');
 	}
 }
 function loadDevicesHTML5(){
@@ -7721,16 +6939,19 @@ function loadDevicesHTML5(){
 				rmPagination(json.root[0].pages,json.root[0].page,json.root[0].total);
 				//$("#RMTotalMatches").html(root[0].getAttribute('total'));
 			}
+			if(json.root[0].total == 0){
+				html += "<tr><td colspan='19'>No available data.</td></tr>";
+				$("#RMDevices-table > tbody").empty().append(html);
+				return;
+			}
             for(var a =0; a< json.root[0].row.length; a++){
-				if( a % 2 == 0){
-					tableClass = "alt";
-				}else{
-					tableClass = "";
-				}
+
 				html += "<tr class='trDevices "+tableClass+"' devId = '"+json.root[0].row[a].DeviceId+"' rId='"+json.root[0].row[a].ResourceId+"'>";
 				html += "<td><input type='checkbox' devId = '"+json.root[0].row[a].DeviceId+"' id='"+json.root[0].row[a].DeviceId+"' name='ReservationDevicesSel' hostname='"+json.root[0].row[a].HostName+"' model='"+json.root[0].row[a].Model+"' onclick='checkSingleRM(\"ReservationDevices\");'/></td>";
 		        html += "<td class='ReservationDevices'>"+json.root[0].row[a].DeviceId+"</td>";
-		        html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"</td>";
+		        html += "<td did='td"+json.root[0].row[a].DeviceId+"' class='toolTip' onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceId+"' style='display:none'><ul>";
+				html += getTooltipInfo(json.root[0].row[a],"HostName");
+				html += "</ul></div></td>";
 				if(json.root[0].row[a].ManagementIp == undefined || json.root[0].row[a].ManagementIp ==""){
 					html+="<td class='ReservationDevices'>N/A</td>";
 				}else{
@@ -7751,31 +6972,27 @@ function loadDevicesHTML5(){
 				}else{
 					html += "<td class='ReservationDevices'>"+json.root[0].row[a].Model+"</td>";
 			  	}
-				if(json.root[0].row[a].AvailablePorts == undefined || json.root[0].row[a].AvailablePorts ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
-				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].AvailablePorts+"</td>";
-			  	}
+			  	html += "<td class='ReservationDevices'>"+json.root[0].row[a].availablePorts+"</td>";	
 				if(json.root[0].row[a].DomainName == undefined || json.root[0].row[a].DomainName ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
+					html+="<td>N/A</td>";
 				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].DomainName+"</td>";
+					html += "<td>"+json.root[0].row[a].DomainName+"</td>";
 			  	}
 				if(json.root[0].row[a].ZoneName == undefined || json.root[0].row[a].ZoneName ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
+					html+="<td>N/A</td>";
 				}else{
-					html += "<td class='ReservationDevices'>"+json.root[0].row[a].ZoneName+"</td>";
+					html += "<td>"+json.root[0].row[a].ZoneName+"</td>";
 			  	}
 				if(json.root[0].row[a].GroupName == undefined || json.root[0].row[a].GroupName ==""){
-					html+="<td class='ReservationDevices'>N/A</td>";
+					html+="<td>N/A</td>";
 				}else{
 					html += "<td class='ReservationDevices'>"+json.root[0].row[a].GroupName+"</td>";
 			  	}
 
 				html += "<td><input style='border:none;text-align:center;' type='text' id='StartDate' class='datepickerdev' readonly='yes' value='"+dateToday+"'/></td>";
 		        html += "<td><input style='border:none;text-align:center;' type='text' id='StartTime' class='timepicker' readonly='yes' value='"+time+"' onchange='' /></td>";
-				html += "<td><input style='border:none;text-align:center;' id='intervalRR' class='interval' type='number' value='0'/></td>";
-		        html += "<td><input style='border:none;text-align:center;' id='iterationRR' class='iteration' type='number' value='1'/></td>";
+				html += "<td><input style='border:none;text-align:center;' id='intervalRR' class='interval' type='text' onkeyup='setIteration(this.value);' onkeypress='return checkNumberInputChar(event,this);' value='0'/></td>";
+		        html += "<td><input style='border:none;text-align:center;' id='iterationRR"+a+"' class='iteration' type='text' onkeyup='setIteration(this.value)' onkeypress='return checkNumberInputChar(event,this);' value='1'/></td>";
 
 		        html += "<td><select style='border:none;' class='DeviceType' id='deviceType"+json.root[0].row[a].DeviceId+"'>";
 				if(json.root[0].row[a].DeviceType == "TestTool"){
@@ -7811,6 +7028,7 @@ function loadDevicesHTML5(){
                secondGrid: 10
             });
 			$('.ui-datepicker-current').attr("id","DoneButton");
+			hoverTable();
 			disableRMButtons();
 			rmExpandedView();
 		}
@@ -7826,12 +7044,8 @@ function loadImportedDevicesHTML5(){
 	var endTime = parseInt(dataArr[0])+2+":"+dataArr[1]+":"+dataArr[2];
 	var date = new Date();
 	var dateToday = date.getMonth()+1+'/'+date.getDate()+'/'+date.getFullYear()
-	
-//		var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=ReservationDevice&query=limit=10`page=1`sort=`orderby=`user='+globalUserName+'`filter=`domain='+domain+"`ZoneName="+zone+"`GroupName="+group;
-//
 	var page = $('#RMPageNumber').val();
 	var limit = $('#ResourceManagementPageLimit').val();
-	//var url = getURL('RM4')+'action=ReservationDeviceAffiliated&query={"QUERY":"limit"::"'+limit+'","page":"'+page+'","sort":"","orderby":"","user":"'+globalUserName+'","filter":"","domain":"'+domain+'","ZoneName":"'+zoneName+'","GroupName":"'+groupName+'"&version=3.0';
 	var url = getURL('RM4')+'action=ReservationDeviceAffiliated&query={"QUERY":"limit":"'+limit+'","page":"'+page+'","sort":"","orderby":"","user":"'+globalUserName+'","filter":"","domain":"'+domain+'","ZoneName":"'+zoneName+'","GroupName":"'+groupName+'"}]}';
 
 	$.ajax({
@@ -7899,7 +7113,7 @@ function loadImportedDevicesHTML5(){
 				html += "<td><input id='startDate' type='text'/></td>";
 		        html += "<td><input  name='mydate' id='startTime' value='"+time+"'/></td>";
 		        html += "<td><input id='inter' type='text' class='Interval' value='0'/></td>";
-		        html += "<td><input id='iter' type='text' class='Iteration' value='1'/></td>";
+		        html += "<td><input id='iter' onkeyup='setIteration();' type='text' class='Iteration' value='1'/></td>";
 		        html += "<td><select class='DeviceType' id='deviceType'><option>Non-Exclusive</option><option>Exclusive</option></select></td>";
 		        html += "<td><input name='mydate' id='endDate' value='"+dateToday+"'/></td>";
 		        html += "<td><input name='mydate' id='endTime' value='"+endTime+"'/></td>";
@@ -8179,6 +7393,7 @@ function openCommitRMOption(){
 				getServerTime();
 //               getdevicetype();
                 queryCreateXMLData();
+				$(this).dialog("close");
 			},
 			"Cancel": function(){
 				$(this).dialog("close");
@@ -8415,13 +7630,13 @@ function rmExpandedView(){
 	}else if(globalPageRM == "ReservationDevices"){
 		if($('#RMExpandedView').is(':checked')){
 			$('#thDevice6').attr('colspan',10);
-			$('#thReservation4').attr('colspan',7);
-			//$('#thExpiration').attr('colspan',2);
+			$('#thReservation4').attr('colspan',5);
+			$('#thExpiration').attr('colspan',2);
 			$('.ReservationDevices').show();
 		}else{
-			$('#thDevice6').attr('colspan',1);
-			$('#thReservation4').attr('colspan',7);
-			//$('#thExpiration').attr('colspan',2);
+			$('#thDevice6').attr('colspan',5);
+			$('#thReservation4').attr('colspan',5);
+			$('#thExpiration').attr('colspan',2);
 			$('.ReservationDevices').hide();
 		}	
 	}else if(globalPageRM == "ReservationImportedDevices"){
@@ -8454,28 +7669,15 @@ function rmExpandedView(){
 		}else{
 			$('.ReservationSchedHist').hide();
 		}	
-	}else if(globalPageRM == "ManageDevice"){
-		if($('#RMExpandedView').is(':checked')){
-			$('#thDevice7').attr('colspan',16);
-			$('#thSystem2').attr('colspan',4);
-			$('#thSystem2').show();
-			$('.ReservationManage').show();
+	}else if(globalPageRM == "ReserveRelease"){
+		if($('#ReleaseExpanded').is(':checked')){
+			$('#thDevice6').attr('colspan',6);
+			$('#thReservation4').attr('colspan',7);
 		}else{
-			$('#thDevice7').attr('colspan',9);
-			$('#thSystem2').hide();
-			$('.ReservationManage').hide();
-		}	
-	}else if(globalPageRM == "LoadImage"){
-		if($('#checkboxLoadImage').is(':checked')){
-			$('.loadImageTable').show();
-		}else{
-			$('.loadImageTable').hide();
+			$('#thDevice6').attr('colspan',1);
+			$('#thReservation4').attr('colspan',6);
+
 		}
-		if($('#checkboxLoadConfig').is(':checked')){
-			$('.loadImageTable').show();
-		}else{
-			$('.loadImageTable').hide();
-		}	
 	}
 }
 /*
@@ -9402,7 +8604,7 @@ function hideFilterDevice(id,id2){
 	    } else {
 	        $('#'+id2).attr('style','display: none');
 			var hasfilters = 0;
-			$('#systemFilter5').attr('checked',false);
+			$('#systemFilter5').prop('checked',false);
 			$('#sysNameselF4').attr('disabled',true);
 			 $('#sysNameselF4').attr('value', "Any");
 			$('#ProductselF4').attr('disabled',true);
@@ -9774,20 +8976,20 @@ function getValuetoFilter(){
 	}
 
 	if (globalStrFilter == "" && AllValue.length == 0) {
-		$('#systemFilter4').attr('checked',false);
-		$('#systemFilter5').attr('checked',false);
-		$('#RouteFilter4').attr('checked',false);
-		$('#EmbeddedFilter4').attr('checked',false);
-		$('#LineFilter4').attr('checked',false);
-		$('#ModuleFilter4').attr('checked',false);
-		$('#PortFilter4').attr('checked',false);
-		$('#systemFilter').attr('checked',false);
-		$('#systemFilter6').attr('checked',false);
-		$('#RouteFilter').attr('checked',false);
-		$('#EmbeddedFilter').attr('checked',false);
-		$('#LineFilter').attr('checked',false);
-		$('#ModuleFilter').attr('checked',false);
-		$('#PortFilter').attr('checked',false);
+		$('#systemFilter4').prop('checked',false);
+		$('#systemFilter5').prop('checked',false);
+		$('#RouteFilter4').prop('checked',false);
+		$('#EmbeddedFilter4').prop('checked',false);
+		$('#LineFilter4').prop('checked',false);
+		$('#ModuleFilter4').prop('checked',false);
+		$('#PortFilter4').prop('checked',false);
+		$('#systemFilter').prop('checked',false);
+		$('#systemFilter6').prop('checked',false);
+		$('#RouteFilter').prop('checked',false);
+		$('#EmbeddedFilter').prop('checked',false);
+		$('#LineFilter').prop('checked',false);
+		$('#ModuleFilter').prop('checked',false);
+		$('#PortFilter').prop('checked',false);
 		DisableAdvFilterDropDown();	
         displayWarning("<b>Nothing to filter</b>");
         return;
@@ -10157,13 +9359,13 @@ function clearFilterDevice(){
 	var ex2 = "6";
 	switch (globalPageRM) {
 		case "ReservationDevice":
-				$('#systemFilter').attr('checked',false);
-				$('#systemFilter6').attr('checked',false);
-				$('#RouteFilter').attr('checked',false);
-				$('#EmbeddedFilter').attr('checked',false);
-				$('#LineFilter').attr('checked',false);
-				$('#ModuleFilter').attr('checked',false);
-				$('#PortFilter').attr('checked',false);
+				$('#systemFilter').prop('checked',false);
+				$('#systemFilter6').prop('checked',false);
+				$('#RouteFilter').prop('checked',false);
+				$('#EmbeddedFilter').prop('checked',false);
+				$('#LineFilter').prop('checked',false);
+				$('#ModuleFilter').prop('checked',false);
+				$('#PortFilter').prop('checked',false);
 				DisableAdvFilterDropDown();	
 
 			if (globalFiltArray[prevDomainVal] == undefined || globalFiltArray[prevDomainVal] == "") {
@@ -10180,13 +9382,13 @@ function clearFilterDevice(){
 		break;
 		case "ManageDevice":
 			if (globalStrFilter4 == "") {
-				$('#systemFilter4').attr('checked',false);
-				$('#systemFilter5').attr('checked',false);
-				$('#RouteFilter4').attr('checked',false);
-				$('#EmbeddedFilter4').attr('checked',false);
-				$('#LineFilter4').attr('checked',false);
-				$('#ModuleFilter4').attr('checked',false);
-				$('#PortFilter4').attr('checked',false);
+				$('#systemFilter4').prop('checked',false);
+				$('#systemFilter5').prop('checked',false);
+				$('#RouteFilter4').prop('checked',false);
+				$('#EmbeddedFilter4').prop('checked',false);
+				$('#LineFilter4').prop('checked',false);
+				$('#ModuleFilter4').prop('checked',false);
+				$('#PortFilter4').prop('checked',false);
 				DisableAdvFilterDropDown();	
 				displayWarning("<b>Nothing to clear</b>");
 				return;
@@ -10203,13 +9405,13 @@ function clearFilterDevice(){
 	}
 	globalFiltLoad = true; 
 	DisableAdvFilterDropDown();
-	$('#systemFilter'+ex).attr('checked',false);
-	$('#systemFilter'+ex2).attr('checked',false);
-	$('#RouteFilter'+ex).attr('checked',false);
-	$('#EmbeddedFilter'+ex).attr('checked',false);
-	$('#ModuleFilter'+ex).attr('checked',false);
-	$('#LineFilter'+ex).attr('checked',false);
-	$('#PortFilter'+ex).attr('checked',false);
+	$('#systemFilter'+ex).prop('checked',false);
+	$('#systemFilter'+ex2).prop('checked',false);
+	$('#RouteFilter'+ex).prop('checked',false);
+	$('#EmbeddedFilter'+ex).prop('checked',false);
+	$('#ModuleFilter'+ex).prop('checked',false);
+	$('#LineFilter'+ex).prop('checked',false);
+	$('#PortFilter'+ex).prop('checked',false);
 	var toreset = new Array('software','OSselF'+ex,'OSVersionselF'+ex,'SWselF'+ex,'sysNameselF'+ex,'ProductselF'+ex,'VersionselF'+ex,'routeNameselF'+ex,'routeProductselF'+ex,'routeVersionselF'+ex,'embNameselF'+ex,'embProductselF'+ex,'embVersionselF'+ex,'modNameselF'+ex,'modProductselF'+ex,'modVersionselF'+ex,'lineNameselF'+ex,'lineProductselF'+ex,'lineVersionselF'+ex,'portTypeselF'+ex,'portMediaselF'+ex,'portBandselF'+ex);
 	ResetFilterOptions(toreset,"0");
 	globalStrFilter5 = "";
@@ -10429,26 +9631,6 @@ function rmPagination(pages,page,total){
 		$('#RMPageNumber').html($(this).text());
 		rmReloadTable();
 	});
-    $('#ConfigTotalPages').html(pages);
-    $('#ConfigPageNumber').html(page);
-    $("#ConfigTotalMatches").html(total);
-    var str2 = "";
-
-
-    for (var l = 1,m=0,n=4; l <= pages && m < 6 && n>-1; l++,m++,n--) {
-         if (page <= 5) {
-            str2+="<a href='#' class='togglePage' style='text-decoration:none;color:#39599C;' id='ConfigPages"+l+"'>"+l+"</a>&nbsp";
-
-         } else {
-            str2+="<a href='#' class='togglePage' style='text-decoration:none;color:#39599C;' id='ConfigPages"+(page-n)+"'>"+(page-n)+"</a>&nbsp";
- 
-         }
-    }
-    $('#ConfigPages').html(str2);
-	$('.togglePage').click(function(){
-		$('#ConfigPageNumber').html($(this).text());
-		rmReloadTable();
-	});
 }
 /*
  *  #######################################################################
@@ -10489,26 +9671,6 @@ function setPagination(type){
     }
     $('#RMPageNumber').text(curr);
 	rmReloadTable();
-	var currConfig = parseInt($('#ConfigPageNumber').text());
-    var totalpageConfig = $('#ConfigTotalPages').text();
-    switch(type){
-        case "first":
-            currConfig = 1;
-        break;
-        case "prev":
-            if(currConfig > 1){
-                currConfig = currConfig - 1;
-            }
-        break;
-        case "next":
-            if(currConfig < totalpage){
-                currConfig = currConfig + 1;
-            }
-        break;
-        case "last":
-            currConfig = totalpage;
-        break;
-    }
 }
 function applySameDuration() {
 	clname = "resres";
@@ -11096,4 +10258,45 @@ function gatherAutoDAdminInfo(data){
 	autoDDevData[0] = data
 	return true;
 }
+function getTooltipInfo(row,column){
+	var html='';
+	if(globalPageRM == "ReservationReserve"){
+		if(column == "HostName"){
+			html += "<li><b>DeviceId:</b>"+row.DeviceId+"</li>";
+			html += "<li><b>Management IP:</b>"+row.ManagementIp+"</li>";
+			html += "<li><b>Console IP:</b>"+row.ConsoleIp+"</li>";
+			html += "<li><b>Model:</b>"+row.Model+"</li>";
+			html += "<li><b>Manufacturer:</b>"+row.Manufacturer+"</li>";
+			html += "<li><b>Software Version:</b>"+row.SoftwarePackage+"</li>";
+			html += "<li><b>Connectivity(L1/L2/Open/Direct Connect):</b>"+row.AvailablePorts+"</li>";
+		}
+		if(column == "User"){
+			html += "<li><b>Full Name:</b>"+row.FirstName+" "+row.LastName+"</li>";	
+			html += "<li><b>Business Phone Number:</b>"+row.BusinessPhoneNumber+"</li>";
+			html += "<li><b>Mobile Number:</b>"+row.CellPhoneNumber+"</li>";
+			html += "<li><b>E-mail Address:</b>"+row.Email+"</li>";
+			html += "<li><b>Department:</b>"+row.Department+"</li>";	
+		}
+	}else if(globalPageRM == "ReservationDevices"){
+		if(column == "HostName"){
+		html += "<li><b>Device Id:</b>"+row.DeviceId+"</li>";
+		html += "<li><b>Management IP:</b>"+row.ManagementIp+"</li>";
+		html += "<li><b>Console IP:</b>"+row.ConsoleIp+"</li>";
+		html += "<li><b>Model:</b>"+row.Model+"</li>";
+		html += "<li><b>Manufacturer:</b>"+row.Manufacturer+"</li>";
+		html += "<li><b>Software Version:</b></li>";
+		html += "<li><b>Connectivity (L1/L2/Open):</b>"+row.availablePorts+"</li>";
 
+		}else if(column == "Connectivity"){
+			html += "<li><b>Number Of GigabitEthernet Ports:</b>"+row.GigabitEthernetCount+"</li>";
+			html += "<li><b>Number Of POS Ports:</b>"+row.POSCount+"</li>";
+		}
+	}
+	return html;
+}
+function setIteration(val){
+	if(val == ""){
+		alerts('Invalid Input');
+	}
+
+}

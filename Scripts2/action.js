@@ -143,7 +143,7 @@ function canvasEvent(page){
 			var mousePosX = window['variable' + dynamicVar[pageCanvas]].getPointerPosition().x;
 			var mousePosY = window['variable' + dynamicVar[pageCanvas]].getPointerPosition().y;
 			imgXPos = mousePosX;
-			imgYPos = mousePosY;	
+			imgYPos = mousePosY;
 			var srcN = getMiniModelImage($(createDev).attr('model'));
 			srcN =  ($(srcN).attr('src')).split("img")[1];
 			if(globalDeviceType != "Mobile"){
@@ -321,6 +321,7 @@ function showActiveTopology(){
 			}else{
 				ajaxLoader('hide');
 			}
+			removespecificconfig();
 			data = $.trim(data);
 			if(globalInfoType == "XML"){
 				getDataFromXML(data);
@@ -328,7 +329,6 @@ function showActiveTopology(){
 			}else{
 				data = data.replace(/'/g,'"');
 				var obj = jQuery.parseJSON(data);
-				removespecificconfig();
 				getDataFromJSON(obj);
 				globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Username = globalUserName;
 				globalMAINCONFIG[pageCanvas].MAINCONFIG[0].MainConfigurationUserId = globalUserId;
@@ -449,49 +449,51 @@ function loadActiveTableQuery(ths){
                     var html ='',startRes='',endRes='';
                     var btns='';
                     for(var a =0; a< row.length; a++){
-						if(globalDeviceType == "Mobile" ){
-                        	html += "<tr class='trSelected' sdate='";
-						}else{
-                        	html += "<tr sdate='";
-						}
-						if(row[a].StartReservation){
-							html += row[a].StartReservation;
-						}else{
-							html += row[a].StartReservationTime
-						}
-						html +="' edate='";
-						if(row[a].EndReservation){
-							html += row[a].EndReservation;
-						}else{
-							html += row[a].EndReservationTime;
-						}
-						html += "' rId='"+row[a].ResourceId+"' >";
-                        if(globalDeviceType != "Mobile"){
-
-                            html +="<td><input type='checkbox' class='trSelected' onclick='checkLoadActive(this,\""+row[a].ResourceId+"\",\"html5\")' id='cb"+row[a].ResourceId+"' /></td>";
-						}
-                        html +="<td>"+row[a].ResourceId+"</td>";
-                        html +="<td>"+row[a].Status+"</td>";
-                        html +="<td>"+row[a].ConfigName+"</td>";
-						if(row[a].StartReservation){
-	                        html +="<td>"+row[a].StartReservation+"</td>";
-						}else{
-							html +="<td>"+row[a].StartReservationTime+"</td>";
-						}
-						if(row[a].EndReservation){
-	                        html +="<td>"+row[a].EndReservation+"</td>";
-						}else{
-							html +="<td>"+row[a].EndReservationTime+"</td>";
-						}
-                        html +="<td>"+row[a].NumberofDevices+"</td>";
-						if(row[a].Exclusivility){
-	                        html +="<td>"+row[a].Exclusivility+"</td>";		
-						}else{
-							html +="<td>"+row[a].Exclusivity+"</td>";
-						}
-                        html +="<td>"+row[a].UserName+"</td>";
-                        html +="</tr>";
-                    }
+						if((globalMAINCONFIG[pageCanvas] != null && globalMAINCONFIG[pageCanvas] != undefined && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != null && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != "" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != undefined && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != row[a].ResourceId) || ((globalMAINCONFIG[pageCanvas] != null && globalMAINCONFIG[pageCanvas] != undefined && (globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId == null || globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId == "" || globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId == undefined )))){	
+							if(globalDeviceType == "Mobile" ){
+	                        	html += "<tr class='trSelected' sdate='";
+							}else{
+	                        	html += "<tr sdate='";
+							}
+							if(row[a].StartReservation){
+								html += row[a].StartReservation;
+							}else{
+								html += row[a].StartReservationTime
+							}
+							html +="' edate='";
+							if(row[a].EndReservation){
+								html += row[a].EndReservation;
+							}else{
+								html += row[a].EndReservationTime;
+							}
+							html += "' rId='"+row[a].ResourceId+"' >";
+	                        if(globalDeviceType != "Mobile"){
+	
+	                            html +="<td><input type='checkbox' class='trSelected' onclick='checkLoadActive(this,\""+row[a].ResourceId+"\",\"html5\")' id='cb"+row[a].ResourceId+"' /></td>";
+							}
+	                        html +="<td>"+row[a].ResourceId+"</td>";
+	                        html +="<td>"+row[a].Status+"</td>";
+	                        html +="<td>"+row[a].ConfigName+"</td>";
+							if(row[a].StartReservation){
+		                        html +="<td>"+row[a].StartReservation+"</td>";
+							}else{
+								html +="<td>"+row[a].StartReservationTime+"</td>";
+							}
+							if(row[a].EndReservation){
+		                        html +="<td>"+row[a].EndReservation+"</td>";
+							}else{
+								html +="<td>"+row[a].EndReservationTime+"</td>";
+							}
+	                        html +="<td>"+row[a].NumberofDevices+"</td>";
+							if(row[a].Exclusivility){
+		                        html +="<td>"+row[a].Exclusivility+"</td>";		
+							}else{
+								html +="<td>"+row[a].Exclusivity+"</td>";
+							}
+	                        html +="<td>"+row[a].UserName+"</td>";
+	                        html +="</tr>";
+                    	}
+					}
 				}
 				$("#ActiveTable > tbody").empty().append(html);
 				$(".ui-dialog").position({
@@ -731,6 +733,11 @@ function cancelReservation(flag){
         	dataType: 'html',
 	        success: function(data) {
 				data = $.trim(data);
+				if(ReleaseFlagLoadActive == true){
+					ReleaseFlagLoadActive = false;
+					showActiveTopology();
+					return;
+				}
 				if(data == "" ){
 					if(globalDeviceType == "Mobile"){
 						error("Cancel Failed.","Notification");
@@ -751,6 +758,7 @@ function cancelReservation(flag){
 					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ReservationType = "";
 					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Offset = "";
 						window['variable' + dynamicOtherUser[pageCanvas]]="";;
+						createConfigName();
 					}else{
 						checkProcessExecuted(obj,flag);	
 					}
@@ -1217,12 +1225,13 @@ function checkProcessExecuted(data,flag){
 				}else{
 					setJSONData();
 				}
-				if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0] != null && globalMAINCONFIG[pageCanvas].MAINCONFIG[0] != undefined){
+				if(globalMAINCONFIG[pageCanvas] != null && globalMAINCONFIG[pageCanvas] != undefined){
 					globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Interval = "";
 				    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Iteration = "";
 				    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DateTIME = "";
 		    		globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ReservationType = "";
 			    	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Offset = "";
+					createConfigName();
 				}
 			}
 			window['variable' + dynamicOtherUser[pageCanvas]]="";;
@@ -1246,12 +1255,13 @@ function checkProcessExecuted(data,flag){
 				if(mydata){
 			    	getDataFromJSON(mydata);
 				}
-				if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0] != null && globalMAINCONFIG[pageCanvas].MAINCONFIG[0] != undefined){
+				if(globalMAINCONFIG[pageCanvas] != null && globalMAINCONFIG[pageCanvas] != undefined){
 					globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Interval = "";
 				    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Iteration = "";
 				    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DateTIME = "";
 		    		globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ReservationType = "";
 			    	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Offset = "";
+					createConfigName();
 				}
 			}
 			window['variable' + dynamicOtherUser[pageCanvas]]="";;

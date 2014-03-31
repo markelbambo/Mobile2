@@ -50,11 +50,76 @@ $(document).on('click','#Magnify', function(){
 */
 
 });
+/*
+ *
+ *  FUNCTION NAME : checkInputLeave
+ *  AUTHOR        : Krisfen G. Ducao 
+ *  DATE          : March 30, 2014
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
+function checkInputLeave(ths){
+	var str = $(ths).val();
+	var id = $(ths).attr('id');
+	var vlan = str.split(",");
+	var value = [];
+	console.log(ths);
+	for(var a=0;a<vlan.length;a++){	
+		console.log("vlan",vlan[a]);
+		if (vlan[a]>4094){
+			alerts("Input cannot be greater than 4094")
+			$("#"+id).val(value);
+			console.log("ID",id);	
+			return 0;
+		}
+		value.push(vlan[a]);
+	}
 
+}
+/*
+ *
+ *  FUNCTION NAME : checkInputReservedVlan
+ *  AUTHOR        : Krisfen G. Ducao 
+ *  DATE          : March 30, 2014
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : 
+ *  PARAMETERS    : 
+ *
+ */
+function checkInputReservedVlan(evt,ths){
+	evt = (evt) ? evt : window.event;
+	var str = "";var vlan = "";
+	var charCode = (evt.which) ? evt.which : evt.keyCode;
+    var asciiCode = String.fromCharCode(charCode);
+	var value = [];
+	if (charCode==44){
+		str = $(ths).val();
+		//console.log('comma');
+		//console.log('str',str);
+		vlan = str.split(",");
+		for(var a=0;a<vlan.length;a++){
+			if (vlan[a]>4094){
+				alerts("Input cannot be greater than 4094")
+				var id = $(ths).id
+				$("#"+id).val(value);
+				return false;
+			}
+			value.push(vlan[a]);
+		}
+		return true;
+	}
+	if (charCode >= 48 && charCode <=57 ) {
+		return true;
+	}
+	return false;
 
-
-
-
+}
 /*
  * 
  *  FUNCTION NAME : error
@@ -244,7 +309,6 @@ function okdevicetype(){
  *  REVISION #    : 
  *  DESCRIPTION   : click icon on sidebar
  *  PARAMETERS    : src
- *
  */
 function clickIcon(src){
     var did =  $(src).attr('did');
@@ -289,6 +353,11 @@ function addHistory() {
 		}
    		$("#historyDiv .ulDeco").html(str);
 	}
+	if($('.ulDeco li').length == 0){
+    	$('#clearHistory').hide();
+	}else{
+		$('#clearHistory').show();
+    }
 }
 
 /*
@@ -518,7 +587,7 @@ function PortTestToolTable(){
 					var portname =$(this).attr('portname');
 					var did = $(this).attr('did');
 					if(!$('#'+did).is(':checked')){
-						$('#'+did).attr("checked",true);
+						$('#'+did).prop('checked',true);
 					}
 					$(this).addClass('highlight');		
 					for(var i = 0; i < testToolObj.length; i++){
@@ -532,7 +601,7 @@ function PortTestToolTable(){
 					$(this).removeClass('highlight');
 					removeObj($(this).attr('portname'),'port');
 					var portname =$(this).attr('portname');
-					$('#'+portname).attr('checked', false);
+					$('#'+portname).prop('checked', false);
 					if(checkPortsTTList.indexOf($(this).attr('portname')) != -1){
 						var indx = checkPortsTTList.indexOf($(this).attr('portname'));
 						checkPortsTTList.splice(indx,1);	
@@ -786,7 +855,7 @@ function TestToolListTable(load){
 					var devId= $(this).attr('DeviceId');
 					HostName = $(this).attr('devname');
 					if(!$('#'+devId).is(':checked')){
-						$('#'+devId).attr('checked',true);
+						$('#'+devId).prop('checked',true);
 					}
 
 					$(this).addClass('highlight');
@@ -808,7 +877,7 @@ function TestToolListTable(load){
 						var i = checkDevNameTT.indexOf($(this).attr('devname'));
 						checkDevNameTT.splice(i,1);
 					}
-					$('#'+devId).attr('checked', false);
+					$('#'+devId).prop('checked', false);
 				}
 			});
 
@@ -932,7 +1001,7 @@ function createTestToolObj(){
  *
  */
 var globalDeviceListLoad="";
-var importLocalFlag = [],globalDevListType='graphical';
+var importLocalFlag = [],globalDevListType='tableview';
 function deviceListPopupTable(load,tab){
 	if(globalDeviceType == "Mobile"){
 		loading("show");
@@ -1016,8 +1085,14 @@ function deviceListPopupTable(load,tab){
 					loading("hide");
 					if(globalDevListType == "graphical"){
 						if((browserInfoObj[0].BrowserName.toLowerCase() == "chrome" && Number(browserInfoObj[0].MajorVersion) > 31) || (browserInfoObj[0].BrowserName.toLowerCase() == "safari" && Number(browserInfoObj[0].MajorVersion)  >=7 && browserInfoObj[0].WebView == false) || (browserInfoObj[0].BrowserName.toLowerCase() == "safari" || browserInfoObj[0].BrowserName.toLowerCase() == "netscape" && Number(browserInfoObj[0].MajorVersion)  >=5 && browserInfoObj[0].WebView == true)){
+							setTimeout(function(){
+								$("#DevlistGraphical").addClass("ui-btn-active");
+							},300);
 							appendToDeviceListTable(data,condition,load,tab);
 						}else{
+							setTimeout(function(){
+								$("#DevlistTableView").addClass("ui-btn-active");
+							},300);
 							appendToDeviceListTable2(data,condition,load,tab);
 						}
 					}else{
@@ -1230,58 +1305,6 @@ function appendToDeviceListTable(data,condition,load, tabSelected){
 	html ='';
 	loop:
 	for(var a =0; a< row.length; a++){
-		if(InfoType == "XML"){
-			var devId = row[a].getAttribute('DeviceId');
-			if(devListFilterId.indexOf(devId) =='-1'){
-				if(devListFilterId.length == (row.length -1)){
-					deg = '360';
-					var deg2 = true;
-					var web = '-webkit-transform: rotateY('+deg+'deg) translateZ(none); -moz-transform: rotateY('+deg+'deg) translateZ(none); -o-transform: rotateY('+deg+'deg) translateZ(none); transform: rotateY('+deg+'deg) translateZ(none);';
-				}else{
-					var deg2 = false;
-					var web = '-webkit-transform: rotateY('+deg+'deg) translateZ( '+tz+' ); -moz-transform: rotateY('+deg+'deg) translateZ( '+tz+' ); -o-transform: rotateY('+deg+'deg) translateZ( '+tz+' ); transform: rotateY('+deg+'deg) translateZ( '+tz+' );';
-				}
-				var devName = row[a].getAttribute('HostName');
-			    var con = checkDeviceIfExist(devName);
-		    	if (con== true){
-      				continue loop;
-	      		}
-				var imgObj = getModelImage(row[a].getAttribute('Model'),true,false);
-				var src = imgObj.src;
-	  			if (tabSelected == "import" || condition== 'import'){ var rowspn=13;}else{ var rowspn=11; }
-	      		html += '<figure data-degree="-'+deg+'deg" style="background: hsla('+deg+', 0%, 83%, 0.9 );'+web+'" ';
-			  	html += "LoadType='"+load+"' ";
-	    	  	html += "DeviceType='"+row[a].getAttribute('DeviceType')+"' ";
-				html += "DeviceId='"+row[a].getAttribute('DeviceId')+"' ";
-		      	html += "HostName='"+row[a].getAttribute('HostName')+"' ";
-      			html += "PortType='"+row[a].getAttribute('PortType')+"' ";
-			  	html += '>';
-      			html += '<div style="width: 100%; height: 100%; line-height: 13px;  font-size: 12px;  font-weight: normal; color: black; ">';
-		      	html += '<table style="text-align:left;min-width: 215px;width: 100%;">';
-      			html += "<tr><th>Device ID</th><td style='text-align: left;'>"+row[a].getAttribute('DeviceId')+"</td>";
-			  	html += '<td rowspan="'+rowspn+'"><img src="'+src+'" style="width: 150px;"></td>';
-	  			html += "</tr>";
-		      	html += "<tr><th>Device Name</th><td style='text-align: left;'>"+row[a].getAttribute('HostName')+"</td></tr>";
-      			html += "<tr><th>Mgmt. IP</th><td style='text-align: left;'>"+row[a].getAttribute('ManagementIp')+"</td></tr>";
-		      	html += "<tr><th>Console IP</th><td style='text-align: left;'>"+row[a].getAttribute('ConsoleIp')+"</td></tr>";
-      			html += "<tr><th>Manufacturer</th><td style='text-align: left;'>"+row[a].getAttribute('Manufacturer')+"</td></tr>";
-		      	html += "<tr><th>Model</th><td style='text-align: left;'>"+row[a].getAttribute('Model')+"</td></tr>";
-	  			if (tabSelected == "import" || condition== 'import'){
-		      		html += "<tr><th>Available Day</th></tr><td style='text-align: left;'>"+row[a].getAttribute('AvailabilityDay')+"</td></tr>";
-      				html += "<tr><th>Available Date</th></tr><td style='text-align: left;'>"+row[a].getAttribute('AvailabilityDate')+"</td></tr>";
-		      		html += "<tr><th>Available Time</th></tr><td style='text-align: left;'>"+row[a].getAttribute('AvailabilityTime')+"</td></tr>";
-      			}
-		      	html += "<tr><th>Status</th><td style='text-align: left;'>"+row[a].getAttribute('Status')+"</td></tr>";
-      			html += "<tr><th>UserName</th><td style='text-align: left;'>"+row[a].getAttribute('UserName')+"</td></tr>";
-		      	html += "<tr><th>Remaining Time</th><td style='text-align: left;'>"+row[a].getAttribute('RemainingTime')+"</td></tr>";
-		      	html += "<tr><th>Available Port/s</th><td style='text-align: left;'>"+row[a].getAttribute('AvailablePort')+"</td></tr>";
-      			html += "<tr><th>Port Type</th><td style='text-align: left;'>"+row[a].getAttribute('PortType')+"</td></tr></tr>";
-		      	html += '</table>';
-      			html += '</div>';
-		      	html += '</figure>';
-      			deg = deg+degAddtnl;
-			}
-    	}else{
 			var devId = row[a].DeviceId;
             if(devListFilterId.indexOf(devId) =='-1'){
                 if(devListFilterId.length == (row.length -1)){
@@ -1300,7 +1323,11 @@ function appendToDeviceListTable(data,condition,load, tabSelected){
                 var imgObj = getModelImage(row[a].Model,true,false);
                 var src = imgObj.src;
                 if (tabSelected == "import" || condition== 'import'){ var rowspn=13;}else{ var rowspn=11; }
-                html += '<figure data-degree="-'+deg+'deg" style="background: hsla('+deg+', 0%, 83%, 0.9 );'+web+'" ';
+                html += '<figure data-degree="-'+deg+'deg" style="background: hsla('+deg+', 0%, 83%, 0.9 );'+web;
+				if (tabSelected != "import" || condition != 'import'){
+                    html += 'height:325px;';
+                }
+				html += '" ';
                 html += "LoadType='"+load+"' ";
                 html += "DeviceType='"+row[a].DeviceType+"' ";
                 html += "DeviceId='"+row[a].DEVICE[0].DeviceId+"' ";
@@ -1334,7 +1361,6 @@ function appendToDeviceListTable(data,condition,load, tabSelected){
                 html += '</figure>';
                 deg = deg+degAddtnl;
             }
-		}
 	}
     setTimeout(function(){
         init();
@@ -1676,9 +1702,7 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 			if($(this).hasClass('highlight') == false){
 				var devName = $(this).attr('DeviceName');
 				var devId= $(this).attr('DeviceId');
-				if(!$('#'+devId).is(':checked')){
-					$('#'+devId).trigger('click');
-				}
+				$('#'+devId).prop('checked', true);
 				$(this).addClass('highlight');
 				if(globalSelectedDeviceList.indexOf(devName) == -1){
 					globalSelectedDeviceList.push(devName);
@@ -1692,7 +1716,7 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 						globalSelectedDeviceList.splice(a,1);
 					}
 				}
-				$('#'+devId).attr('checked', false);
+				$('#'+devId).prop('checked', false);
 			}
 		}
 		fullHubDisEna();
@@ -1748,68 +1772,60 @@ function checkDeviceIfExist(devName,type){
  *  PARAMETERS    
  *
  */
+var dynamicGreenRouletteArr =[];
 function reCreateDock(){
-	var devices = getDevicesNodeJSON();
-	var hst = [];
-	var ipAdd=[];
 	$("#osxDocUL").html('');
-	if(devices.length > 0){
-		$("#dockContainer").show();
-	}else{
-		$("#dockContainer").hide();
-	}
-	var devCounter=0;
-    for(var a=0; a < devices.length; a++){
-        var srcN = getModelImage(devices[a].Model);
-        var model = devices[a].Model;
-        var manufac = devices[a].Manufacturer;
-        var ostyp = devices[a].OSType;
-        var prdfmly = devices[a].ProductFamily;
-        var ipadd = devices[a].ManagementIp;
-        var prot = devices[a].DEVICE[0].PrototypeFlag;
-        var hostnme = devices[a].HostName;
-        var devtype = devices[a].DeviceType;
-		var devPath = devices[a].ObjectPath;
-		
-	    if(hst.indexOf(hostnme) == "-1" && hostnme != "" && devtype.toLowerCase() == "dut"){
-			devCounter++;
-			hstFlg = true;
-			hst.push(hostnme);
-        }else if(ipAdd.indexOf(ipadd) == "-1" && ipadd != "" && devtype.toLowerCase() == "testtool"){
-			devCounter++;
-			hstFlg = true;
-			ipAdd.push(ipadd);
-        }
-	}
-	if(hstFlg == true){
-		$("#dockContainer").show();
-        var text = createDeviceTooltip(devPath);
-        str += '<li>';
-	    str += '<div class="divTooltipDock">'+text+'</div>';
-        str += '<a href="#" title="'+devPath+'"><img alt="'+devPath+' icon" src="'+imageObj.src+'" devpath="'+devPath+'" class="dockImg" width="62px" hostname="'+hostnme+'" proto="'+prot+'" devtype="'+devtype+'" ipAdd="'+ipadd+'" productFamily="'+prdfmly+'" ostype="'+ostyp+'" manufacturer="'+manufac+'" did="device" model="'+model+'"/></a>';
-        str += '</li>';
-        $("#osxDocUL").append(str);
-        if(globalDeviceType != "Mobile"){
-    	    $(".dockImg").click(function(e){
-        		createdev = this;
-               	var srcN = getMiniModelImage($(this).attr('model'));
+    var dckCtr=0;
+    var str='';
+    for(var a=0; a < dynamicGreenRouletteArr.length; a++){
+        var dkArr = dynamicGreenRouletteArr[a];
+        
+        if(dkArr.pageCanvas == pageCanvas){
+            dckCtr++;
+            var model = dkArr.model;
+            var manufac = dkArr.manufac;
+            var ostyp = dkArr.ostyp;
+            var prdfmly = dkArr.prdfmly;
+            var ipadd = dkArr.ipadd;
+            var prot = dkArr.prot;
+            var hostnme = dkArr.hostnme;
+            var devtype = dkArr.devtype;
+            var text = createDeviceTooltip(devPath);
+            var imageObj =getModelImage(model);
+            str += '<li>';
+            str += '<div class="divTooltipDock">'+text+'</div>';
+            str += '<a href="#" title="'+devPath+'"><img id="'+devPath+hostnme+pageCanvas+'" alt="'+devPath+' icon" src="'+imageObj.src+'" devpath="'+devPath+'" class="dockImg" width="62px" hostname="'+hostnme+'" proto="'+prot+'" devtype="'+devtype+'" ipAdd="'+ipadd+'" productFamily="'+prdfmly+'" ostype="'+ostyp+'" manufacturer="'+manufac+'" did="device" model="'+model+'"/></a>';
+            str += '</li>';
+                               
+            if(globalDeviceType != "Mobile"){
+                $("#"+devPath+hostnme+pageCanvas).click(function(e){
+                createdev = this;
+                var srcN = getMiniModelImage($(this).attr('model'));
                 srcN =  ($(srcN).attr('src')).split("img")[1];
                 $("#configContent"+pageCanvas).css("cursor","url("+dir+"/img/"+srcN+") 10 18,auto");
                 clickIcon(this);
-            });
-        }else{
-        	$.mobile.document.on( "taphold",".dockImg", function(e){
-            	createdev = this;
-               	clickIcon(this);
-            });
-       	}
-		var tots = 37 * devCounter;
-		var el = $("#dockWrapper");
-        var w = el.width() + tots;
-        var dvded = -Math.abs(w / 2);
-        var css = {"position": 'absolute', "left": "50%","width": w+"px","margin-left":dvded};
-        $("#dockContainer").css(css);
-	}
+                });
+            }else{
+                $.mobile.document.on( "taphold","#"+devPath+hostnme+pageCanvas, function(e){
+                    createdev = this;
+                    clickIcon(this);
+                });
+            }
+        }
+    }
+    if(dckCtr > 0){
+        $("#dockContainer").show();
+    }else{
+        $("#dockContainer").hide();
+        return;
+    }
+    $("#osxDocUL").append(str);
+	var tots = 40 * devCounter;
+	var el = $("#dockWrapper");
+    var w = el.width() + tots;
+	var dvded = -Math.abs(w / 2);
+	var css = {"position": 'absolute', "left": "50%","width": w+"px","margin-left":dvded};
+    $("#dockContainer").css(css);
 }
 
 /*
@@ -1822,7 +1838,6 @@ function reCreateDock(){
  *  REVISION #    : 
  *  DESCRIPTION   : create device in canvas
  *  PARAMETERS    : src
- *
  */
 function createDevice(src){
 	var devPath = "Device_" + deviceCtr;
@@ -1831,7 +1846,7 @@ function createDevice(src){
 	if(idsArray.length == 0){
 		createConfigName(); 
 	}
-	window['variableHistory'+pageCanvas].push("Created a device.");
+	addEvent2History("Created a device.");
 	var str ='';
 	if(idsArray.indexOf(devPath) == -1){
 		var imageObj = new Image();
@@ -1854,25 +1869,15 @@ function createDevice(src){
 			}else if(devices[a].ManagementIp == ipadd && ipadd != "" && devtype.toLowerCase() == "testtool"){
 				return;
 			}
-		}	
-/*		for(var a=0; a < window['variable' + dynamicGreenRouletteArr[pageCanvas]].length; a++){
-			if(window['variable' + dynamicGreenRouletteArr[pageCanvas]][a].devPath == devPath){
-				rTr++;
-			}
-			if(window['variable' + dynamicGreenRouletteArr[pageCanvas]][a].hostnme == hostnme && hostnme != "" && devtype.toLowerCase() == "dut"){
-				return;
-			}else if(window['variable' + dynamicGreenRouletteArr[pageCanvas]][a].ipadd == ipadd && ipadd != "" && devtype.toLowerCase() == "testtool"){
-				return;
-			}
-		}*/
+		}
 
 		if(globalInfoType == "JSON"){
 			setJSONData();
 			setDeviceInformation(devPath,model,imageObj,manufac,ostyp,prdfmly,ipadd,prot,hostnme,devtype);
 			imgXPos+=70;
-            idsArray.push(devPath);
-            deviceCtr++;
-            drawImage();
+       			idsArray.push(devPath);
+		        deviceCtr++;
+		        drawImage();
 		}else{
 			var devices = devicesArr;
 			imageObj.onload = function() {
@@ -1884,41 +1889,60 @@ function createDevice(src){
 			};
 		}
 		setTimeout(function(){
+            var ctrDck=0;
+            for(var a=0; a < dynamicGreenRouletteArr.length; a++){
+                var dkArr = dynamicGreenRouletteArr[a];
+                if(dkArr.pageCanvas == pageCanvas){
+                   if(dkArr.model == model && dkArr.manufac == manufac && dkArr.ostyp == ostyp && dkArr.prdfmly == prdfmly && dkArr.ipadd==ipadd && dkArr.prot == prot && dkArr.hostnme == hostnme && dkArr.devtype == devtype){
+                        ctrDck++;
+                        a =dynamicGreenRouletteArr.length;
+                   }else if(dkArr.model == model && manufac == undefined && ostyp == undefined && prdfmly == undefined && ipadd== undefined && prot == undefined && hostnme && hostnme == undefined){
+                        ctrDck++;
+                        a =dynamicGreenRouletteArr.length;
+                   }
+                }
+            }
+            if(ctrDck == 0){
+            dynamicGreenRouletteArr.push({"pageCanvas":pageCanvas,"devPath":devPath,"model":model,"imageObj":imageObj,"manufac":manufac,"ostyp":ostyp,"prdfmly":prdfmly,"ipadd":ipadd,"prot":prot,"hostnme":hostnme,"devtype":devtype});
+            }else{
+                return;
+            }
 			$("#dockContainer").show();
 			var text = createDeviceTooltip(devPath);
 			str += '<li>';
 			str += '<div class="divTooltipDock">'+text+'</div>';
-			str += '<a href="#" title="'+devPath+'"><img alt="'+devPath+' icon" src="'+imageObj.src+'" devpath="'+devPath+'" class="dockImg" width="62px" hostname="'+hostnme+'" proto="'+prot+'" devtype="'+devtype+'" ipAdd="'+ipadd+'" productFamily="'+prdfmly+'" ostype="'+ostyp+'" manufacturer="'+manufac+'" did="device" model="'+model+'"/></a>';
+			str += '<a href="#" title="'+devPath+'"><img id="'+devPath+hostnme+pageCanvas+'" alt="'+devPath+' icon" src="'+imageObj.src+'" devpath="'+devPath+'" class="dockImg" width="62px" hostname="'+hostnme+'" proto="'+prot+'" devtype="'+devtype+'" ipAdd="'+ipadd+'" productFamily="'+prdfmly+'" ostype="'+ostyp+'" manufacturer="'+manufac+'" did="device" model="'+model+'"/></a>';
 			str += '</li>';
 			$("#osxDocUL").append(str);
-			if(globalDeviceType != "Mobile"){
-     		   $(".dockImg").click(function(e){
+            
+            if(globalDeviceType != "Mobile"){
+                $("#"+devPath+hostnme+pageCanvas).click(function(e){
 					createdev = this;
-	        		var srcN = getMiniModelImage($(this).attr('model'));
-			        srcN =  ($(srcN).attr('src')).split("img")[1];
-			        $("#configContent"+pageCanvas).css("cursor","url("+dir+"/img/"+srcN+") 10 18,auto");
-        		    clickIcon(this);
+		        	var srcN = getMiniModelImage($(this).attr('model'));
+					srcN =  ($(srcN).attr('src')).split("img")[1];
+					$("#configContent"+pageCanvas).css("cursor","url("+dir+"/img/"+srcN+") 10 18,auto");
+                    clickIcon(this);
+                });
+            }else{
+                $.mobile.document.on( "taphold","#"+devPath+hostnme+pageCanvas, function(e){
+                //$("#"+devPath+hostnme).dblclick(function(e){
+                createdev = this;
+            	clickIcon(this);
 		        });
-    		}else{		
-        		$.mobile.document.on( "taphold",".dockImg", function(e){
-					createdev = this;
-            		clickIcon(this);
-		        });
-    		}
+            }
 			var el = $("#dockWrapper");
-            var w = el.width() + 37;
+            var w = el.width() + 40;
             var dvded = -Math.abs(w / 2);
             var css = {"position": 'absolute', "left": "50%","width": w+"px","margin-left":dvded};
             $("#dockContainer").css(css);
-		},300);
+			
+		},100);
 	}else{
 		deviceCtr++;
 		createConfigName();
 		createDevice(src);
 	}
-}
-
-/*
+}/*
  *
  *  FUNCTION NAME : getModelImage
  *  AUTHOR        : Mark Anthony Elbambo
@@ -2139,17 +2163,21 @@ function draw() {
 				});
 				rectX = -this.getX()*.10;
 				rectY = -this.getY()*.10;	
-
+//				console.log("dragonC",dragX,dragY);
+//				console.log("pdragOnC",pdragX,pdragY);
 				rectX = ((dragX - pdragX) * .1);
-				rectY = ((dragY - pdragY) * .1);						
+				rectY = ((dragY - pdragY) * .1);
+//				console.log("RECT After computation",rectX,rectY);
 				rectngl.setAttrs({x:rectX, y:rectY});
 				/***************ON DRAG RECTANGLE******************/
 				rectngl.on('dragend', function() {
 					
 					rectX = -this.getX();
 					rectY = -this.getY();
+//					console.log("from stage drag rectangle rect",rectX,rectY);
 					dragX = ((rectX) - (-srectX)) *10;
 					dragY = ((rectY) - (-srectY)) *10;
+//					console.log("from stage drag rectabgle DRAG",dragX,dragY);
 					window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
 					drawImage("true");
 					window['variable' + dynamicLayer[pageCanvas]].draw();
@@ -2157,16 +2185,17 @@ function draw() {
 				});
 
 				/****************************************************/
-				
 				rectnglLayer.add(rectngl);
 				miniLayerCloned.setAttrs({x:0,y:0});
 				window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
 				window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-//				fromNavigator = "stage";
+				fromNavigator = "stage";
 				srectX = rectX;
 				srectY = rectY;
 				sdragX = dragX;
-				sdragY = dragY;						
+				sdragY = dragY;
+//				console.log("set srect",srectX,srectY);
+//				console.log("set sdrag",sdragX,sdragY);
 			});
 
 			/**********************************************/	
@@ -2367,6 +2396,9 @@ function reDrawImage(){
 
 	}
 	window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
+    $('.canvasID'+pageCanvas).remove();
+    $("#configContent"+pageCanvas+" canvas").attr("class", "canvasID"+pageCanvas);
+    $("#configContent"+pageCanvas+" canvas").attr("id", "canvasID"+pageCanvas);
 
 }
 	
@@ -2391,6 +2423,21 @@ var dragY =0;
 function drawImage(flag,newscale){
     var countXpos = 50;
     var countYpos = 50;
+	if(globalDeviceType == "Mobile"){
+    	if(createDev != ""){
+        	var src = $(createDev).attr("src");
+            $("#activeSelected").attr("src",src);
+            $("#activeSelected").attr("type","dev");
+            $("#activeSelected").show();
+       	}else if(createLineVar != ""){
+        	var src = $(createLineVar).attr("src");
+            $("#activeSelected").attr("src",src);
+            $("#activeSelected").attr("type","line");
+            $("#activeSelected").show();
+        }else{
+        	$("#activeSelected").hide();
+        }
+    }
     if(window['variable' + dynamicLayer[pageCanvas]] != undefined){
         window['variable' + dynamicVar[pageCanvas]].clear().clearCache();
         window['variable' + dynamicLayer[pageCanvas]].remove().clearCache();
@@ -2414,21 +2461,6 @@ function drawImage(flag,newscale){
             $("#trashBin").hide();
         }
         for(var i=0 ; i < devices.length ; i++){
-            if(globalDeviceType == "Mobile"){
-                if(createDev != ""){
-                    var src = $(createDev).attr("src");
-                    $("#activeSelected").attr("src",src);
-                    $("#activeSelected").attr("type","dev");
-                    $("#activeSelected").show();
-                }else if(createLineVar != ""){
-                    var src = $(createLineVar).attr("src");
-                    $("#activeSelected").attr("src",src);
-                    $("#activeSelected").attr("type","line");
-                    $("#activeSelected").show();
-                }else{
-                    $("#activeSelected").hide();
-                }
-            }
             var x2 =  parseInt(devices[i].XLocation);
             var y2 =  parseInt(devices[i].YLocation);
             if(x2 > (gblCanvasWidth - 100) && frmMapLink == true){
@@ -2485,6 +2517,10 @@ function drawImage(flag,newscale){
     }else{
         $("#showTooltipInfo").hide();
     }
+    $('.canvasID'+pageCanvas).remove();
+    $("#configContent"+pageCanvas+" canvas").attr("class", "canvasID"+pageCanvas);
+    $("#configContent"+pageCanvas+" canvas").attr("id", "canvasID"+pageCanvas);
+
     if (flag=="true"){
         window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
         duplicateOnMinimap("true");
@@ -2496,9 +2532,6 @@ function drawImage(flag,newscale){
         duplicateOnMinimap();
 		return;
     }
-    $('.canvasID'+pageCanvas).remove();
-    $("#configContent"+pageCanvas+" canvas").attr("class", "canvasID"+pageCanvas);
-    $("#configContent"+pageCanvas+" canvas").attr("id", "canvasID"+pageCanvas);
 }
 
 
@@ -2540,26 +2573,48 @@ function duplicateOnMinimap(from,newscale){
 		draggable: true
 	});	
 	rectnglLayer.add(rectngl);
-/*******************************DRAG RECTANGLE*****************************/
-/*	rectngl.on('dragend', function() {
-		//rectnglLayer.remove(rectngl);
-    	window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: -this.getX()*10, y:-this.getY()*10});
-		dragX = -this.getX()*10;
-		dragY = -this.getY()*10;
-		rectX = -this.getX();
-		rectY = -this.getY();
-		drawImage("true");
-		window['variable' + dynamicLayer[pageCanvas]].batchDraw();	
-//		window['variable' + dynamicLayer[pageCanvas]].draw();	
+/**************************************************************************/
+/*************************************************************************/
+/*	if(from == "" && fromNavigator == "rectangle"){
+		rectngl.setPosition(-(rectX), -(rectY));
+		rectnglLayer.clear().add(rectngl);
+		miniLayerCloned.setAttrs({x:0,y:0});
+		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
+		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
+		fromNavigator = "rectangle";		
+		pdragX = dragX;
+		pdragY = dragY;
+		prectX = rectX;
+		prectY = rectY;
 		return;
-	});
+	}
+	if(from == "" && fromNavigator == "stage"){
+		rectX = ((dragX - pdragX) * .1);
+		rectY = ((dragY - pdragY) * .1);						
+		rectngl.setAttrs({x:rectX, y:rectY});
+		rectnglLayer.clear().add(rectngl);
+		miniLayerCloned.setAttrs({x:0,y:0});
+		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
+		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
+		fromNavigator = "stage";
+		srectX = rectX;
+		srectY = rectY;
+		sdragX = dragX;
+		sdragY = dragY;
+		return;
+p
+	}
 */
+/*******************************DRAG RECTANGLE*****************************/
+
 	rectngl.on('dragend', function() {
 					
 		rectX = -this.getX();
 		rectY = -this.getY();
+//		console.log("rect this", rectX,rectY);
 		dragX = ((rectX) - (-srectX)) *10;
 		dragY = ((rectY) - (-srectY)) *10;
+//		console.log("drag after computation",dragX,dragY);
 		window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
 		drawImage("true");
 		window['variable' + dynamicLayer[pageCanvas]].draw();
@@ -2578,14 +2633,12 @@ function duplicateOnMinimap(from,newscale){
 		pdragY = dragY;
 		prectX = rectX;
 		prectY = rectY;
+//		console.log("set pdrag", pdragX, pdragY);
+//		console.log("set prect", prectX,prectY);
 		return;
 	}
 /*************************ON ZOOM SET POSITION*******************************/
 	if(from == "scale"){
-//		if(fromNavigator == "stage"){
-//			rectX = rectX * 2;
-//			rectY = rectY * 2;
-//		}
 		rectX = ((dragX - pdragX) * .1);
 		rectY = ((dragY - pdragY) * .1);
 		globalscale = newscale;
@@ -2604,8 +2657,10 @@ function duplicateOnMinimap(from,newscale){
 		prectY = rectY;
 		return;
 	}
+/********************************* START CREATE DEVICE *********************************/
+
 /***************************SET INITIAL POSITION*******************************/
-	if(from != "scale"){
+	if(from != "scale" && fromNavigator == ""){
 		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer).setPosition(rectX,rectY);
 		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
 	}
@@ -2940,7 +2995,7 @@ function initImages(devImg){
 			glblDevMenImg = this.getAttr('id');
 			HostName = this.getAttr('hostname');
 			zoomButtonStatus = "inactive";
-			window['variableHistory'+pageCanvas].push("Device menu opened.");
+			addEvent2History("Device menu opened.");
 //			drawImage();
 		});
 		devImg.on('mouseup touchend', function(){
@@ -2951,11 +3006,11 @@ function initImages(devImg){
 			$('#showTooltipInfo').hide();
 			duplicateOnMinimap();
 			zoomButtonStatus = "inactive";
-			window['variableHistory'+pageCanvas].push("Device dragged");
+			addEvent2History("Device dragged");
 //			drawImage(); //for hang issue
 		});	
 		devImg.on('mouseover mousedown touchstart', function() {
-			window['variableHistory'+pageCanvas].push("Device clicked");
+			addEvent2History("Device clicked");
 			var imgId = this.getAttr('id');
 			$('#showTooltipInfo').show();	 
 			var imgXpos2 = this.getPosition().x;
@@ -3082,12 +3137,12 @@ function deleteDevSub(imgId){
 				devices[a].UpdateFlag = "delete";
 				deleteLinkFromDev(devices[a].ObjectPath);
 				devices.splice(a,1);
-				window['variableHistory'+pageCanvas].push("Device deleted");
+				addEvent2History("Device deleted");
 				a = devices.length;
 			}else if(devices[a].ObjectPath == imgId && devices[a].Status != "Reserved"){
 				deleteLinkFromDev(devices[a].ObjectPath);
 				devices.splice(a,1);
-				window['variableHistory'+pageCanvas].push("Device deleted");
+				addEvent2History("Device deleted");
 				a = devices.length;
 			}
 		}
@@ -3120,8 +3175,9 @@ function dragtoTrashDeviceOnly(imgId,imgXpos2,imgYpos2,devMenu){
 		for(var i = 0; i  < devsArr.length; i++){
         	if(devsArr[i].ObjectPath == imgId){
 				devsArr[i].UpdateFlag = "delete";
-				window['variableHistory'+pageCanvas].push("Device Deleted");
+				addEvent2History("Device Deleted");
     //        	devsArr.splice(i,1);
+
             }
     	}
         for(var i = 0; i  < devsArr.length; i++){
@@ -3129,7 +3185,7 @@ function dragtoTrashDeviceOnly(imgId,imgXpos2,imgYpos2,devMenu){
       //      	deviceArr.splice(i,1);
             }
         }
-        drawImage();
+//        drawImage();
         return;
 	}else{
 		if(trashW2 >= trashW && trashH2 >= trashH){
@@ -3178,10 +3234,10 @@ function deleteLink(source,destination){
 				for(var a=0; a < prtArr.length; a++){
 					if(prtArr[a].ObjectPath == destination || prtArr[a].ObjectPath == source){
 						if(prtArr[a].Status == "Reserved"){
-							window['variableHistory'+pageCanvas].push("Device Link Deleted");
+							addEvent2History("Device Link Deleted");
 							prtArr[a].UpdateFlag = "delete";
 						}else{
-							window['variableHistory'+pageCanvas].push("Device Link Deleted");
+							addEvent2History("Device Link Deleted");
 							prtArr.splice(a,1);
 						}
 					}
@@ -3224,12 +3280,12 @@ function deleteLinkFromDev(dev){
 		var dstArr = destination.split(".");
 		if(srcArr[0] == dev){
 			var portobject = getPortObject2(destination);
-			window['variableHistory'+pageCanvas].push("Device Link Deleted");
+			addEvent2History("Device Link Deleted");
 			portobject.PORTMAP = [];
 		}
 		if(dstArr[0] == dev){
 			var portobject = getPortObject2(source);
-			window['variableHistory'+pageCanvas].push("Device Link Deleted");
+			addEvent2History("Device Link Deleted");
 			portobject.PORTMAP = [];
 		}
 	}
@@ -3296,7 +3352,7 @@ function loadDeviceConfig(glblDevMenImg){
 			$("#exclusivityDevConf").html(exc);
 			$("#statusDevConf").html(Statuss);
 			$("#devNameDevConf").html(hName);
-			window['variableHistory'+pageCanvas].push("Device Configuration loaded.");
+			addEvent2History("Device Configuration loaded.");
 			return;
 		}else if(devices[a].ObjectPath == glblDevMenImg && a == (devices.length - 1)){
 			alert("There is no such device in the canvas.");
@@ -3317,6 +3373,12 @@ function loadDeviceConfig(glblDevMenImg){
  *
  */
 function checkCommitOptions(){
+	var allline = [];
+	var devices = getDevicesNodeJSON();
+
+	for(var t=0; t<devices.length ; t++){
+		allline = gettargetmap(devices[t].ObjectPath,allline);
+	}
 	if(globalInfoType == "JSON"){
         var devices = getDevicesNodeJSON();
 		var prtArr =[];
@@ -3341,12 +3403,12 @@ function checkCommitOptions(){
 			$("#comOpEndResTr").css({"display":"none"});
 
 		}
-		if(devices[a].Status.toLowerCase() != "reserved" && window['variable' + dynamicLineConnected[pageCanvas]].length > 0){
+		if(devices[a].Status.toLowerCase() != "reserved" && allline.length > 0){
 			if(devices[a].DeviceName == ""){
 				$("#comOpConnectivityTr").removeAttr("style");
 			}else{
 				$("#comOpConnectivityTr").css({"display":"none"});
-				$("#comOpConnectivity").attr("checked",false);
+				$("#comOpConnectivity").prop('checked',false);
 				for(var b=0; b < prtArr.length; b++){
 					if(prtArr[b].SwitchInfo != ""){
 						$("#comOpConnectivityTr").removeAttr("style");
@@ -3355,7 +3417,7 @@ function checkCommitOptions(){
 				}
 			}
 		}
-		if(devices[a].Status.toLowerCase() != "reserved" && window['variable' + dynamicLineConnected[pageCanvas]].length > 0 && devices[a].Model != "3750"){ 
+		if(devices[a].Status.toLowerCase() != "reserved" && allline.length > 0 && devices[a].Model != "3750"){ 
 			var dut= 0;var testool= 0;var others= 0;var all= 0;
 			for(var c=0; c < devices.length;c++){
 				all++;
@@ -3373,7 +3435,7 @@ function checkCommitOptions(){
 				$("#comOpLinkSanityTr").css({"display":"none"});
 			}
 		}
-		if(devices[a].Status.toLowerCase() != "reserved" && window['variable' + dynamicLineConnected[pageCanvas]].length > 0 && devices[a].Model != "3750"){
+		if(devices[a].Status.toLowerCase() != "reserved" && allline.length > 0 && devices[a].Model != "3750"){
 			var dut= 0;var testool= 0;var others= 0;var all= 0;var vlanVar =0;var vlansArr="";
             for(var c=0; c < devices.length;c++){
                 all++;
@@ -3392,13 +3454,19 @@ function checkCommitOptions(){
 					$("#comOpEnaInterfaceTr").removeAttr("style");
 				}else{
 					var vlanCtr=0;
-					for(var d=0; d < window['variable' + dynamicLineConnected[pageCanvas]].length; d++){
-						if(window['variable' + dynamicLineConnected[pageCanvas]][d].Destination.split(".")[0] == vlansArr){
-							if(window['variable' + dynamicLineConnected[pageCanvas]][d].SourceDeviceDeviceType.toLowerCase() == "dut"){
+					for(var d=0; d < allline.length; d++){
+						var source = allline[d].Source;
+				        var destination = allline[d].Destination;
+				        var srcArr = source.split(".");
+						var srcObj = getDeviceObject2(srcArr[0]);
+				        var dstArr = destination.split(".");
+						var dstObj = getDeviceObject2(dstArr[0]);
+						if(allline[d].Destination.split(".")[0] == vlansArr){
+							if(srcObj.DeviceType.toLowerCase() == "dut"){
 								vlanCtr++;
 							}
-						}else if(window['variable' + dynamicLineConnected[pageCanvas]][d].Source.split(".")[0] == vlansArr){
-							if(window['variable' + dynamicLineConnected[pageCanvas]][d].DestinationDeviceDeviceType.toLowerCase() == "dut"){
+						}else if(allline[d].Source.split(".")[0] == vlansArr){
+							if(dstObj.DeviceType.toLowerCase() == "dut"){
 								vlanCtr++;
 							}
 						}
@@ -3471,7 +3539,7 @@ function commitOptionsOk(){
 	for(var b=0;b < window['variable' + dynamicLineConnected[pageCanvas]].length; b++){
 		window['variable' + dynamicLineConnected[pageCanvas]][b].ConnectivityFlag = lnkSan;
 	}
-//	window['variable' + ConnectivityFlag[pageCanvas]] = lnkSan;
+	window['variable' + ConnectivityFlag[pageCanvas]] = lnkSan;
 //	enablePort = enaInt;
 //	if(ConnectivityFlag == "yes"){
 //		enablePort = true;
@@ -3497,20 +3565,20 @@ function commitOptionsOk(){
  *
  */
 function resetCommitOptions(){
-	$("#comOpDevSanity").attr("checked",true);
-	$("#comOpAccSanity").attr("checked",true);
-	$("#comOpConnectivity").attr("checked",true);
+	$("#comOpDevSanity").prop('checked',true);
+	$("#comOpAccSanity").prop('checked',true);
+	$("#comOpConnectivity").prop('checked',true);
 	$("#comOpConnectivity").parent().parent().parent().css({'display':'none'});
-	$("#comOpEnaInterface").attr("checked",false);
+	$("#comOpEnaInterface").prop('checked',false);
 	$("#comOpEnaInterface").parent().parent().parent().css({'display':'none'});
-	$("#comOpLinkSanity").attr("checked",false);
+	$("#comOpLinkSanity").prop('checked',false);
 	$("#comOpLinkSanity").parent().parent().parent().css({'display':'none'});
-	$("#comOpStartRes").attr("checked",false);
-	$("#comOpEndRes").attr("checked",false);
+	$("#comOpStartRes").prop('checked',false);
+	$("#comOpEndRes").prop('checked',false);
 	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DeviceSanity = "true";
 	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].AccessSanity = "true";
 	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Connectivity = "false";
-	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable = "no";
+	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable = "false";
 	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].EnableInterface = "false";
 }
 
@@ -3529,13 +3597,11 @@ function resetCommitOptions(){
 function newDevice(devtype){
 	if(globalDeviceType == "Mobile"){
         loading('show');
-    }else{
-		
+//    }else{
+//		ajaxLoader('show','Processing Information ...')
 	}
 	$.ajax({
 		url: getURL("ConfigEditor2","JSON"),
-//		url: getURL("ConfigEditor2"),
-//		url: getURL("ConfigEditor"),
 		data : {
 			"action": "getalldevices",
 			//"query": "user="+globalUserName,
@@ -3548,23 +3614,16 @@ function newDevice(devtype){
 		success: function(data) {
 			if(globalDeviceType == "Mobile"){
         		loading('hide');
+//			}else{
+//				ajaxLoader('hide');
 		    }
-/*			if(globalInfoType == "XML"){
-				var parser = new DOMParser();
-				var xmlDoc = parser.parseFromString(data , "text/xml" );
-				var MAINCONFIG = xmlDoc.getElementsByTagName('MAINCONFIG');
-
-				var domavail = MAINCONFIG[0].getAttribute("Domain").split(",");
-				var devinfos = MAINCONFIG[0].getAttribute("Info").split("^");
-			}else{
-*/
 				var dat = data.replace(/'/g,'"');
 		        var dat2 = $.parseJSON(dat);
 				var MAINCONFIG = dat2.MAINCONFIG;
 				
 				var domavail = MAINCONFIG[0].Domain.split(",");
 				var devinfos = MAINCONFIG[0].Info.split("^");
-//			}
+
 				//add domain selection
 				var domopt = '<option>Select</option>';
 				$.each(domavail , function(i, v) {
@@ -3616,8 +3675,6 @@ function newDevice(devtype){
 				}
 				autoDDevLists.push({NetworkingDevices: networkdevs, L1Switch: l1switch, L2Switch: l2switch, Appliance: appliance, TermServer: termserver, PassThrough: passthrough});
 				autoDDomainOptions = domopt;
-				//MAINCONFIG[0].getAttribute("Model");
-				//return;				
 
 		}
 	});	
@@ -3637,7 +3694,6 @@ function newDevice(devtype){
  */
 function checkDeviceInDbAutoD(){
 	var infoType = globalInfoType;
-//	var infoType = "JSON";
 	if(globalDeviceType == "Mobile"){
         loading('show');
     }
@@ -3671,7 +3727,14 @@ function checkDeviceInDbAutoD(){
 			if(globalDeviceType == "Mobile"){
         		loading('hide');
 		    }
-			if(!data){error("Process Failed!","Notification");}
+			if(!data){
+/*				if(globalDeviceType == "Mobile"){
+					doSaveAutoDevice();
+				}else{
+					doSaveAutoDeviceMain();
+				}			
+*/				error("Process Failed!","Notification"); return;
+			}
 			if(globalInfoType!="XML"){
 				data = $.trim(data);
 				var dat = data.replace(/'/g,'"');
@@ -3694,13 +3757,13 @@ function checkDeviceInDbAutoD(){
 				}
 			}else{
 				if(data=="") {
-				//}else if(data.match(/already exists in the database/g)){
+				/*}else if(data.match(/already exists in the database/g)){
 					//prompt if update or overwrite
-					//if(flag=="update"){
-					//	autoDDevData[0].SaveOption = 'Update';
-					//}else if(flag=="overwrite"){
-					//	autoDDevData[0].SaveOption = 'Overwrite';
-					//}else{return false;}
+					if(flag=="update"){
+						autoDDevData[0].SaveOption = 'Update';
+					}else if(flag=="overwrite"){
+						autoDDevData[0].SaveOption = 'Overwrite';
+					}else{return false;}*/
 					return true;
 				}else{
 					error(data,"Notification")
@@ -3811,7 +3874,8 @@ function showAutoLogPage(fname,user,ip,pIp){
 		width: "auto",
 		//title: "Auto Discovery"
 	});
-	$( "#autoDLogsDialog" ).empty().load('pages/ConfigEditor/AutoDTableLogs.html',function(){
+	$( "#autoDLogsDialog" ).empty().append("<center id='processingPage'><div  style='text-align:center;'>Processing Information...<br /><img src='img/ajax-loader.gif'/></div></center>");
+	$( "#autoDLogsDialog" ).load('pages/ConfigEditor/AutoDTableLogs.html',function(){
 		//$('.ui-dialog-title').css({'margin-left':'10px','text-align':'center','margin-top':'7px'});
 		//$('span.ui-dialog-title').text('Auto Discovery');
 		if(fname!='' && user!='' && ip!=''){
@@ -3825,6 +3889,7 @@ function showAutoLogPage(fname,user,ip,pIp){
 		   at: "top",
 		   of: window
 		});
+		$('#processingPage').remove();
 	});
 }
 
@@ -3842,15 +3907,6 @@ function showAutoLogPage(fname,user,ip,pIp){
  */
 
 function getStatusAutoD(){
-/*	var tmpidx = autoDDevData.length - 1;
-	if(autoDCurIdx>-1){
-		tmpidx = autoDCurIdx;
-	}
-*/
-/*	if(idx!=undefined){	
-		if(idx!=""){ tmpidx = idx; }
-	}
-*/
 	if(autoDcomplete){
 		showAutoSavePage();
 		autoDcomplete = false;	
@@ -3907,7 +3963,7 @@ function showAutoSavePage(){
 	//$( "#autoDLogsDialog" ).dialog({
 	$( "#autoDSaveDialog" ).dialog({
 		modal: true,
-		autoResize:true,
+		autoResize:false,
 		//min-width:800,
 		//min-height:500,
 		width: "auto",
@@ -3933,6 +3989,13 @@ function showAutoSavePage(){
  */
 function toSaveAddInfoAutoD() {
 	var saveargs = gatherAddInfoAutoD();
+	$("#alertPopUp").dialog({
+		modal: true,
+		autoResize:false,
+		width: "auto",
+	});
+
+//	$( "#alertPopUp" ).empty().append("<center id='processingPage'><div  style='text-align:center;'>Processing Information...<br /><img src='img/ajax-loader.gif'/></div></center>");
 	if(saveAutoDAddInfoQuery(saveargs)==false){
 		return;
 	}
@@ -4104,11 +4167,6 @@ function docreatePowerManAutoD(count){
  *
  */
 function newDeviceAutoD(args,idx){
-/*	var tmpidx = autoDDevData.length - 1;
-	if(idx){
-		if(idx!=""){ tmpidx = idx }
-	}
-*/
 	if(globalDeviceType == "Mobile"){
         loading('show');
 //    }else{
@@ -4122,7 +4180,6 @@ function newDeviceAutoD(args,idx){
 	}
 	$.ajax({
 		url: urlx,
-//		url: getURL("RM"),
 		data : {
 			"action": "autodiscover",
 			"query": args,
@@ -4189,11 +4246,6 @@ function cancelAutoDQuery(idx){
 	if(globalDeviceType == "Mobile"){
         loading('show');
     }
-/*	var tmpidx = autoDDevData.length - 1;
-	if(idx){
-		if(idx!=""){ tmpidx = idx }
-	}
-*/
 	if(globalInfoType=="XML"){
 		var urlx = getURL("RM");
 		var queryS = "ip="+autoDDevData[0].ManagementIp+"&"+
@@ -4242,18 +4294,6 @@ function cancelAutoDQuery(idx){
 				}	
 			}
 
-/*			if(globalDeviceType == "Mobile"){
-        		loading('hide');
-		    }
-			data = $.trim(data);
-			if(data=="1") {
-				return true;
-			}else{
-				alertUser("Process failed.");
-				return false;
-			}	
-*/
-
 		}
 	});
 }
@@ -4273,17 +4313,14 @@ function cancelAutoDQuery(idx){
 function saveAutoDAddInfoQuery(args,idx){
 	if(globalDeviceType == "Mobile"){
         loading('show');
-    }
+//    }else{
+//		ajaxLoader('show','Processing Information ...');
+	}
 	if(globalInfoType=="XML"){
 		var urlx = getURL("ConfigEditor2","XML");
 	}else{
 		var urlx = getURL("ConfigEditor2","JSON");
 	}
-/*	var tmpidx = autoDDevData.length - 1;
-	if(idx){
-		if(idx!=""){ tmpidx = idx }
-	}
-*/
 	$.ajax({
 		url: urlx,
 		data : {
@@ -4299,6 +4336,8 @@ function saveAutoDAddInfoQuery(args,idx){
         		loading('hide');
 		    }else{
 				$('#autoDSaveDialog').dialog('destroy');
+//				ajaxLoader('hide');
+//				$("#alertPopUp").dialog('destroy');
 			}
 			data = $.trim(data);
 			if(globalInfoType == "JSON"){
@@ -4360,11 +4399,6 @@ function saveAutoDAddInfoQuery(args,idx){
  *
  */
 function autoDCompleteDevInfo(ip,type,idx){
-/*	var tmpidx = autoDDevData.length - 1;
-	if(idx){
-		if(idx!=""){ tmpidx = idx }
-	}
-*/
 	if(globalInfoType == "XML"){
 		var urlx = getURL("ConfigEditor2");
 		var queryS = "hostname="+ip;
@@ -4471,6 +4505,7 @@ function autoDCompleteDevInfo(ip,type,idx){
 					//$('#autoDSaveRP2AuxPort').val();
 					//$('#').val();
 				}else{
+					console.log(data);
 					var dat = data.replace(/'/g,'"');
 			        var dat2 = $.parseJSON(dat);
 					if(type){
@@ -4485,7 +4520,9 @@ function autoDCompleteDevInfo(ip,type,idx){
 					if(globalDeviceType=="Mobile"){
 						assignValAutoDSave(dat2);
 					}else{
-						$( "#autoDSaveDialog" ).empty().load('pages/ConfigEditor/autoDSaveInfo.html',function(){
+				
+						$( "#autoDSaveDialog" ).empty().append("<center id='processingPage'><div  style='text-align:center;'>Processing Information...<br /><img src='img/ajax-loader.gif'/></div></center>");
+						$( "#autoDSaveDialog" ).load('pages/ConfigEditor/autoDSaveInfo.html',function(){
 							$('.ui-dialog-title').css({'margin-left':'10px','text-align':'center','margin-top':'7px'});
 							$('span.ui-dialog-title').text('Optional Device Information');
 							$('#accordion').accordion();
@@ -4501,6 +4538,8 @@ function autoDCompleteDevInfo(ip,type,idx){
 							   at: "top",
 							   of: window
 							});
+							$('#processingPage').remove();
+							$( "#autoDSaveDialog" ).width(1000);
 						});
 					}
 				}
@@ -4659,11 +4698,6 @@ function loadLoadConfig(){
                     }
                 }
             }else{
-				var dat = data.replace(/'/g,'"');
-                var data2 = $.parseJSON(dat);
-                var CONFIGURATION = data2.MAINCONFIG[0].CONFIGURATION;
-                for (var x=0; x<CONFIGURATION.length; x++){
-                    var typeFrmName = CONFIGURATION[x].Name.split(".")[1];
                     if (type == 'Static' || type == 'undefined'){
                         if(typeFrmName == "stat")vw = "display:block";
                         else vw = "display:none";
@@ -4684,6 +4718,11 @@ function loadLoadConfig(){
                     }else{
                         $('.fileType').hide();
                     }
+				var dat = data.replace(/'/g,'"');
+                var data2 = $.parseJSON(dat);
+                var CONFIGURATION = data2.MAINCONFIG[0].CONFIGURATION;
+                for (var x=0; x<CONFIGURATION.length; x++){
+                    var typeFrmName = CONFIGURATION[x].Name.split(".")[1];
                     selOpt += "<option style='"+vw+"' value='"+CONFIGURATION[x].Name+"' type='"+typeFrmName+"' id='"+CONFIGURATION[x].Id+"' filetype='"+CONFIGURATION[x].FileType+"'>"+CONFIGURATION[x].Name+"</option>";
                 }
             }
@@ -7174,7 +7213,7 @@ function loadGridMenuContent(){
 			var connectivityFlag = false;
 
 			var dat = data.replace(/'/g,'"');
-	        var dat2 = $.parseJSON(dat);
+		        var dat2 = $.parseJSON(dat);
 			var root = dat2.root;
 			var info = dat2.root[0].info;
 			var conn;
@@ -7205,31 +7244,31 @@ function loadGridMenuContent(){
 				showSideBarMenu(testtoolFlag,deviceFlag,serverFlag,connectivityFlag);
 			}
 			for (var x = 0; x < info.length; x++){
-    	        var model = info[x].Model;
-                var hostname = info[x].HostName;
-                var manu = info[x].Manufacturer;
-                var type = info[x].DeviceType;
-                var OStype = info[x].OSType;
-                var ProductFamily = info[x].ProductFamily;
-                var protoFlg = info[x].ProtoTypeFlag;
-                type = type.toLowerCase();
-                var imgObj = getModelImage(model);
-                var imgSrc = imgObj.src;
-                if(type.toLowerCase() == "testtool"){
+    	        		var model = info[x].Model;
+                		var hostname = info[x].HostName;
+               			var manu = info[x].Manufacturer;
+                		var type = info[x].DeviceType;
+                		var OStype = info[x].OSType;
+                		var ProductFamily = info[x].ProductFamily;
+                		var protoFlg = info[x].ProtoTypeFlag;
+                		type = type.toLowerCase();
+                		var imgObj = getModelImage(model);
+                		var imgSrc = imgObj.src;
+                		if(type.toLowerCase() == "testtool"){
 					testtool = true;
-                    var mod1 = model;
-                    var mod2 = info[x].ManagementIp;
-                }
-			    var imgObj2 = getModelImage(manu);
-                var imgSrc2 = imgObj2.src;
-               if(manu != "" && manu != undefined){
-                   if(manuCtr.indexOf(manu) == '-1' && type == "dut"){
-    	               manuCtr.push(manu);
-                       manuTd += '<div style="float: left;"><img hostname="" proto="" class="manufacDevice devicePaletteTr" ostype="" ipAdd="" productfamily="" did="device" manufacturer="'+manu+'" devtype="dut" model="'+manu+'" id="deviceSub'+model+'" src="'+imgSrc2+'" /><p>'+manu+'</p></div>';
-                    }
-                    if(manuCtr2.indexOf(manu) == '-1' && type == "testtool"){
-        	            manuCtr2.push(manu);
-                        manuTd2 += '<div style="float: left;"><img hostname="" proto="" class="manufacTT testToolPaletteTr" ostype="" ipAdd="" productfamily="" did="device" devtype="testtool" manufacturer="'+manu+'" model="'+manu+'" id="testToolSub'+manu+'" src="'+imgSrc2+'" /><p>'+manu+'</p></div>';
+                    			var mod1 = model;
+                    			var mod2 = info[x].ManagementIp;
+                		}
+			    	var imgObj2 = getModelImage(manu);
+               			var imgSrc2 = imgObj2.src;
+               			if(manu != "" && manu != undefined){
+                   			if(manuCtr.indexOf(manu) == '-1' && type == "dut"){
+    	               				manuCtr.push(manu);
+                       				manuTd += '<div style="float: left;"><img hostname="" proto="" class="manufacDevice devicePaletteTr" ostype="" ipAdd="" productfamily="" did="device" manufacturer="'+manu+'" devtype="dut" model="'+manu+'" id="deviceSub'+model+'" src="'+imgSrc2+'" /><p>'+manu+'</p></div>';
+                    		}
+                    		if(manuCtr2.indexOf(manu) == '-1' && type == "testtool"){
+        	            		manuCtr2.push(manu);
+                        		manuTd2 += '<div style="float: left;"><img hostname="" proto="" class="manufacTT testToolPaletteTr" ostype="" ipAdd="" productfamily="" did="device" devtype="testtool" manufacturer="'+manu+'" model="'+manu+'" id="testToolSub'+manu+'" src="'+imgSrc2+'" /><p>'+manu+'</p></div>';
                     }
                	}
                	if(OStype != "" && OStype != undefined){
@@ -7294,31 +7333,43 @@ function loadGridMenuContent(){
 				if(devFlag == false && userInformation[0].userLevel == "Administrator"){
 					$("#deviceIcoDiv").show();
 					$("#deviceSubList").hide();
+					$("#device-Last").hide();
+					$("#device-First").hide();
 					$("#deviceSubList").parent().find("p").hide();
 					$("#deviceSubNew").show();
 				}else if(devFlag == true){
 					$("#deviceIcoDiv").show();
 					$("#deviceSubNew").show();
-                    $("#deviceSubList").show();
-                    $("#deviceSubList").parent().find("p").show();
+		                    	$("#deviceSubList").show();
+					$("#device-Last").show();
+                                        $("#device-First").hide();
+                			$("#deviceSubList").parent().find("p").show();
 				}else{
 					$("#deviceIcoDiv").hide();
 					$("#deviceSubNew").show();
+					$("#device-Last").hide();
+                                        $("#device-First").hide();
 					$("#deviceSubNew").parent().find("p").show();
 				}
 				if(testTlFlag == false && userInformation[0].userLevel == "Administrator"){
 					$("#testToolIcoDiv").show();
 					$("#testToolSubList").hide();
+					$("#testTool-Next").hide();
+					$("#testTool-Last").hide();
 					$("#testToolSubList").parent().find("p").hide();
 					$("#testToolSubNew").show();
 				}else if(testTlFlag == true){
 					$("#testToolIcoDiv").show();
 					$("#testToolSubNew").show();
 					$("#testToolSubList").show();
-                    $("#testToolSubList").parent().find("p").show();
+					$("#testTool-Next").show();
+					$("#testTool-Last").show();
+                    			$("#testToolSubList").parent().find("p").show();
 				}else{
 					$("#testToolIcoDiv").hide();
 					$("#testToolSubNew").show();
+					$("#testTool-Next").hide();
+                                        $("#testTool-Last").hide();
 					$("#testToolSubNew").parent().find("p").show();
 				}
 				if((serverFlag == false && userInformation[0].userLevel == "Administrator") || (serverFlag == true)){
@@ -7447,7 +7498,11 @@ function connectivitySideBar(conn,subChnl){
 	$("#connectivityPaletteSubTrL1Sub").html(l1StrSub);
 	$("#connectivityPaletteSubTrL2").html(l2Str);
 	$("#connectivityPaletteSubTrL2Sub").html(l2StrSub);
+	$("#connectivity-Next").show();
+        $("#connectivity-Last").show();
 	}else{
+		$("#connectivity-Next").hide();
+		$("#connectivity-Last").hide();
 		return;
 	}
 }
@@ -8393,7 +8448,7 @@ function updateLineConnectionIfExist(){
 			var devObj = window['variable' + dynamicLineConnected[pageCanvas]][a].Destination;
 			var dev
 			if (glblDevMenImg == desDev){
-				setLineConnectedAttributes(window['variable' + dynamicLineConnected[pageCanvas]],desDev,"destination",srcObj,devObj);
+				setLineConnectedAttributes(window['variable' + dynamicLineConnected[pageCanvas]][a],desDev,"destination",srcObj,devObj);
 			}else if (glblDevMenImg == sourceDev){
 				setLineConnectedAttributes(window['variable' + dynamicLineConnected[pageCanvas]][a],sourceDev,"source",srcObj,devObj);
 			}
@@ -8408,7 +8463,7 @@ function updateLineConnectionIfExist(){
  *  FUNCTION NAME : setLineConnectedAttributes
  *  AUTHOR        : marlo agapay
  *  DATE          : December 18, 2013 
- *  MODIFIED BY   : 
+ *  MODIFIED BY   : James Turingan
  *  REVISION DATE : 
  *  REVISION #    : 
  *  DESCRIPTION   : 
@@ -8417,9 +8472,9 @@ function updateLineConnectionIfExist(){
  */
 function setLineConnectedAttributes(LineConnected, devObjPath,lineLocation,srcObj,devObj){
 	if (lineLocation =="destination"){
-		checkAvPortForConnect(LineConnected.SourceDeviceObjectPath,devObjPath,lineLocation,srcObj,devObj);
+		checkAvPortForConnect(LineConnected.Source,devObjPath,lineLocation,srcObj,devObj);
 	}else if (lineLocation == "source"){
-		checkAvPortForConnect(LineConnected.DestinationDeviceObjectPath,devObjPath,lineLocation,srcObj,devObj);
+		checkAvPortForConnect(LineConnected.Destination,devObjPath,lineLocation,srcObj,devObj);
 	}	
 }
 /*
@@ -8435,6 +8490,7 @@ function setLineConnectedAttributes(LineConnected, devObjPath,lineLocation,srcOb
  *
  */
 function checkAvPortForConnect(lineConnectedDevice, toConnectDevice,lineLocation,srcObj,devObj){
+	console.log('??????>>>',lineConnectedDevice);
 	if(globalInfoType == "JSON"){
 		var pathArr = lineConnectedDevice.split(".");
     	var prtArr = getAllPortOfDevice(pathArr[0]);
@@ -8453,7 +8509,6 @@ function checkAvPortForConnect(lineConnectedDevice, toConnectDevice,lineLocation
 			var LCPortType = prtArr[a].PortType;
 			for (var q=0; q<portTempArr.length; q++){
 				var TCPortName = portTempArr[q].PortName;
-				var TCPortFlag = portTempArr[q].PortFlag;
 				var TCSpeed = portTempArr[q].Speed;
 				var TCPortType = portTempArr[q].PortType;
 				var TCPortFlag = portTempArr[q].PortFlag;
@@ -9495,7 +9550,11 @@ function devSanXML(uptable,lowtable){
 		for(var i = 0; i < uptable.length; i++){
 			if(uptable[i].ShowCommands.toLowerCase() != 'completed' && uptable[i].ShowCommands.toLowerCase() != 'cancelled'){
 				var msg = "One/All of the devices have\n failed in device sanity.\nDo you want to continue the test? <br/><input type='checkbox' id='devsancb'/>  Release Reservation\n(Reservation will be released when you select No.)";
-				alerts(msg,'cancelReservation()','YN');
+				if(globalDeviceType != "Mobile"){
+					alerts(msg,'','YN');
+				}else{
+					confirmation(msg,'','devSanityFail("yes")','devSanityFail("no")');
+				}
 			}else{
 				devSanXML2(devFlag);
 			}
@@ -10398,9 +10457,9 @@ function selectAllConnectivivty(src,level,srcid){
 	if(level == "all"){
 		$('.'+srcid).each(function(){
 			if($(src).is(':checked')){
-				$(this).attr("checked",true);
+				$(this).prop('checked',true);
 			}else{
-				$(this).attr("checked",false);
+				$(this).prop('checked',false);
 			}
 		});
 	}else{
@@ -10413,9 +10472,9 @@ function selectAllConnectivivty(src,level,srcid){
 			len ++;
 		});
 		if(cnt == len && len != 0){
-			$('#deleteAllLink').attr("checked",true);
+			$('#deleteAllLink').prop('checked',true);
 		}else{
-			$('#deleteAllLink').attr("checked",false);
+			$('#deleteAllLink').prop('checked',false);
 		}
 	}
 }
@@ -11299,13 +11358,18 @@ function closePopUp(table,type){
 
 	}else if(table == "loadactive"){
 		if(type == "done"){
-			showActiveTopology();
+			if(ReleaseFlagLoadActive == true){
+				cancelReservation();
+			}else{
+				showActiveTopology();
+			}
+		}else{
+			ReleaseFlagLoadActive = false;
 		}
 
 		$( "#configPopUp" ).dialog('destroy');
 	}else if(table == "commit"){
 		ajaxLoader('show','Processing Information...');
-		$( "#configPopUp" ).dialog('destroy');
 		if(type == "done"){
 			if(validateDate() == 1){
 				return
@@ -11316,8 +11380,10 @@ function closePopUp(table,type){
 			$("#confirm_test1").timepicker("destroy");    
 			globalSelectedDeviceList = [];
 			createQueryforResevartion();
+			$( "#configPopUp" ).dialog('destroy');
 		}else{
 			ajaxLoader('hide');
+			$( "#configPopUp" ).dialog('destroy');
 		}
 	}else if(table == "devMenu"){
 		$( "#deviceMenuPopUp" ).dialog('destroy');
@@ -11348,7 +11414,7 @@ function actionButton(type){
 	$("#Magnify").attr("title","Zoom");
 	createDev ="";
 	zoomButtonStatus = "inactive";
-	window['variableHistory'+pageCanvas].push("Click "+type); //add event to history
+	addEvent2History("Click "+type); //add event to history
 	if(type == "applyall"){
 		$('#applyall').attr("src","img/action_buttons/applyallActive.png");
 		$("#loadactive").attr("src","img/action_buttons/loadactive.png");
@@ -11366,7 +11432,14 @@ function actionButton(type){
 		$("#clearcanvas").attr("src","img/action_buttons/clear.png");
 		$("#committopology").attr("src","img/action_buttons/commit.png");
 		$("#cancelreservation").attr("src","img/action_buttons/cancel.png");
-		showloadActive();	
+       	var devices = getDevicesNodeJSON();
+		if(devices.length > 0 && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != null && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != "" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != undefined){
+			alerts("Device/s on the canvas will be cleared for this action. Do you still want to continue?","showloadActive()","deleteload");
+		}else if(devices.length > 0){
+			alerts("Device/s on the canvas will be cleared for this action. Do you still want to continue?","showloadActive()","deleteload");
+		}else{ 
+			showloadActive();	
+		}
 
 	}else if(type == "clearcanvas"){
 		$("#clearcanvas").attr("src","img/action_buttons/clearActive.png");
@@ -11493,6 +11566,7 @@ function commitOptPopUp(page){
 			$('#commitPop').show();	
 			$('#commitOptions').hide();
 			populateCombo();
+	//		clickPicker();
 //			commitOptionsOk();
 			populateCombo();
 			outOfFocus();
@@ -11829,6 +11903,8 @@ function dynamicCanvas(num){
 	window['variable' + dynamicGreenRouletteArr[divctr]] = [];
 	$('#paginationcanvas').empty().append(str2);
 	canvasEvent(divctr); // add click event on canvas
+	pageCanvas = divctr;
+	paginateCanvas();
 	divctr++;
 	if(globalInfoType != "XML"){
 		setJSONData();
@@ -11935,6 +12011,7 @@ function paginateCanvas(){
 		$("#trashBin").hide();
 	}
 	reCreateDock();
+	drawImage();
 //	greenRoulette2();
 }
 
@@ -12103,11 +12180,11 @@ function showPopup(sub){
 		}else{
 			for(var a=0; a<deviceArr.length; a++){
 				if(deviceArr[a].Status.toLowerCase()=="reserved"){
-					if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable.toString()=="true"){
-						window['variable' + SanityFlag[pageCanvas] ]=true;
+					if(window['variable' + ConnectivityFlag[pageCanvas] ].toString()=="true"){
+						window['variable' + SanityFlag[pageCanvas] ]="true";
 						linkSanRunValid();
 						return;
-					}else{ alertUser("Link Sanity is disabled.");return;}
+					}else{ alertUser("Link Sanity is not allowed to run.");return;}
 				}else{ alertUser("Device/s should be committed.");return;}
 			} 
 		}
@@ -12124,7 +12201,7 @@ function showPopup(sub){
 					if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable.toString()=="true"){
 						loadResultTable('linksanity');
 						return;
-					}else{ alertUser("Link Sanity is disabled.");return;}
+					}else{ alertUser("No Runnning Sanity.");return;}
 				}else{ alertUser("Device/s should be committed.");return;}
 
 			}
@@ -12135,7 +12212,7 @@ function showPopup(sub){
 		}else{
 			for(var a=0; a<deviceArr.length; a++){
 				if(deviceArr[a].Status.toLowerCase()=="reserved"){
-					if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable.AccessSanity.toString()=="true"){
+					if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].AccessSanity.toString()=="true"){
 						loadResultTable('accessSanity');
 						return;
 					}else{ alertUser("Access Sanity is disabled.");return;}
@@ -12289,8 +12366,8 @@ function testbedOptionSave(){
             $("#checkportmapping").attr("disabled", true);
             $("#checktgenconfig").attr("disabled", true)
         }*/
-        if(window['variable' + DeviceSanity[pageCanvas] ].toString()=="true")$("#checkdevsanity").attr("checked", true);
-        if(Commit=="true")$("#checkcommit").attr("checked",true);
+        if(window['variable' + DeviceSanity[pageCanvas] ].toString()=="true")$("#checkdevsanity").prop('checked', true);
+        if(Commit=="true")$("#checkcommit").prop('checked',true);
 
 
         $(".ui-dialog").position({
@@ -12494,10 +12571,10 @@ function cancelHardware(){
 function cancelstartEndReserve(flag,mainMenuFlag){
 	if(flag=="start"){
 		StartReservation="false";
-		$("#comOpStartRes").attr('checked', false);
+		$("#comOpStartRes").prop('checked', false);
 	}else{
 		EndReservation="false";
-		$("#comOpEndRes").attr('checked', false);
+		$("#comOpEndRes").prop('checked', false);
 	}
 	if(globalDeviceType == "Mobile"){
 		if(flag=="start" && mainMenuFlag==undefined){
@@ -12524,12 +12601,12 @@ function cancelPowerAlert(){
 }
 function cancelConPowerPopup(type){
 	if(type=='img'){
-		$("#imgconIDOn").attr('checked', false);
-		$("#imgconIDCycle").attr('checked', false);
+		$("#imgconIDOn").prop('checked', false);
+		$("#imgconIDCycle").prop('checked', false);
 	}else{
-		$("#devconIDOff").attr('checked',false);
-		$("#devconIDOn").attr('checked', false);
-		$("#devconIDCycle").attr('checked', false);
+		$("#devconIDOff").prop('checked',false);
+		$("#devconIDOn").prop('checked', false);
+		$("#devconIDCycle").prop('checked', false);
 	}
 	$("#divAlert").dialog('destroy');
 	return;
@@ -12925,6 +13002,7 @@ function emailOption(){
 		$('#sendCc').show();
 		});
 	$("#emailPopup").empty().load("pages/ConfigEditor/emailOption.html",function (){
+		$('span.ui-dialog-title').text('Email');
 		setTimeout(function(){
 			$(".ui-dialog").position({
 				my:"center",
@@ -12933,11 +13011,13 @@ function emailOption(){
 				});
 			},1000);
 			getEmail();
-			$("#deviceLogs").multiselect();
 			$("#emailAccount").multiselect();
-			$("#emailAccountBB").multiselect();
+			$("#emailAccountCC").multiselect();
+			getOnlineUsers();	
 			$("#user").multiselect();
-			$("#groups").multiselect();
+//			$("#groups").multiselect();
+//			$("#deviceLogs").multiselect();
+
 		});
 }
 
@@ -13017,7 +13097,7 @@ function sendEmail(){
 */
 
 
-
+var globalparsedjson = [];
 function getEmail(){
 	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=emailList";
 
@@ -13028,23 +13108,46 @@ function getEmail(){
  		 proccessData: false,
 		 async:false,
 	 	success: function(data) {
- 		 data = $.trim(data);
- 		   var data = data.replace(/'/g,'"');
-            var json = $.parsedJSON(data);
+ 		   var dat = data.replace(/'/g,'"');
+			globalparsedjson = dat
+            var json = jQuery.parseJSON(dat);
             var parsed = json.RESULT[0].Email;
-			//var str= parsed.toString();
-			//var a="";
-	 		for(var i=0; i< parsed.lenght; i++){
-				var email = parsed[i].Email;				 
-				a+="<option >"+email+"</option>"
+			var	w = parsed.split(",");
+			var	str='';
+	 		for(var i=0; i< w.length; i++){
+				str+="<option >"+w[i]+"</option>"
+				console.log("email",str);
 			}
-			$('#emailAccount').empty().append(a);			 	
+			$('#emailAccount').empty().append(str);			 	
+			$('#emailAccountCC').empty().append(str);
 		}
 		
 	});	
 }
 
+/*
+ *FUNCTION NAME :hideChat()
+ *AUTHOR        :Mary Grace P. Delos Reyes
+ *DATE          :March 19, 2014
+ *MODIFIED BY   :
+ *REVISON  DATE :
+ *REVISON #     :
+ *DESCRIPTION   :
+ *PARAMETERS    :
+*/
 
+function hideChat(){
+	$(document).on("click","#hideChat", function(){
+		if(ChatMax==true){
+			$('#chatTableMainDiv').hide();
+			ChatMax=false;
+		}else{
+			$('#chatTableMainDiv').show();
+			ChatMax=true;
+			}
+			
+		});
+}
 
 /*
  *FUNCTION NAME :deviceQstr()
@@ -13128,6 +13231,7 @@ function getOnlineUsers(){
 				$('#listonline').html(str);	
 			}else{
 				$('#onlineUser').empty().append(str);
+				$("#user").multiselect();
 			}
 		}
 	});
@@ -13184,7 +13288,7 @@ function saveGroup(){
 		dataType: 'html',
 		success: function(data)	{
 			data = data.replace(/'/g,'"')
-			var json = $.parsedJSON(data);
+			var json = jQuery.parseJSON(data);
 //			data = $.trim(data);
 			if(json.RESULT[0].Result == "1"){
 				error('Group name successfully added!!');		
@@ -13714,11 +13818,11 @@ function enableText(id, no){
 	$("input:checkbox[name='checkName']").each(function(){
 		if($(this).is(":checked")){
 			$("#url"+id+"").attr("disabled", false);
-			$(this).attr("checked",true);
+			$(this).prop('checked',true);
 			$(this).parent().parent().addClass('highlight');
 		}else{
 			$("#url"+id+"").attr("disabled", true);
-			$(this).attr("checked",false);
+			$(this).prop('checked',false);
 			$(this).parent().parent().removeClass("highlight");
 		}
 	});
@@ -13727,12 +13831,12 @@ function enableText(id, no){
 		if($(this).is(":checked")){
 			$("#imgurl"+id+"").attr("disabled", false);
 			$("#imgdestination"+id+"").attr("disabled", false);
-			$(this).attr("checked", true);
+			$(this).prop('checked', true);
 			$(this).parent().parent().addClass('highlight');
 		}else{
 			$("#imgurl"+id+"").attr("disabled", true);
 			$("#imgdestination"+id+"").attr("disabled", true);
-			$(this).attr("checked", false);
+			$(this).prop('checked', false);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
@@ -13740,11 +13844,11 @@ function enableText(id, no){
 	$("input:checkbox[name='loadCheckName']").each(function(){
 		if($(this).is(":checked")){
 			$("#lodurl"+id+"").attr("disabled", false);
-			$(this).attr("checked", true);
+			$(this).prop('checked', true);
 			$(this).parent().parent().addClass('highlight');
 		}else{
 			$("#lodurl"+id+"").attr("disabled", true);
-			$(this).attr("checked", true);
+			$(this).prop('checked', true);
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
@@ -14123,11 +14227,11 @@ function selectAll(flag){
 	$('input:checkbox[name="'+flag+'"]').each(function(){
 		if($(".checkAll").is(":checked")){
 			$(this).trigger('click');
-//			$(this).attr("checked", true);
+//			$(this).prop('checked', true);
 			$(this).parent().parent().addClass("highlight");
 //			$(this).parent().parent().removeClass("alt");
 		}else{
-			//$(this).attr("checked", false);	
+			//$(this).prop('checked', false);	
 			$(this).trigger('click');
 //			if(ctr % 2 == 0){
 //				$(this).parent().parent().addClass("alt");
@@ -14258,15 +14362,15 @@ function customView(){
  */
 
 function checkCustomView(){
-	if(viewconfigname==true)$("#checkConfigName").attr('checked', true);
-	if(viewhostname==true)$("#checkhostname").attr('checked', true);
-	if(viewmanagementip==true)$("#checkmanagementip").attr('checked', true);
-	if(viewconsoleip==true)$("#checkconsoleip").attr('checked', true);
-	if(viewloopbackadd==true)$("#checkloopbackadd").attr('checked', true);
-	if(viewosversion==true)$("#checkosversion").attr('checked', true);
-	if(viewsoftwarepack==true)$("#checksoftwarepack").attr('checked', true);
-	if(viewinterfaceip==true)$("#checkinterfaceip").attr('checked', true);
-	if(viewinterfacename==true)$("#checkinterfacename").attr('checked', true);
+	if(viewconfigname==true)$("#checkConfigName").prop('checked', true);
+	if(viewhostname==true)$("#checkhostname").prop('checked', true);
+	if(viewmanagementip==true)$("#checkmanagementip").prop('checked', true);
+	if(viewconsoleip==true)$("#checkconsoleip").prop('checked', true);
+	if(viewloopbackadd==true)$("#checkloopbackadd").prop('checked', true);
+	if(viewosversion==true)$("#checkosversion").prop('checked', true);
+	if(viewsoftwarepack==true)$("#checksoftwarepack").prop('checked', true);
+	if(viewinterfaceip==true)$("#checkinterfaceip").prop('checked', true);
+	if(viewinterfacename==true)$("#checkinterfacename").prop('checked', true);
 		$(".ui-dialog").position({
     	    my: "center",
         	at: "center",
@@ -14397,12 +14501,14 @@ function loadQueryJSON(action,page){
 }
 
 /*-----kmmabignay - mar19 - createRowData in JSON format---------------*/
-function createRowObjforDyn(type,opt){
+function createRowObjforDyn(type,opt,pmDevArr){
 	var now = new Date();
 	var rowArr = [];
 	var rowObj = {'row':rowArr};
 	var dataObj = {'data':[rowObj]};
+	var pmFlag = false;
 	devicesArr = getDevicesNodeJSON();
+	if(pmDevArr!=undefined){devicesArr = pmDevArr; pmFlag = true;}
 	for(var a=0; a<devicesArr.length; a++){
 		var epoc = now.getTime();
 		var rowKeyVal = {};
@@ -14426,9 +14532,9 @@ function createRowObjforDyn(type,opt){
 	}
 	var data = JSON.stringify(dataObj);
 	if(opt=="Save"){
-		saveConfigAndImageJSON(data,type);
+		saveConfigAndImageJSON(data,type,pmFlag);
 	}else{
-		loadConfigAndImageJSON(data,type);
+		loadConfigAndImageJSON(data,type,pmFlag);
 	}
 	return;
 }
@@ -14664,7 +14770,7 @@ function getDataFromPreviousPage(from,opt,opt2) {
                 var dev = $(this).val();
                 var filename = $(this).parent().parent().find('td').eq(4).find('input').val();
                 var destination = $(this).parent().parent().find('td').eq(5).find('select').val();
-                var checked = $(this).attr('checked');
+                var checked = $(this).prop('checked');
                 var loc = $(this).parent().parent().find('td').eq(3).find('select').val();
                 if (/tftp|ftp/i.test(filename) && /\/bootflash:|\/flash:|\flash0:|\/flash1:|\/flash2:|\/disk0:|\/disk1:|\/disk2:|\/slot0:|\/slot1:|\/slot2/i.test(filename)) {
                     retArr.push(1);
@@ -14681,7 +14787,7 @@ function getDataFromPreviousPage(from,opt,opt2) {
                 var path = $(this).parent().parent().find('td').eq(6).find('input').val();
                 var filename = $(this).parent().parent().find('td').eq(7).find('input').val();
                 var destination = $(this).parent().parent().find('td').eq(8).find('select').val();
-                var checked = $(this).attr('checked');
+                var checked = $(this).prop('checked');
                 var loc = $(this).parent().parent().find('td').eq(3).find('select').val();
                 if (/tftp|ftp/i.test(proto2) && /\/bootflash:|\/flash:|\flash0:|\/flash1:|\/flash2:|\/disk0:|\/disk1:|\/disk2:|\/slot0:|\/slot1:|\/slot2/i.test(path)) {
                     retArr.push(1);
@@ -14719,11 +14825,11 @@ function applyDataFromPreviousPage(from,opt,opt2,data) {
                 var loc = data[y].split("^")[7];
                 switch (checked) {
                     case "true":
-                        $('#tr'+opt2+dev).find('td').eq(0).find('input:checkbox').attr('checked',true);
+                        $('#tr'+opt2+dev).find('td').eq(0).find('input:checkbox').prop('checked',true);
                         enableRow1(opt2,dev);
                     break;
                     case "false":
-                        $('#tr'+opt2+dev).find('td').eq(0).find('input:checkbox').attr('checked',false);
+                        $('#tr'+opt2+dev).find('td').eq(0).find('input:checkbox').prop('checked',false);
                         enableRow1(opt2,dev);
                     break;
                 }
@@ -14765,11 +14871,11 @@ function applyDataFromPreviousPage(from,opt,opt2,data) {
                 var loc = data[y].split("^")[4];
                 switch (checked) {
                     case "true":
-                        $('#tr'+opt2+'Detail'+dev).find('td').eq(0).find('input:checkbox').attr('checked',true);
+                        $('#tr'+opt2+'Detail'+dev).find('td').eq(0).find('input:checkbox').prop('checked',true);
                         enableRow1(opt2+"Detail",dev);
                     break;
                     case "false":
-                        $('#tr'+opt2+'Detail'+dev).find('td').eq(0).find('input:checkbox').attr('checked',false);
+                        $('#tr'+opt2+'Detail'+dev).find('td').eq(0).find('input:checkbox').prop('checked',false);
                         enableRow1(opt2+"Detail",dev);
                     break;
                 }
@@ -14838,7 +14944,7 @@ function openAddPie() {
 function LoadSaveOption(source,opt,opt2,from) {
     if (source.checked == true) {
         $('input[name="'+opt2+from+'Sel"]').each(function() {
-            $(this).attr('checked',true);
+            $(this).prop('checked',true);
             $(this).parent().parent().addClass('highlight');
             var dev = $(this).val();
             enableRow1(opt2+from,dev);
@@ -14846,7 +14952,7 @@ function LoadSaveOption(source,opt,opt2,from) {
     } else {
         $('input[name="'+opt2+from+'Sel"]').each(function() {
             $(this).parent().parent().removeClass('highlight');
-            $(this).attr('checked',false);
+            $(this).prop('checked',false);
             var dev = $(this).val();
             enableRow1(opt2+from,dev);
         });
@@ -14871,12 +14977,12 @@ function enableRow1( flag , id ) {
             if ( $(this).val() == id ) {
                 if ( $(this).is(':checked') ) {
                     $('#tbLoadImageURL'+id).attr('disabled',false);
-                    $(this).attr('checked',true);
+                    $(this).prop('checked',true);
                     $(this).parent().parent().addClass('highlight');
                     $('#tbLoadImageDestination'+id).attr('disabled',false);
                     $('#'+flag+'Location'+id).attr('disabled',false);
                 } else {
-                    $(this).attr('checked',false);
+                    $(this).prop('checked',false);
                     $(this).parent().parent().removeClass('highlight');
                     $('#tbLoadImageURL'+id).attr('disabled',true);
                     $('#tbLoadImageDestination'+id).attr('disabled',true);
@@ -14891,7 +14997,7 @@ function enableRow1( flag , id ) {
 			if ( $(this).is(':checked') ) {checkCtr++;}
             if ( $(this).val() == id ) {
                 if ( $(this).is(':checked') ) {
-                    $(this).attr('checked',true);
+                    $(this).prop('checked',true);
                     $(this).parent().parent().addClass('highlight');
                     $('#tbLoadConfigURL'+id).attr('disabled',false);
                     $('#tbLoadConfigDestination'+id).attr('disabled',false);
@@ -14959,13 +15065,13 @@ function enableRow1( flag , id ) {
 			if ( $(this).is(':checked') ) {checkCtr++;}
             if ( $(this).val() == id ) {
                 if ( $(this).is(':checked') ) {
-                    $(this).attr('checked',true);
+                    $(this).prop('checked',true);
                     $(this).parent().parent().addClass('highlight');
                     $('#tbSaveImageURL'+id).attr('disabled',false);
                     $('#tbSaveImageDestination'+id).attr('disabled',false);
                     $('#'+flag+'Location'+id).attr('disabled',false);
                 } else {
-                    $(this).attr('checked',false);
+                    $(this).prop('checked',false);
                     $(this).parent().parent().removeClass('highlight');
                     $('#tbSaveImageURL'+id).attr('disabled',true);
                     $('#tbSaveImageDestination'+id).attr('disabled',true);
@@ -14980,13 +15086,13 @@ function enableRow1( flag , id ) {
 			if ( $(this).is(':checked') ) {checkCtr++;}
             if ( $(this).val() == id ) {
                 if ( $(this).is(':checked') ) {
-                    $(this).attr('checked',true);
+                    $(this).prop('checked',true);
                     $(this).parent().parent().addClass('highlight');
                     $('#tbSaveConfigURL'+id).attr('disabled',false);
                     $('#tbSaveConfigDestination'+id).attr('disabled',false);
                     $('#'+flag+'Location'+id).attr('disabled',false);
                 } else {
-                    $(this).attr('checked',false);
+                    $(this).prop('checked',false);
                     $(this).parent().parent().removeClass('highlight');
                     $('#tbSaveConfigURL'+id).attr('disabled',true);
                     $('#tbSaveConfigDestination'+id).attr('disabled',true);
@@ -15331,11 +15437,11 @@ function alerts(msg,todo,type,source,todo2,todo3) {
 						}else if(type == "cancel"){
 							cancelReservation();
 						}
-                        $(this).dialog('destroy');
+                        $(this).dialog('close');
                     },
                     "No": function() {
                         res=false;
-                        $(this).dialog('destroy');
+                        $(this).dialog('close');
                     }
                 }
                 });
@@ -15470,13 +15576,39 @@ function alerts(msg,todo,type,source,todo2,todo3) {
                 buttons: {
                     "Yes": function() {	
                         $(this).dialog('destroy');
-						sendUpdateContFlag('continue');
-						devFlag = false;												
-						devSanXML2(devFlag);
+						devSanityFail('yes');
                     },
                     "No": function() {
                         $(this).dialog('destroy');
+						devSanityFail('no');
+                    }
+                }
+            });
+        break;
+		case "deleteload":
+            $( "#msg" ).remove();
+			if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != null && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != "" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId != undefined){
+				msg += "<br/></br><input type='checkbox' id='cancelclearcanvas'/>  Release Reservation<br/><span style='font-size:10.5px;color:red'>Note : </span><span style='font-size:10.5px'>Reservation of the device/s in the canvas will be released.</span>";
+			}
+           	$("body").append("<div id='msg' style='display:none' class='label'><center>"+msg+"</msg>");
+            $( "#msg" ).dialog({
+                height: "auto",
+				width: 350,
+                resizable: false,
+                modal: true,
+                closeOnEscape: false,
+                open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); $(".ui-dialog :button").blur();},
+                buttons: {
+                    "Yes": function() {	
+                        $(this).dialog('destroy');
+						if($('#cancelclearcanvas').is(':checked')){
+							ReleaseFlagLoadActive = true;
+						}
 						eval(todo);
+                    },
+                    "No": function() {
+						ReleaseFlagLoadActive = false;
+                        $(this).dialog('destroy');
                     }
                 }
             });
@@ -15494,7 +15626,7 @@ function alerts(msg,todo,type,source,todo2,todo3) {
                 open: function(event, ui) { $("#msg.ui-dialog-titlebar-close").hide(); $(".ui-dialog :button").blur();},
                 buttons: {
                     "OK": function() {
-                        $(this).dialog('destroy');
+                        $(this).dialog('close');
                         eval(todo);
                     }
                 }
@@ -16068,6 +16200,30 @@ function refreshConsole(){
             setInt ="";
     }
 }
+/*FUNCTION NAME :refreshChat
+ *AUTHOR        :Mary Grace P. Delos Reyes
+ *DATE          :March 14, 2014
+ *MOTIFIED BY   :
+ *REVISON DATE  :
+ *REVISON #     :
+ *DESCRIPTION   : refresh for chat
+ *PARAMETERS    :
+ *
+*/
+
+function refreshChat(){
+    if (globalRefresh == true){
+        clearInterval(setInt);
+		setInt ="";
+        setInt = setInterval(function(){
+                loadChatSession();
+        },8000);
+    }else if (globalRefresh == false){
+        clearInterval(setInt);
+            setInt ="";
+    }
+}
+
 
 /*FUNCTION NAME	:readuserlogs 
  *AUTHOR		:Mary Grace P. Delos Reyes
@@ -16083,7 +16239,9 @@ function refreshConsole(){
 
 function loadConsole(){
 	var selectArr = seletedSessionId.split("__");
-	var url =getURL('Console') + "action=readuserlogs&query={'row':[{'username':'"+globalUserName+"','sessionId':'"+selectArr[1]+"'}]}" 
+	//var url =getURL('Console') + "action=readuserlogs&query={'row':[{'username':'"+globalUserName+"','sessionId':'"+selectArr[1]+"'}]}" 
+	var devicesStr = deviceQstr(device); 
+ 	var url = getURL('Console') + "action=sessionIdCreator&query={'MAINCONFIG': [{'UserName': '"+globalUserName+"','ResourceId': '"+globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId+"','To': '','ActiveSession':'"+selectArr[1]+"','DEVICE' : "+devicesStr + "}]}";
 	$.ajax({
 		url: url,
 		dataType: 'html',
@@ -16132,7 +16290,7 @@ if (e.charCode == 13 || e=='send') {
 	val = $('#textLogs').val();
 //	var url ="https://"+CURRENT_IP +"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?"
 //	var url = 'https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=sendmessage&query=usernameSender='+globalUserName+'^usernameReceiver='+globalReciever+'^message='+val;
-	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=sendmessage&query={'data': [{'message': '"+val+"', 'usernameSender': '"+globalUserName+"', 'usernameReceiver': '"+globalReciever+"'}]}";
+	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=sendmessage&query={'QUERY': [{'message': '"+val+"', 'usernameSender': '"+globalUserName+"', 'usernameReceiver': '"+globalReciever+"'}]}";
 	$.ajax({
 		url: url,
 		dataType: 'html',
@@ -16141,7 +16299,7 @@ if (e.charCode == 13 || e=='send') {
 		async:false,
 		success: function(data) {
 		    var str ='' ;
-			/*var parser = new DOMParser();
+			/*var parser = new DOMP
 			var xmlDoc =parser.parseFromString(data, "text/xml");
 			var row = xmlDoc.getElementsByTagName("row");*/
 			dat = data.replace(/'/g,'"');
@@ -16197,7 +16355,7 @@ function loadChatSession(){
 //	var url ="https://"+CURRENT_IP +"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?"
 //	var url = 'https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query=username='+globalReciever+'^userFrom='+globalUserName;
 //	var query = "username="+globalReciever+"^userfrom="+globalUserName";
-	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query={'data': [{'userName':'"+globalReciever+"','userFrom:'"+globalUserName+"'}}";
+	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query={'QUERY': [{'userName':'"+globalReciever+"','userFrom:'"+globalUserName+"'}]}";
 
 	$.ajax({
 		url: url,
@@ -16207,11 +16365,8 @@ function loadChatSession(){
 		async:false,
 		success: function(data) {
 		    var str ='' ;
-/*			var parser = new DOMParser();
-			var xmlDoc =parser.parseFromString(data, "text/xml");
-			var row = xmlDoc.getElementsByTagName("row");*/
 			data = data.replace(/'/g,'"');
-			var json = $.parsedJSON(data);
+			var json = jQuery.parseJSON(data); 
 			var parsed = json.data[0].row;
 			for (var i = 0;i<parsed.length; i++){
 				var sender = parsed[i].UsernameTo;
@@ -16329,10 +16484,8 @@ if (e.charCode == 13){
 */
 
 function pdfDownload(){ 
-//	var url ="https://"+CURRENT_IP+"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?"
-	var action =" configdlpdf"
-	var url = getURL('RM');
-	var query = "<data username = '"+globalUserName+"' />"
+	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=configdlpdf&query={'QUERY':[{'username':'"+globalUserName+"'}]}";
+ 
 		window.location.href = url + query ;
 }
 
@@ -16374,10 +16527,6 @@ function showGroupName(){
 		async:false,
 		success: function(data) {
 			data = $.trim(data);
-		/*	var str ="";
-			var parser = new DOMParser();
-			var xmlDoc =parser.parseFromString(data, "text/xml");
-			var row = xmlDoc.getElementsByTagName("row");*/
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data);
 				for (var i = 0; i< json.data[0].row.length; i++ ){
@@ -16497,10 +16646,41 @@ function autoCreateLine(){
  */
 
 function checkSamePort(devices,devices2){
-	var dataArr ='';
+	var dataArr = [];
+    var prtArr = getAllPortOfDevice(devices.ObjectPath);
+    var portTempArr = getAllPortOfDevice(devices2.ObjectPath);
 
+	for(var a=0; a<prtArr.length; a++){
+		var dev = prtArr[a].ObjectPath.split(".");
+		var portDev=dev[0];
+			var LCPortName = prtArr[a].PortName;
+			var LCPortFlag = prtArr[a].PortFlag;
+			var LCSpeed = prtArr[a].Speed;
+			var LCPortType = prtArr[a].PortType;
+			var LCPath = prtArr[a].ObjectPath;
+			var LCSwitch = prtArr[a].SwitchInfo;
+			for (var q=0; q<portTempArr.length; q++){
+				var TCPortName = portTempArr[q].PortName;
+				var TCSwitch = portTempArr[q].SwitchInfo;
+				var TCSpeed = portTempArr[q].Speed;
+				var TCPortType = portTempArr[q].PortType;
+				var TCPortFlag = portTempArr[q].PortFlag;
+				var TCPath = portTempArr[q].ObjectPath;
+				var name= 't'+TCSpeed.substring(0,TCSpeed.length - 3)+'gb';
+				if(LCPortType == "L1" && LCSpeed == TCSpeed && TCPortType == LCPortType && TCPortFlag ==""){
+					
+					portTempArr[q].PortFlag = true;
+					prtArr[a].PortFlag = true;
+					q = portTempArr.length;
+					a = prtArr.length;
+					dataArr.push(name,LCPath,TCPath);
+					
+				}				
+			}
+	}
+	
 /// SOURCE
-	if(devices.PORT){
+/*	if(devices.PORT){
 		for(var a = 0; a < devices.PORT.length; a++){
 			if(devices.PORT[a].PortFlag == "" && devices.PORT[a].PortType.toLowerCase() != 'open'){
 				var type = devices.PORT[a].PortType;
@@ -16549,12 +16729,12 @@ function checkSamePort(devices,devices2){
 
 				}
 				dataArr = destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag);
-				return dataArr;
 
 			}
 		}
-	}
+	}*/
 // DESTINATION
+	return dataArr;
 }
 function destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag){
 	var dataArr=[];
@@ -16855,9 +17035,9 @@ function linkBackBtn(){
 
 function chooseHubFull(type){
 	if(type == 'hub'){
-		$('#cbFull').attr('checked',false);		
+		$('#cbFull').prop('checked',false);		
 	}else{
-		$('#cbHub').attr('checked',false);		
+		$('#cbHub').prop('checked',false);		
 	}
 }
 
@@ -16877,7 +17057,7 @@ function chooseHubFull(type){
 function closeCanvas(){
 	for(var i = 0 ; i < globalMAINCONFIG.length; i++){
 		if(pageCanvas == globalMAINCONFIG[i].MAINCONFIG[0].PageCanvas){
-			globalMAINCONFIG.splice(i,1);
+//	globalMAINCONFIG.splice(i,1);
 		}
 	}
 	var stage = "stage_"+pageCanvas;
@@ -16960,10 +17140,12 @@ function newDevicePopUp(){
 	$( "#newdevicePopUp" ).dialog({
 		modal: true,
 		autoResize:true,
-		width: "720px",
+		width: "auto",
 		closeOnEscape: false
 	});
-	$( "#newdevicePopUp" ).empty().load('pages/ConfigEditor/NewDevice.html',function(){
+	$( "#newdevicePopUp" ).empty().append("<center id='processingPage'><div  style='text-align:center;'>Processing Information...<br /><img src='img/ajax-loader.gif'/></div></center>");
+	$( "#newdevicePopUp" ).load('pages/ConfigEditor/NewDevice.html',function(){
+		$('.ui-dialog').css({'width':'680px'});
 		$('.ui-dialog-title').css({'margin-left':'14px','margin-top':'7px','text-align':'center'});
 		$("span.ui-dialog-title").text("ADD NEW DEVICE");
 		setTimeout(function(){
@@ -16994,6 +17176,7 @@ function newDevicePopUp(){
 		   at: "top",
 		   of: window
 		});
+		$('#processingPage').remove();
 	});
 }
 
@@ -17085,7 +17268,7 @@ function checkManuType(){
 		$("#addNewDevConIp").attr("disabled", true);
 		$("#addNewDevConIp").val("");
 		$("#addNewDevConIpPortChk").attr("disabled", true);
-		$("#addNewDevConIpPortChk").attr("checked", true);
+		$("#addNewDevConIpPortChk").prop('checked', true);
 		$("#addNewDevConIpPort").attr("disabled", true);
 		$("#addNewDevConIpPort").val("");
 		$("#addNewDevUserN").attr("disabled", true);
@@ -17097,14 +17280,14 @@ function checkManuType(){
 		$("#addNewDevDomainOpt").attr("disabled", true);
 		$("#addNewDevDomainOpt > option:contains('Select')").prop('selected',true);
 		$("#addNewDevOptValChk").attr("disabled", true);
-		$("#addNewDevOptValChk").attr("checked", false);
+		$("#addNewDevOptValChk").prop('checked', false);
 		$("#addNewDevIncPartPChk").attr("disabled", true);
-		$("#addNewDevIncPartPChk").attr("checked", false);
+		$("#addNewDevIncPartPChk").prop('checked', false);
 		$("#addNewDevAuxIpPort").attr("disabled", true);
 		$("#addNewDevAuxIpPort").val("");
 		//$("#addNewDevAuxIp").attr("disabled", true);
 		$("#addNewDevAuxIp").val("");
-		$("#addNewDevAuxIpPortChk").attr("checked", false);
+		$("#addNewDevAuxIpPortChk").prop('checked', false);
 		$("#autoDPartnerInfoCont").hide();
 		//$("#autoDDevSlotsIncCont").hide();
 		getAutoDSelectedPartnerAdd("Select","device");
@@ -17271,7 +17454,7 @@ function changeServerManuType(){
 		$('#addNewTestTConIp').attr('disabled', true);
 		$('#addNewTestTConIp').val('');
 		$('#addNewTestTConIpPortChk').attr('disabled', true);
-		$('#addNewTestTConIpPortChk').attr('checked', true);
+		$('#addNewTestTConIpPortChk').prop('checked', true);
 		$('#addNewTestTConIpPort').attr('disabled', true);
 		$('#addNewTestTConIpPort').val('');
 		$('#addNewTestTUserN').attr('disabled', true);
@@ -17397,20 +17580,6 @@ function changeServerManuType(){
 			$("#autoDTestTPartPortsSrchLblCont").hide();
 		}
 	});
-/*	$(document).on("change","#autoDTestTPartPortsSrchOpt", function () {
-        if($('#autoDTestTPartPortsSrchOpt > option:selected').text()=="Per Slot"){
-            showautoDPortSrchTableByNum2(3);
-            $('#autoDTestTPartPortsSrchNumLbl').hide();
-            $('#autoDTestTPartPortsSrchNumCont').hide();
-        }else if($('#autoDTestTPartPortsSrchOpt > option:selected').text()=="On Selected Slots"){
-            showautoDPortSrchTableByNum2(2);
-            $('#autoDTestTPartPortsSrchNumLbl').show();
-            $('#autoDTestTPartPortsSrchNumCont').show();
-        }else{
-            $('#autoDTestTPartPortsSrchNumLbl').hide();
-            $('#autoDTestTPartPortsSrchNumCont').hide();
-        }
-    });*/
 	$("#autoDTestTSlotsIncChk").bind("click", function () {
 		$('#autoDTestTSlotInfoTbody').empty();
 		$('#autoDTestTSlotsIncCount').val("");
@@ -17431,16 +17600,6 @@ function changeServerManuType(){
 	 $(document).on("blur","#autoDTestTSlotsIncCount", function () {
         createDevSlotTbodyAutoD($(this).val(),"testtool");
     });
-
-/*    $(document).on("click","#okAutoDTestT", function () {
-		 if(!gatherDataAutoD("testtool")){return;}
-		checkDeviceInDbAutoD();
-	});
-*/
-/*    $(document).on("click","#cancelAutoDTestT", function () {
-        $('#newTestToolDialog').dialog("close");
-        $('#newServerDialog').dialog("close");
-    });*/
 
 }
 /*
@@ -17475,7 +17634,7 @@ function getAutoDSelectedPartnerAdd(opt,type){
 				$('#autoDDevSlotInfoTableCont').hide();
 				$('#autoDDevSlotInfoTbody').empty();
 				$('#autoDDevSlotsIncCount').val('');
-				$('#autoDDevSlotsIncChk').attr('checked',false);
+				$('#autoDDevSlotsIncChk').prop('checked',false);
 				$('#addNewDevAuxIpTR').hide();
 
             }else if(type=="testtool"){
@@ -17493,7 +17652,7 @@ function getAutoDSelectedPartnerAdd(opt,type){
                 $('#autoDTestTSlotsIncCountCont').hide();
 				$('#autoDTestTSlotInfoTableCont').hide();
 				$('#autoDTestTSlotInfoTbody').empty();
-				$('#autoDTestTSlotsIncChk').attr('checked',false);
+				$('#autoDTestTSlotsIncChk').prop('checked',false);
 				$('#autoDTestTSlotsIncCount').val("");
 		    }
         break;
@@ -17658,7 +17817,6 @@ function gatherDataAutoD(type){
 				var devtype = $('#addDevTypeOpt >  option:selected').text()
 				if(devtype=="L1 Switch"){devtype = "Layer 1 Switch";
 				}else if(devtype=="L2 Switch"){devtype = "Layer 2 Switch";}
-				//data.DeviceType = devtype;
 				data.Type = devtype;
 				}
 			if($('#addNewDevManuOpt > option:selected').text()!="Select"){
@@ -17732,6 +17890,10 @@ function gatherDataAutoD(type){
 						}
 					}
 				});
+			}
+			var totalports = $('#autoDPartPortsSrchNum').val();
+			if(totalports!=undefined && totalports!=0){
+				data.TotalPortsToSearch = totalports;
 			}
 		break;
 		case "testtool":
@@ -17814,6 +17976,11 @@ function gatherDataAutoD(type){
 					}
 				});
 
+			}
+			var totalports = "";
+			totalports = $('#autoDTestTPartPortSrchNumNum').val();
+			if(totalports!=undefined && totalports!=0){
+				data.TotalPortsToSearch = totalports;
 			}
 		break;
 		case "admin":
@@ -17912,10 +18079,6 @@ function checkDataManuAutoD (type) {
 					if(!ValidateIPaddress($('#addNewTestTMmgmtIp').val())){return false;}
 				}
 			}
-			//ValidateIPaddress($('#addNewTestTMmgmtIp').val());
-			//if($('#addNewTestTConIp').val()!=""){
-			//	ValidateIPaddress($('#addNewTestTMmgmtIp').val());
-			//}
 			if($('#addNewTestTConIpPort').val()!="" 
 				&& parseInt($('#addNewTestTConIpPort').val())<=0
 				|| parseInt($('#addNewTestTConIpPort').val())>65535){
@@ -18015,6 +18178,7 @@ function checkPortSlotTotal(evt){
 			tmpcount += parseInt(object.children[3].getAttribute('value'));
 		}
 	});
+	console.log(tmpcount);
 }
 
 
@@ -18490,7 +18654,7 @@ function checkIpEnable(val){
 		$("#newdevusername").attr('disabled',true);
 		$("#newdevpassword").attr('disabled',true);
 		$("#newdevmanageinterface").attr('disabled',true);
-		$("#newdevportcheckbox").attr('checked',false);
+		$("#newdevportcheckbox").prop('checked',false);
 		$("#newdevportcheckbox").attr('disabled',true);
 		$("#newdevportaddress").attr('disabled',true);
 	}
@@ -20393,7 +20557,7 @@ function greenRoulette2(){
 	$(".rouletImg").on("dragstart", function(e){
            dragSrcEl = this;
     });
-	con.addEventListener('dragover',function(e){
+	con.ddEventListener('dragover',function(e){
         e.preventDefault(); //@important
     });
 	con.addEventListener('drop',function(e){
@@ -21355,7 +21519,7 @@ function showActiveAutoDLog(){
 
 /*-----kmmabignay - mar12 -------------------------------------*/
 function showAutoDPopup(fname,user,ip,pIp){
-	$("#autoDProcessDialogContent").empty().load("pages/ConfigEditor/AutoDTableLogs.html", function(){
+	$("#autoDProcessDialogContent").load("pages/ConfigEditor/AutoDTableLogs.html", function(){
 		$('#autoDProcessDialog').trigger('create');
 		$('.ui-table-columntoggle-btn').hide();
 //	$("#autodContent").empty().load("pages/ConfigEditor/AutoDTableLogs.html", function(){
@@ -21441,6 +21605,7 @@ function showAutoDiscoveryStatus(fname,user,devIp,pIp,devInfo,linkInfo,logs) {
 			clearTimeout(initAutoD);
 			initAutoD = "";
 			autoDcomplete = true;
+			$('#okAutoDStatus').attr('disabled',false);
 		}else{
 			initAutoD = setTimeout(function(){
 				queryAutoDiscoveryLogs(fname,user,devIp,pIp)
@@ -21458,14 +21623,14 @@ function enableRow1SubProc(cbAllKey,setValKey,checkCtr,checkBoxCtr){
 	if(checkCtr == checkBoxCtr){
 		$("#"+cbAllKey).trigger("click");
 	}else{
-		$("#"+cbAllKey).attr('checked',false);
+		$("#"+cbAllKey).prop('checked',false);
 	}
 	if (userInformation[0].userLevel == 'Administrator') {
 		if(checkCtr > 0){
 			$('#'+setValKey).attr('disabled',false);
 		}else{
 			$('#'+setValKey).attr('disabled',true);
-			$('#'+setValKey).attr('checked',false);
+			$('#'+setValKey).prop('checked',false);
 		}
 	}
 }
@@ -21530,7 +21695,7 @@ function saveEndReservationAlerts(mainMenu,msg,type,opt){
 			func2Eval += "changePageWithTimeout('commitOptions','"+resOpt+"',true);";
 		}else{
 			func2Eval += "$('#startEndReserve').dialog('close');";
-			func2Eval += "$('#"+resOpt+"').attr('checked',true);";
+			func2Eval += "$('#"+resOpt+"').prop('checked',true);";
 		}
 	}
 	switch(true){
@@ -21604,7 +21769,7 @@ function saveEndReservationInfo(type,opt){
 	});
     var errorMsg = validateInputs(selectedArr,isDetailed,opt,type);
     if(errorMsg!=""){
-		alertUser(errorMsg,"Warning");
+		alertUser(errorMsg);
 		return "";
 	}
 	for(var y=0;y<selectedArr.length;y++){
@@ -21751,7 +21916,7 @@ function saveEndReservationAlertConditions(MainEndArr,type,mainMenu,opt){
 			break;
 		case (adminFlag && !isChecked && resInfoFlag): 
 		case (!adminFlag && resInfoFlag): 
-			$("#"+resOpt).attr('checked',true);
+			$("#"+resOpt).prop('checked',true);
 			$('#startEndReserve').dialog('destroy');
 			if($('#customPage')){toConfig();}
 			break;
@@ -22387,6 +22552,7 @@ function mainDevMenuValid(sub) {
 	}
 	if(sub=="software"){
 		if(devicesArr ==[] || devicesArr.length == 0){
+			alertUser("No device on canvas");
 			return;
 		}else{
 			for(var a=0; a<devicesArr.length; a++){
@@ -22402,6 +22568,7 @@ function mainDevMenuValid(sub) {
 		}return;
 	}else if(sub=="configuration"){
 		if(devicesArr ==[] || devicesArr.length == 0){
+			alertUser("No device on canvas");
 			return;
 		}else{
 			for(var a=0; a<devicesArr.length; a++){
@@ -22417,6 +22584,7 @@ function mainDevMenuValid(sub) {
 		}return;
 	}else if(sub=="showActivity"){
 		if(devicesArr ==[] || devicesArr.length == 0){
+			alertUser("No device on canvas");
 			return;
 		}else if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DeviceSanity.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].AccessSanity.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Connectivity.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LinkSanityEnable.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].EnableInterface.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LoadImageEnable.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].LoadConfigEnable.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].SaveImageEnable.toString() == "false" && globalMAINCONFIG[pageCanvas].MAINCONFIG[0].SaveConfigEnable.toString() == "false"){
 			alertUser("No activity to show");return;
@@ -22434,6 +22602,7 @@ function mainDevMenuValid(sub) {
 		}return;
 	}else if(sub=="linksanity"){
 		if(devicesArr ==[] || devicesArr.length == 0){
+			alertUser("No device on canvas");
 			return;
 		}else{
 			for(var a=0; a<devicesArr.length; a++){
@@ -22988,7 +23157,7 @@ function menuToolsConfigQueryJSON(actionx,queryx,type,opt){
 /*--------------------------------------------------------*/
 
 /*---kmmabignay--mar17----*/
-function saveConfigAndImageJSON(data,type){
+function saveConfigAndImageJSON(data,type,pmFlag){
 	var dat = data.replace(/'/g,'"');
  	var dat2 = $.parseJSON(dat);
 	var row = dat2.data[0].row;
@@ -23010,16 +23179,18 @@ function saveConfigAndImageJSON(data,type){
 		svc += "name='save"+type+"Sel' onclick='enableRow1(\"save"+type+"\",\""+devId+"\")'/></td>";
 		svc += "<td class='defaultGrid'>"+hName+"</td>";
 		svc += "<td class='defaultGrid'>"+model+"</td>";
-		svc += "<td class='defaultGrid'>";
-		svc += "<select disabled='disabled' style='width:98%' ";
-		svc += "id='save"+type+"Location"+devId+"' ";
-		svc += "onchange='getImageConfigLocation("+onchangeArgs+")'>";
-		svc += "<option value='Custom'> Custom </option>";
-		svc += "<option value='Primary'> Primary </option>";
-		svc += "<option value='Secondary'> Secondary </option></select></td>";
+		if(!pmFlag){
+			svc += "<td class='defaultGrid'>";
+			svc += "<select disabled='disabled' style='width:98%' ";
+			svc += "id='save"+type+"Location"+devId+"' ";
+			svc += "onchange='getImageConfigLocation("+onchangeArgs+")'>";
+			svc += "<option value='Custom'> Custom </option>";
+			svc += "<option value='Primary'> Primary </option>";
+			svc += "<option value='Secondary'> Secondary </option></select></td>";
+		}
 		svc += "<td class='defaultGrid'>";
 		svc += "<input disabled='disabled' type='text' style='width:98%' ";
-		svc += "id='tbSave"+type+"URL"+devId+"'></td>";
+		svc += "id='tbSave"+type+"URL"+devId+"'></td></tr>";
 		/*----detailed---*/
 		svc2 += "<tr class='"+tabClass+"'id='trsave"+type+"Detail"+devId+"'>";
 		svc2 += "<td class='defaultGrid'>";
@@ -23045,15 +23216,19 @@ function saveConfigAndImageJSON(data,type){
 		svc2 += "id='tbSave"+type+"DetailPath"+devId+"'></td>";
 		svc2 += "<td class='defaultGrid'>";
 		svc2 += "<input disabled='disabled' type='text' style='width:98%' ";
-		svc2 += "id='tbSave"+type+"DetailFilename"+devId+"'></td>";
+		svc2 += "id='tbSave"+type+"DetailFilename"+devId+"'></td></tr>";
 	}
-	$("#save"+type+"Body").html(svc);
-	$("#save"+type+"DetailBody").html(svc2);		
+	if(pmFlag){
+		$("#save"+type+"BodyPM").html(svc);
+	}else{
+		$("#save"+type+"Body").html(svc);
+		$("#save"+type+"DetailBody").html(svc2);		
+	}
 }
 /*--------------------------------------------------------*/
 
 /*---kmmabignay--mar17----*/
-function loadConfigAndImageJSON(data,type){
+function loadConfigAndImageJSON(data,type,pmFlag){
 	var dat = data.replace(/'/g,'"');
    	var dat2 = $.parseJSON(dat);
 	var row = dat2.data[0].row;
@@ -23080,13 +23255,15 @@ function loadConfigAndImageJSON(data,type){
 		svc += "name='load"+type+"Sel' onclick='enableRow1(\"load"+type+"\",\""+devId+"\")'/></td>";
 		svc += "<td class='defaultGrid'>"+hName+"</td>";
 		svc += "<td class='defaultGrid'>"+model+"</td>";
-		svc += "<td class='defaultGrid'>";
-		svc += "<select disabled='disabled' style='width:98%' ";
-		svc += "id='load"+type+"Location"+devId+"' ";
-		svc += "onchange='getImageConfigLocation("+onchangeArgs+")'>";
-		svc += "<option value='Custom'> Custom </option>";
-		svc += "<option value='Primary'> Primary </option>";
-		svc += "<option value='Secondary'> Secondary </option></select></td>";
+		if(!pmFlag){
+			svc += "<td class='defaultGrid'>";
+			svc += "<select disabled='disabled' style='width:98%' ";
+			svc += "id='load"+type+"Location"+devId+"' ";
+			svc += "onchange='getImageConfigLocation("+onchangeArgs+")'>";
+			svc += "<option value='Custom'> Custom </option>";
+			svc += "<option value='Primary'> Primary </option>";
+			svc += "<option value='Secondary'> Secondary </option></select></td>";
+		}
 		svc += "<td class='defaultGrid'>";
 		svc += "<input disabled='disabled' type='text' style='width:98%' ";
 		svc += "id='tbLoad"+type+"URL"+devId+"'></td>";
@@ -23133,8 +23310,13 @@ function loadConfigAndImageJSON(data,type){
 		}
 		svc2 += "</select></td></tr>";
 	}
-	$("#load"+type+"Body").html(svc);
-	$("#load"+type+"DetailBody").html(svc2);		
+	if(pmFlag){
+		$("#load"+type+"BodyPM").html(svc);
+		$("#load"+type+"DetailBody").html(svc2);		
+	}else{
+		$("#load"+type+"Body").html(svc);
+		$("#load"+type+"DetailBody").html(svc2);		
+	}
 }
 /*--------------------------------------------------------*/
 
@@ -24238,17 +24420,23 @@ function sanityQuery2(type){
  *  PARAMETERS    : 
  *
  */
-function devSanityFail(){
+function devSanityFail(yesno){
 	var devSanF = $("#devsancb").is(":checked");
-	if(devSanF.toString == "true"){
-		sendUpdateContFlag('stop');
-		closePopUp('sanity');
-		cancelReservation();
-		return;
-	}else{
-		sendUpdateContFlag('stop');
-		closePopUp('sanity');
-		return;
+	if(yesno == "yes"){
+		sendUpdateContFlag('continue');
+		var devFlag = false;
+		devSanXML2(devFlag);
+	}else if(yesno == "no"){
+		if(devSanF.toString == "true"){
+			sendUpdateContFlag('stop');
+			closePopUp('sanity');
+			cancelReservation();
+			return;
+		}else{
+			sendUpdateContFlag('stop');
+			closePopUp('sanity');
+			return;
+		}
 	}
 }	
 
@@ -24269,6 +24457,7 @@ function onClickEditConfigName(valKey){
 /*---kmmabignay - mar21------------*/
 function addEvent2History(msg){
 	window['variableHistory'+pageCanvas].push(msg);
+	addHistory();	
 }
 /*------------------------------*/
 
@@ -24630,7 +24819,7 @@ function checkLoadActive(src,id,platform){
 		if($(this).attr("rId") != id){
 			var ids = $(this).attr('rId');
 			$(this).removeClass('highlight');
-			$('#cb'+ids).attr('checked',false);
+			$('#cb'+ids).prop('checked',false);
 //			$("#LoadActiveButton").attr('disabled',true);
 		}else{
 			var ids = $(this).attr('rId');
@@ -24851,21 +25040,34 @@ function showDevicetoSelect(devicesArr,myArray){
 			var devname = devicesArr[t].DeviceName;
 			var devresid = devicesArr[t].DeviceResId;
 			if(devname != ""){
-				str += "<tr><td class='defaultGrid'><input class='openSelectedDevice' type='checkbox' did='"+devresid+"' onclick='enableSelection(this,\""+devresid+"\");' did='"+devresid+"'/></td>";
+				if(devicesArr.length == 1){
+					str += "<tr><td class='defaultGrid'><input class='openSelectedDevice' type='checkbox' checked='true' did='"+devresid+"' onclick='enableSelection(this,\""+devresid+"\");' did='"+devresid+"'/></td>";
+				}else{
+					str += "<tr><td class='defaultGrid'><input class='openSelectedDevice' type='checkbox' did='"+devresid+"' onclick='enableSelection(this,\""+devresid+"\");' did='"+devresid+"'/></td>";
+				}
 				str += "<td class='defaultGrid'>"+devname+"</td>";
 				str += "<td class='defaultGrid'>"+mgtip+"</td>";
 				str += "<td class='defaultGrid'>"+conIp+"</td>";
 				str += "<td class='defaultGrid'>"+model+"</td>";
 				str += "<td class='defaultGrid' style='width:20%'>";
-				str += "<select id='open_"+devresid+"' disabled='disabled'>";
+				if(devicesArr.length == 1){
+					str += "<select id='open_"+devresid+"'>";
+				}else{
+					str += "<select id='open_"+devresid+"' disabled>";
+				}
 				str += "<option value='Telnet'> Telnet </option>";
 				str += "<option value='SSH'> SSH </option>";
 				str += "<option value='SSL'> SSL </option></select></td></tr>";
 			}	
 		}
-		$('#showOpenconsoleTable > tbody').empty().append(str)
 		$('.openSelectedDevice').trigger('click');
 		$('#selectAllConsole').trigger('click');
+		if(devicesArr.length == 1){
+        	$("#selectAllConsole").attr("checked",true);
+		}else{
+        	$("#selectAllConsole").attr("checked",false);
+		}
+		$('#showOpenconsoleTable > tbody').empty().append(str)
 		setTimeout(function(){
 			enableSelection("","");
 		},500);
@@ -24898,9 +25100,9 @@ function enableSelection(src,deviceresid){
 			cnt2++;
 		});
 		if(cnt == cnt2 && cnt != 0){
-			$('#selectAllConsole').attr("checked",true);
+			$('#selectAllConsole').prop('checked',true);
 		}else{
-			$('#selectAllConsole').attr("checked",false);
+			$('#selectAllConsole').prop('checked',false);
 		}
 	}
 }
@@ -25318,14 +25520,14 @@ function createtableforinvitation(){
 	str+= "<td style='text-align:left;'><div id='usertobeadded' style='height:345px;width:250px;overflow:auto;'><ul>";
 	for(var t=0; t<userNotExistArray.length; t++){
 		if(userNotExistArray[t] != ""){
-			str+="<li><input type='checkbox' style='width:20px' class='usernotexist' did='"+userNotExistArray[t]+"'/>  "+ userNotExistArray[t] + "</li>"; 
+			str+="<li><input type='checkbox' style='width:20px' class='usernotexist' did='"+userNotExistArray[t]+"'/><img src='images/users.png'>  "+ userNotExistArray[t] + "</li>"; 
 		}
 	}
 	str+= "</ul></td></div>";
 	str+= "<td style='text-align:left;'><div id='addeduser' style='height:345px;width:250px;overflow:auto;'><ul>";
 	for(var t=0; t<userExistArray.length; t++){
 		if(userExistArray[t] != ""){
-			str+="<li><input type='checkbox' style='width:20px' class='userexist' did='"+userExistArray[t]+"'/>  "+ userExistArray[t] + "</li>"; 
+			str+="<li><input type='checkbox' style='width:20px' class='userexist' did='"+userExistArray[t]+"'/><img src='images/users.png'>  "+ userExistArray[t] + "</li>"; 
 		}
 	}
 	str+= "</ul></td></div>";
@@ -25407,6 +25609,7 @@ function savedatainsession(id){
 	closeDialog(id);
 	var sessionid = seletedSessionId.split("__");
 	var url = getURL('Console') + "action=putConsoleInvitation&query={'MAINCONFIG': [{'user': '"+globalUserName+"','addeduser': '"+addeduser+"','sessionid': '"+sessionid[1]+"'}]}";
+	console.log("url putConsoleInvitation >>>" + url);
     $.ajax({
         url: url,
         dataType: 'html',
@@ -25464,6 +25667,7 @@ function getActiveUser(){
 				}
 			}
 			str += "</select>";
+			console.log("ctr >>>" + ctr);
 			if(ctr > 1){
 				$("#activeusercontainer").html(str);
 			}else if(ctr != 0){
@@ -25479,9 +25683,13 @@ function getActiveUser(){
 			}else if(ctr > 1){
             	$("#selectActiveUser").attr("disabled",true);
 			}
-			if(active == globalUserName && ctr != 0){
+			if(active == globalUserName){
             	$("#consoletext").removeAttr("disabled");
-				$('#enableactiveuser').show();
+				if(userArr.length > 0 && users != "" && globalUserName == creator){
+					$('#enableactiveuser').show();
+				}else{
+					$('#enableactiveuser').hide();
+				}
 			}else{
             	$("#consoletext").attr("disabled",true);
 				$('#enableactiveuser').hide();
@@ -25558,6 +25766,7 @@ function checkUserNotfication(){
     	   	proccessData: false,
         	async:false,
 	   	    success: function(data) {
+				console.log("data >>>" + data);
 				var dat = data.replace(/'/g,'"');
 			    var dat2 = $.parseJSON(dat);
 			    var row = dat2.MAINCONFIG[0];
@@ -25588,7 +25797,7 @@ function checkUserNotfication(){
 				}
 			}
    		});
-	},60000);
+	},1000);
 }
 
 /*
@@ -25634,4 +25843,21 @@ function shownotification(){
 			}
 		}
   	});
+}
+/*
+ *
+ *  FUNCTION NAME : clearCanvasHistory
+ *  AUTHOR        :	Clarice A. Salanda
+ *  DATE          : March 30, 2014
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : clear history 
+ *  PARAMETERS    : 
+ *
+ */
+function clearCanvasHistory(){
+	window['variableHistory'+pageCanvas] = [];
+	$("#historyDiv .ulDeco").html("");
+	$('#clearHistory').hide();
 }

@@ -2732,7 +2732,7 @@ function changePage(num){
     $("#Magnify").attr("title","Zoom");
 	zoomButtonStatus = "inactive";
 	createDev = '';
-	window['variableHistory'+pageCanvas].push("Change page to "+globalCurrPage); //add event to history
+	addEvent2History("Change page to "+globalCurrPage); //add event to history
 	for(var i = 0 ; i < 5; i++){
 		if(num == i){
 			$('#divPage-'+i).show('slide', {direction: 'left'}, 1000);

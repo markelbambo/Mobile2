@@ -1,408 +1,408 @@
 <div data-role="page" id="RMReservation" data-theme="a">
-	<div data-role="navbar" id="tabsReservation">
-		<ul id='ulReservation'>
-			<li id='liReserved' style='width:auto;'><a href='#liTabReserved'>Reservation Reserved</a></li>
-			<li id='liConnectivity' style='width:auto;'><a href='#liTabConnectivity'>Reservation Connectivity</a></li>
-			<li id='liPort' style='width:auto;'><a href='#liTabPort'>Reservation Port</a></li>
-			<li id='liHistory' style='width:auto;'><a href='#liTabHistory'>Reservation History</a></li>
-			<li id='liDevices' style='width:auto;'><a href='#liTabDevices'>Reservation Devices</a></li>
-		</ul>
-		<a id="rmBackBtn" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Back</a>
-		<div id="liTabReserved">
-			<div style='overflow:auto;'>
-				<nav data-role="navbar" id='ReserveButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
-					<ul class="ui-grid-c">
-						<li class="ui-block-c" style='width:33.3%' ><a href="" id='ReserveEdit' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="grid" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Edit</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
-						<li class="ui-block-c" style='width:33.3%' ><a href="RMReleaseDevice.html" id='ReserveRelease' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="delete" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Release</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
-						<li class="ui-block-d" style='width:33.3%' ><a href=""  id='ReserveGenerateReport' data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-icon="arrow-d" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
-					</ul>
-				</nav>
-				<div style="float: left;margin-top:0.5em;">
-				<tr>
-					<td>
-						<a id="rmReserveSelectAll" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='txtreservedSelectAll'>Select All</span></a>
-					</td>
-				</tr>
-				<table>
-					<tr>
-						<td>
-							<select id="filterReserved"  data-mini="true">
-								<option value="hostName">Host Name</option>
-								<option value="user">User</option>
-								<option value="domainname">Domain Name</option>
-								<option value="managementip">Management IP</option>
-								<option value="consoleip">Console IP</option>
-								<option value="model">Model</option>
-								<option value="type">Type</option>
-							</select>
-						</td>
-						<td><input type='text' placeholder='Search' class='ReservedFilter' id='searchReserved'/></td>
-					</tr>
-				</table>
-       		 	<span>Total Matches: <span id="totalMatchesReserved">0</span></span>
-     			</div>
-				<table data-role="table" id="reservationRM-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-theme="a" data-column-popup-theme="a" data-mini="true">
-  					<thead>
-	 		 	  		<tr class="ui-bar-d">
-						    <th>ID</th>
-						    <th data-priority="1">Timestamp</th>
-						    <th data-priority="1">Host Name</th>
-						    <th data-priority="1">Domain Name</th>
-						    <th data-priority="1">Management IP</th>
-						    <th data-priority="1">Console IP</th>
-						    <th data-priority="1">Model</th>
-						    <th data-priority="1" style='padding-right:100px;'>Start Date</th>
-						    <th data-priority="1" style='padding-right:100px;'>Start Time</th>
-      						<th data-priority="2">User</th>
-    			  			<th data-priority="2">Domain Name</th>
-							<th data-priority="3">Application</th>
-							<th data-priority="6">Interval</th>
-							<th data-priority="6">Iteration</th>
-							<th data-priority="6">Iteration No.</th>
-							<th data-priority="6">Type</th>
-							<th data-priority="1" style='padding-right:100px;'>End Date</th>
-							<th data-priority="1" style='padding-right:150px;'>End Time</th>
-							<th data-priority="6">Status</th>
+	<div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed"><center>Reservation</center></div>
+		<div data-role="content" style="margin-top:50px;">
+			<div data-role="navbar" id="tabsReservation" style='margin-top:12px;'>
+				<ul id='ulReservation'>
+					<li id='liReserved' style='width:auto;'><a href='#liTabReserved'>Reservation Reserved</a></li>
+					<li id='liConnectivity' style='width:auto;'><a href='#liTabConnectivity'>Reservation Connectivity</a></li>
+					<li id='liPort' style='width:auto;'><a href='#liTabPort'>Reservation Port</a></li>
+					<li id='liHistory' style='width:auto;'><a href='#liTabHistory'>Reservation History</a></li>
+					<li id='liDevices' style='width:auto;'><a href='#liTabDevices'>Reservation Devices</a></li>
+				</ul>
+				<div id="liTabReserved">
+					<div style='overflow:auto;'>
+						<nav data-role="navbar" id='ReserveButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+							<ul class="ui-grid-c">
+								<li class="ui-block-c" style='width:33.3%' ><a href="" id='ReserveEdit' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="grid" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Edit</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
+								<li class="ui-block-c" style='width:33.3%' ><a href="RMReleaseDevice.html" id='ReserveRelease' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="delete" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Release</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
+								<li class="ui-block-d" style='width:33.3%' ><a href=""  id='ReserveGenerateReport' data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-icon="arrow-d" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+							</ul>
+						</nav>
+						<div style="float: left;margin-top:0.5em;">
+						<tr>
+							<td>
+								<a id="rmReserveSelectAll" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='txtreservedSelectAll'>Select All</span></a>
+							</td>
 						</tr>
-				  	</thead>
-					<tbody class='test'>
-					</tbody>
-				</table>
-				<div>
-					<center>
-						<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
-					</center>
-				</div>	
-			</div>
-		</div>
-		<div id="liTabConnectivity">
-			<div style='overflow:auto;'>
-				<nav data-role="navbar" id='ConnectivityButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
-					<ul class="ui-grid-c">
-						<li class="ui-block-d"><a href=""  id='ConnectivityGenerateReport' data-rel="dialog"  data-corners="false" data-shadow="false" data-icon="arrow-d" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
-					</ul>
-				</nav>
-				<div style="width:50%;float:left"></div>
-				<div style="float: left;margin-top:0.5em;">
-					<td>
-						<a id="rmConnectivitySelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-					</td>
 						<table>
 							<tr>
 								<td>
-									<select id="filterConnectivity"  data-mini="true">
-										<option value="hostName">Hostname</option>
-										<option value="description">Description</option>
-										<option value="switchhostname">Switch Hostname</option>
-										<option value="switchdescription">Switch Descritpion</option>
-										<option value="devicehostname">Device Hostname</option>
-										<option value="devicedescription">Device Description</option>
+									<select id="filterReserved"  data-mini="true">
+										<option value="hostName">Host Name</option>
 										<option value="user">User</option>
+										<option value="domainname">Domain Name</option>
+										<option value="managementip">Management IP</option>
+										<option value="consoleip">Console IP</option>
+										<option value="model">Model</option>
+										<option value="type">Type</option>
 									</select>
 								</td>
-								<td><input type='text' placeholder='Search' class='ConnectivityFilter' id='searchConnectivity'/></td>
+								<td><input type='text' placeholder='Search' class='ReservedFilter' id='searchReserved'/></td>
 							</tr>
 						</table>
-  				      	<span>Total Matches: <span id="totalMatchesConnectivity">0</span></span>
-
-				</div>
-					<table data-role="table" id="RMConnectivity-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-						<thead>
-							<tr class="ui-bar-d">
-								<th>Timestamp</th>
-								<th data-priority="1">HostName</th>
-								<th data-priority="6">Description</th>
-								<th data-priority="1">Slot</th>
-								<th data-priority="1">Module</th>
-								<th data-priority="1">Port</th>
-								<th data-priority="1">Switch Port</th>
-								<th data-priority="1">Switch Slot</th>
-								<th data-priority="1">Switch HostName</th>
-								<th data-priority="6">Switch Description</th>
-								<th data-priority="1">Switch Slot</th>	
-								<th data-priority="1">Switch Port</th>
-								<th data-priority="1">Port</th>	
-								<th data-priority="1">Module</th>
-								<th data-priority="1">Slot</th>
-								<th data-priority="1">Device HostName</th>
-								<th data-priority="6">Device Description</th>
-								<th data-priority="6">User</th>
-								<th data-priority="6">Start Reservation</th>
-								<th data-priority="6">End Reservation</th>
-								<th data-priority="1">Reservation Status</th>
-								<th data-priority="1">Connectivity Status</th>
-				
-							</tr>
-						</thead>
-						<tbody class='test'></tbody>
+						<span>Total Matches: <span id="totalMatchesReserved">0</span></span>
+						</div>
+						<table data-role="table" id="reservationRM-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-theme="a" data-column-popup-theme="a" data-mini="true">
+							<thead>
+								<tr class="ui-bar-d">
+									<th>ID</th>
+									<th data-priority="1">Timestamp</th>
+									<th data-priority="1">Host Name</th>
+									<th data-priority="1">Domain Name</th>
+									<th data-priority="1">Management IP</th>
+									<th data-priority="1">Console IP</th>
+									<th data-priority="1">Model</th>
+									<th data-priority="1" style='padding-right:100px;'>Start Date</th>
+									<th data-priority="1" style='padding-right:100px;'>Start Time</th>
+									<th data-priority="2">User</th>
+									<th data-priority="2">Domain Name</th>
+									<th data-priority="3">Application</th>
+									<th data-priority="6">Interval</th>
+									<th data-priority="6">Iteration</th>
+									<th data-priority="6">Iteration No.</th>
+									<th data-priority="6">Type</th>
+									<th data-priority="1" style='padding-right:100px;'>End Date</th>
+									<th data-priority="1" style='padding-right:150px;'>End Time</th>
+									<th data-priority="6">Status</th>
+								</tr>
+							</thead>
+							<tbody class='test'>
+							</tbody>
 						</table>
 						<div>
 							<center>
 								<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
 							</center>
-				
 						</div>	
-			</div>
-		</div>
-		<div id="liTabPort">
-			<div style='overflow:auto;'>
-				<nav data-role="navbar" id='PortButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
-					<ul class="ui-grid-c">
-						<li class="ui-block-d"><a href=""  id='PortGenerateReport' data-rel="dialog" data-icon="arrow-d" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
-					</ul>
-				</nav>
-				<div style="width:50%;float:left"></div>
-				<div style="float: left;margin-top:0.5em;">
-					<td>
-						<a id="rmPortSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-					</td>
-					<table>
-						<tr>
-							<td>
-								<select id="filterPort"  data-mini="true">
-									<option value="hostName">Hostname</option>
-									<option value="managementip">Management IP</option>
-									<option value="model">Model</option>
-									<option value="portname">Port Name</option>
-									<option value="user">User</option>
-									<option value="type">Type</option>
-									<option value="physicalporttype">Physical Port Type</option>
-									<option value="portspeed">Port Speed</option>
-									<option value="bandwidth">Bandwidth</option>
-									<option value="linetype">Line Type</option>
-								</select>
-							</td>
-							<td><input type='text' placeholder='Search' class='PortFilter' id='searchPort'/></td>
-						</tr>
-					</table>
-					<span>Total Matches: <span id="totalMatchesPort">0</span></span>
+					</div>
 				</div>
-				<table data-role="table" id="RMPort-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-					<thead>
-						<tr class="ui-bar-d curl">
-							<th>Device ID</th>
-							<th data-priority="1">TimeStamp</th>
-							<th data-priority="1">HostName</th>
-							<th data-priority="1">MnmtIP</th>
-							<th data-priority="1">Model</th>
-							<th data-priority="1">PortName</th>
-							<th data-priority="1">Start Reservation</th>
-							<th data-priority="1">End Reservation</th>
-							<th data-priority="1">User</th>
-							<th data-priority="1">Reservation State</th>
-							<th data-priority="1">Type</th>	
-							<th data-priority="1">Physical Port Type</th>
-							<th data-priority="6">Port Speed</th>	
-							<th data-priority="6">Bandwidth</th>
-							<th data-priority="6">Line Type</th>
-						</tr>
-					</thead>
-					<tbody class='test'></tbody>
-				</table>
-				<div>
-					<center>
-						<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
-					</center>
-				</div>	
-			</div>
-		</div>
-		<div id="liTabHistory">
-			<div style='overflow:auto;'>
-				<nav data-role="navbar" id='RHistoryButtons' class="ui-navbar ui-mini" style="display:none;" role="navigation">
-					<ul class="ui-grid-c">
-						<li class="ui-block-d" style='width:100%; '><a href="RHistoryClear.html"  id='HistoryClear' data-rel="dialog"  data-corners="false" data-icon="delete" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Clear</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
-					</ul>
-				</nav>		
-				<div style="width:50%;float:left"></div>
-				<div style="float: left;margin-top:0.5em;">
-					<table>
-						<tr>
+				<div id="liTabConnectivity">
+					<div style='overflow:auto;'>
+						<nav data-role="navbar" id='ConnectivityButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+							<ul class="ui-grid-c">
+								<li class="ui-block-d"><a href=""  id='ConnectivityGenerateReport' data-rel="dialog"  data-corners="false" data-shadow="false" data-icon="arrow-d" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+							</ul>
+						</nav>
+						<div style="width:50%;float:left"></div>
+						<div style="float: left;margin-top:0.5em;">
 							<td>
-								<a id="RHistoryClearAll" href="ClearReleaseAll.html" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Clear All</a>
+								<a id="rmConnectivitySelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
 							</td>
-							<td>
-								<a id="rmHistorySelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-							</td>
-						</tr>
-					</table>
-					<table>
-						<tr>
-							<td>
-								<select id="filterHistory"  data-mini="true">
-									<option value="hostName">Hostname</option>
-									<option value="managementip">Management IP</option>
-									<option value="manufacturer">Manufacturer</option>
-									<option value="model">Model</option>
-									<option value="user">User</option>
-								</select>
-							</td>
-							<td><input type='text' placeholder='Search' class='HistoryFilter' id='searchHistory'/></td>
-						</tr>
-					</table>
-					<span>Total Matches: <span id="totalMatchesHistory">0</span></span>
-				</div>
-				<table data-role="table" id="RMHistory-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-					<thead>
-						<tr class="ui-bar-d">
-							<th>ID</th>
-							<th data-priority="1">TimeStamp</th>
-							<th data-priority="1">HostName</th>
-							<th data-priority="1">MnmtIP</th>
-							<th data-priority="1">Manufacturer</th>
-							<th data-priority="1">Model</th>
-							<th data-priority="1">User</th>
-							<th data-priority="1">Start Reservation</th>
-							<th data-priority="1">Interval</th>
-							<th data-priority="1">Iteration</th>
-							<th data-priority="1">Iteration Number</th>	
-							<th data-priority="1">End Reservation</th>
-							<th data-priority="1">Events</th>	
-						</tr>
-					</thead>
-					<tbody class='test'></tbody>
-				</table>
-				<div>
-					<center>
-						<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
-					</center>
-				</div>	
-			</div>
-		</div>
-		<div id="liTabDevices">
-			<div style='overflow:auto;'>
-				<nav data-role="navbar" id='DevicesButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
-					<ul class="ui-grid-c">
-						<li class="ui-block-d"><a href="RMNewReservation.html"  id='DevicesReserve' data-icon="plus" data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Reserve</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
-					</ul>
-				</nav>
-				<div style="width:50%;float:left"></div>
-				<div data-role="navbar" id="tabsDevices">
-					<ul id="ulDevices">
-						<li id="liLocal" style="width: auto;"><a href="#liFTab1">Local Devices</a></li>
-						<li id="liManual" style="width: auto;"><a href="#liFTab2">Imported Devices</a></li>
-					</ul>
-					<div style="float: left;margin-top:0.5em;">
-					<table style='width:1000px'>
-						<tr>
-							<td><b>Resource Domain: </b></td>
-							<td style='display:none;'>
-								<select id="domainSelect" class=" optionDes a-btn" style='width:100px;'>
-									<option value="all" selected>All</option>
-								</select>
-							</td>
-							<td id='tdDomain' style='display:none'></td>
-							<td id='tdZone' style='display:none'><b>Resource Zone: </b></td>
-							<td style='display:none'>
-								<select id="zoneSelect" class=" optionDes a-btn" onchange="changeZone(this.value)" style='width:100px'>
-									<option value="" selected>All</option>
-								</select>
-							</td>
-							<td id='tdGroup' style='display:none'><b>Group: </b></td>
-							<td style='display:none'>
-								<select id="groupSelect" class=" optionDes a-btn" onchange="changeGroup(this.value)" style='width:100px'>
-									<option value="" selected>All</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br><br><br><br>
-					<table>
-						<tr>
-							<td>
-								<select id="filterDevices"  data-mini="true">
-									<option value="hostName">Hostname</option>
-									<option value="managementip">Management IP</option>
-									<option value="consoleip">Console IP</option>
-									<option value="manufacturer">manufacturer</option>
-									<option value="model">Model</option>
-								</select>
-							</td>
-							<td><input type='text' placeholder='Search' class='DevicesFilter' id='searchConnectivity'/></td>
-						</tr>
-<!--						<tr>
-							<td style='float:right;'><input type='checkbox' id='devAdvanced' class='devAdvancedFilter'/></td>
-							<td>Advanced Filter</td>
-						</tr>--!>
+								<table>
+									<tr>
+										<td>
+											<select id="filterConnectivity"  data-mini="true">
+												<option value="hostName">Hostname</option>
+												<option value="description">Description</option>
+												<option value="switchhostname">Switch Hostname</option>
+												<option value="switchdescription">Switch Descritpion</option>
+												<option value="devicehostname">Device Hostname</option>
+												<option value="devicedescription">Device Description</option>
+												<option value="user">User</option>
+											</select>
+										</td>
+										<td><input type='text' placeholder='Search' class='ConnectivityFilter' id='searchConnectivity'/></td>
+									</tr>
+								</table>
+								<span>Total Matches: <span id="totalMatchesConnectivity">0</span></span>
 
-					</table>
-					<div id="liFTab1">
-						<a id="rmDevicesSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-							<span>Total Matches: <span id="totalMatchesDevices">0</span></span> 
-								<div style="overflow:auto;">
-									<div id="rmtab-01"  data-role="content" style="border-top-width: 0px; padding-top: 0px;">
-										<table data-role="table" id="RMDevices-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-											<thead>
-												<tr class="ui-bar-d">
-													<th>Device ID</th>
-													<th data-priority="1">HostName</th>
-													<th data-priority="1">Start Reservation(Date)</th>	
-													<th data-priority="1">Start Reservation(Time)</th>
-													<th data-priority="1">Interval</th>	
-													<th data-priority="1">Iteration</th>
-													<th data-priority="1">Type</th>
-													<th data-priority="1">End Reservation(Date)</th>	
-													<th data-priority="1">End Reservation(Date)</th>	
-													<th data-priority="1">MgmtIP</th>
-													<th data-priority="1">ConsoleIP</th>
-													<th data-priority="1">Manufacturer</th>
-													<th data-priority="1">Model</th>
-													<th data-priority="1">Connectivity(L1/L2/Open)</th>
-													<th data-priority="1">Domain</th>
-													<th data-priority="1">Zone</th>
-													<th data-priority="1">Group</th>
-																									</tr>
-											</thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
+						</div>
+						<table data-role="table" id="RMConnectivity-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+							<thead>
+								<tr class="ui-bar-d">
+									<th>Timestamp</th>
+									<th data-priority="1">HostName</th>
+									<th data-priority="6">Description</th>
+									<th data-priority="1">Slot</th>
+									<th data-priority="1">Module</th>
+									<th data-priority="1">Port</th>
+									<th data-priority="1">Switch Port</th>
+									<th data-priority="1">Switch Slot</th>
+									<th data-priority="1">Switch HostName</th>
+									<th data-priority="6">Switch Description</th>
+									<th data-priority="1">Switch Slot</th>	
+									<th data-priority="1">Switch Port</th>
+									<th data-priority="1">Port</th>	
+									<th data-priority="1">Module</th>
+									<th data-priority="1">Slot</th>
+									<th data-priority="1">Device HostName</th>
+									<th data-priority="6">Device Description</th>
+									<th data-priority="6">User</th>
+									<th data-priority="6">Start Reservation</th>
+									<th data-priority="6">End Reservation</th>
+									<th data-priority="1">Reservation Status</th>
+									<th data-priority="1">Connectivity Status</th>
+															</tr>
+							</thead>
+							<tbody class='test'></tbody>
+						</table>
+						<div>
+							<center>
+								<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+							</center>
+						</div>	
 					</div>
-					<div id="liFTab2">
-						<a id="rmImportedDevicesSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-							<span>Total Matches: <span id="totalMatchesImportedDevices">0</span></span>
-								<div id="rmtab-02"  data-role="content" style="border-top-width: 0px; padding-top: 0px;">
-									<div style='overflow:auto;'>
-										<table data-role="table" id="RMImportedDevices-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-											<thead>
-												<tr class="ui-bar-d">
-													<th>Device ID</th>
-													<th data-priority="1">HostName</th>
-													<th data-priority="1">MgmtIP</th>
-													<th data-priority="1">ConsoleIP</th>
-													<th data-priority="1">Manufacturer</th>
-													<th data-priority="1">Model</th>
-													<th data-priority="1">Connectivity(L1/L2/Open)</th>
-													<th data-priority="1">Domain</th>
-													<th data-priority="1">Zone</th>
-													<th data-priority="1">Group</th>
-													<th data-priority="1">Availability Day</th>
-													<th data-priority="1">Availability Time</th>
-													<th data-priority="1">Availability Date</th>
-													<th data-priority="1">Availability</th>
-													<th data-priority="1">Start Reservation(Date)</th>	
-													<th data-priority="1">Start Reservation(Time)</th>
-													<th data-priority="1">Interval</th>	
-													<th data-priority="1">Iteration</th>
-													<th data-priority="1">Type</th>
-													<th data-priority="1">End Reservation(Date)</th>	
-													<th data-priority="1">End Reservation(Time)</th>	
-												</tr>
-											</thead>
-											<tbody id ='rmImportedDevices' class='test'></tbody>
-										</table>
-									</div>
-										<div>
-											<center>
-												<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
-											</center>
-										</div>	
-								</div>
+				</div>
+				<div id="liTabPort">
+					<div style='overflow:auto;'>
+						<nav data-role="navbar" id='PortButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+							<ul class="ui-grid-c">
+								<li class="ui-block-d"><a href=""  id='PortGenerateReport' data-rel="dialog" data-icon="arrow-d" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+							</ul>
+						</nav>
+						<div style="width:50%;float:left"></div>
+						<div style="float: left;margin-top:0.5em;">
+							<td>
+								<a id="rmPortSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
+							</td>
+							<table>
+								<tr>
+									<td>
+										<select id="filterPort"  data-mini="true">
+											<option value="hostName">Hostname</option>
+											<option value="managementip">Management IP</option>
+											<option value="model">Model</option>
+											<option value="portname">Port Name</option>
+											<option value="user">User</option>
+											<option value="type">Type</option>
+											<option value="physicalporttype">Physical Port Type</option>
+											<option value="portspeed">Port Speed</option>
+											<option value="bandwidth">Bandwidth</option>
+											<option value="linetype">Line Type</option>
+										</select>
+									</td>
+									<td><input type='text' placeholder='Search' class='PortFilter' id='searchPort'/></td>
+								</tr>
+							</table>
+							<span>Total Matches: <span id="totalMatchesPort">0</span></span>
+						</div>
+						<table data-role="table" id="RMPort-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+							<thead>
+								<tr class="ui-bar-d curl">
+									<th>Device ID</th>
+									<th data-priority="1">TimeStamp</th>
+									<th data-priority="1">HostName</th>
+									<th data-priority="1">MnmtIP</th>
+									<th data-priority="1">Model</th>
+									<th data-priority="1">PortName</th>
+									<th data-priority="1">Start Reservation</th>
+									<th data-priority="1">End Reservation</th>
+									<th data-priority="1">User</th>
+									<th data-priority="1">Reservation State</th>
+									<th data-priority="1">Type</th>	
+									<th data-priority="1">Physical Port Type</th>
+									<th data-priority="6">Port Speed</th>	
+									<th data-priority="6">Bandwidth</th>
+									<th data-priority="6">Line Type</th>
+								</tr>
+							</thead>
+							<tbody class='test'></tbody>
+						</table>
+						<div>
+							<center>
+								<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+							</center>
+						</div>	
+					</div>
+				</div>
+				<div id="liTabHistory">
+					<div style='overflow:auto;'>
+						<nav data-role="navbar" id='RHistoryButtons' class="ui-navbar ui-mini" style="display:none;" role="navigation">
+							<ul class="ui-grid-c">
+								<li class="ui-block-d" style='width:100%; '><a href="RHistoryClear.html"  id='HistoryClear' data-rel="dialog"  data-corners="false" data-icon="delete" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Clear</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+							</ul>
+						</nav>		
+						<div style="width:50%;float:left"></div>
+						<div style="float: left;margin-top:0.5em;">
+							<table>
+								<tr>
+									<td>
+										<a id="RHistoryClearAll" href="ClearReleaseAll.html" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Clear All</a>
+									</td>
+									<td>
+										<a id="rmHistorySelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
+									</td>
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<td>
+										<select id="filterHistory"  data-mini="true">
+											<option value="hostName">Hostname</option>
+											<option value="managementip">Management IP</option>
+											<option value="manufacturer">Manufacturer</option>
+											<option value="model">Model</option>
+											<option value="user">User</option>
+										</select>
+									</td>
+									<td><input type='text' placeholder='Search' class='HistoryFilter' id='searchHistory'/></td>
+								</tr>
+							</table>
+							<span>Total Matches: <span id="totalMatchesHistory">0</span></span>
+						</div>
+						<table data-role="table" id="RMHistory-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+							<thead>
+								<tr class="ui-bar-d">
+									<th>ID</th>
+									<th data-priority="1">TimeStamp</th>
+									<th data-priority="1">HostName</th>
+									<th data-priority="1">MnmtIP</th>
+									<th data-priority="1">Manufacturer</th>
+									<th data-priority="1">Model</th>
+									<th data-priority="1">User</th>
+									<th data-priority="1">Start Reservation</th>
+									<th data-priority="1">Interval</th>
+									<th data-priority="1">Iteration</th>
+									<th data-priority="1">Iteration Number</th>	
+									<th data-priority="1">End Reservation</th>
+									<th data-priority="1">Events</th>	
+								</tr>
+							</thead>
+							<tbody class='test'></tbody>
+						</table>
+						<div>
+							<center>
+								<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+							</center>
+						</div>	
+					</div>
+				</div>
+				<div id="liTabDevices">
+					<div style='overflow:auto;'>
+						<nav data-role="navbar" id='DevicesButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+							<ul class="ui-grid-c">
+								<li class="ui-block-d"><a href="RMNewReservation.html"  id='DevicesReserve' data-icon="plus" data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Reserve</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+							</ul>
+						</nav>
+						<div style="width:50%;float:left"></div>
+						<div data-role="navbar" id="tabsDevices">
+							<ul id="ulDevices">
+								<li id="liLocal" style="width: auto;"><a href="#liFTab1">Local Devices</a></li>
+								<li id="liManual" style="width: auto;"><a href="#liFTab2">Imported Devices</a></li>
+							</ul>
+							<div style="float: left;margin-top:0.5em;">
+								<table style='width:1000px'>
+									<tr>
+										<td><b>Resource Domain: </b></td>
+										<td style='display:none;'>
+											<select id="domainSelect" class=" optionDes a-btn" style='width:100px;'>
+												<option value="all" selected>All</option>
+											</select>
+										</td>
+										<td id='tdDomain' style='display:none'></td>
+										<td id='tdZone' style='display:none'><b>Resource Zone: </b></td>
+										<td style='display:none'>
+											<select id="zoneSelect" class=" optionDes a-btn" onchange="changeZone(this.value)" style='width:100px'>
+												<option value="" selected>All</option>
+											</select>
+										</td>
+										<td id='tdGroup' style='display:none'><b>Group: </b></td>
+										<td style='display:none'>
+											<select id="groupSelect" class=" optionDes a-btn" onchange="changeGroup(this.value)" style='width:100px'>
+												<option value="" selected>All</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<br><br><br><br>
+							<table>
+								<tr>
+									<td>
+										<select id="filterDevices"  data-mini="true">
+											<option value="hostName">Hostname</option>
+											<option value="managementip">Management IP</option>
+											<option value="consoleip">Console IP</option>
+											<option value="manufacturer">manufacturer</option>
+											<option value="model">Model</option>
+										</select>
+									</td>
+									<td><input type='text' placeholder='Search' class='DevicesFilter' id='searchConnectivity'/></td>
+								</tr>
+		<!--						<tr>
+									<td style='float:right;'><input type='checkbox' id='devAdvanced' class='devAdvancedFilter'/></td>
+									<td>Advanced Filter</td>
+								</tr>--!>
+
+							</table>
+							<div id="liFTab1">
+								<a id="rmDevicesSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
+									<span>Total Matches: <span id="totalMatchesDevices">0</span></span> 
+										<div style="overflow:auto;">
+											<div id="rmtab-01"  data-role="content" style="border-top-width: 0px; padding-top: 0px;">
+												<table data-role="table" id="RMDevices-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+													<thead>
+														<tr class="ui-bar-d">
+															<th>Device ID</th>
+															<th data-priority="1">HostName</th>
+															<th data-priority="1">Start Reservation(Date)</th>	
+															<th data-priority="1">Start Reservation(Time)</th>
+															<th data-priority="1">Interval</th>	
+															<th data-priority="1">Iteration</th>
+															<th data-priority="1">Type</th>
+															<th data-priority="1">End Reservation(Date)</th>	
+															<th data-priority="1">End Reservation(Date)</th>	
+															<th data-priority="1">MgmtIP</th>
+															<th data-priority="1">ConsoleIP</th>
+															<th data-priority="1">Manufacturer</th>
+															<th data-priority="1">Model</th>
+															<th data-priority="1">Connectivity(L1/L2/Open)</th>
+															<th data-priority="1">Domain</th>
+															<th data-priority="1">Zone</th>
+															<th data-priority="1">Group</th>
+																											</tr>
+													</thead>
+													<tbody></tbody>
+												</table>
+											</div>
+										</div>
+							</div>
+							<div id="liFTab2">
+								<a id="rmImportedDevicesSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
+									<span>Total Matches: <span id="totalMatchesImportedDevices">0</span></span>
+										<div id="rmtab-02"  data-role="content" style="border-top-width: 0px; padding-top: 0px;">
+											<div style='overflow:auto;'>
+												<table data-role="table" id="RMImportedDevices-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+													<thead>
+														<tr class="ui-bar-d">
+															<th>Device ID</th>
+															<th data-priority="1">HostName</th>
+															<th data-priority="1">MgmtIP</th>
+															<th data-priority="1">ConsoleIP</th>
+															<th data-priority="1">Manufacturer</th>
+															<th data-priority="1">Model</th>
+															<th data-priority="1">Connectivity(L1/L2/Open)</th>
+															<th data-priority="1">Domain</th>
+															<th data-priority="1">Zone</th>
+															<th data-priority="1">Group</th>
+															<th data-priority="1">Availability Day</th>
+															<th data-priority="1">Availability Time</th>
+															<th data-priority="1">Availability Date</th>
+															<th data-priority="1">Availability</th>
+															<th data-priority="1">Start Reservation(Date)</th>	
+															<th data-priority="1">Start Reservation(Time)</th>
+															<th data-priority="1">Interval</th>	
+															<th data-priority="1">Iteration</th>
+															<th data-priority="1">Type</th>
+															<th data-priority="1">End Reservation(Date)</th>	
+															<th data-priority="1">End Reservation(Time)</th>	
+														</tr>
+													</thead>
+													<tbody id ='rmImportedDevices' class='test'></tbody>
+												</table>
+											</div>
+												<div>
+													<center>
+														<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+													</center>
+												</div>	
+										</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </div>
 
 

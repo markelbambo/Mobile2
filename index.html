@@ -51,18 +51,17 @@
 	<script type="text/javascript" src="scripts/jquery.ui.touch-punch.js"></script>
 	<script type="text/javascript" src="scripts/carousel.js"></script>
 	<script type="text/javascript" src="Scripts2/administration.js"></script>
-
 	
 	<!--<script type="application/ecmascript" async="" src="scripts/FileSaver.js"></script>-->
 <!--<script type="text/javascript" src="../Scripts/mousewheel.js"></script>-->
 </head>
-<body ontouchmove="event.preventDefault()">
+<body>
 	<script>
 		var globalDeviceType = "Mobile";
 		browserInfo();
-	//	if(window.location.protocol != "http:"){
-	//		window.location.href = "http:" + window.location.href.substring(window.location.protocol.length);
-	//	}
+		//if(window.location.protocol != "https:"){
+		//	window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+		//}
 	</script>
 	<div class="cRight" style="position: fixed; bottom: 0px; z-index: 9999999;color: #1c58ad;  text-align: center;  width: 100%;  font-family: 'Arial',helvetica,san-serif;  font-weight: normal;  font-size: 11px; margin-bottom: -3px;">
 		<table style="margin-left: auto;margin-right: auto;margin: 0 auto;">
@@ -636,8 +635,8 @@
                             <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="devlistview" >
                                 <input type="radio" name="radiodevlistype" value="graphical" id="graphical" >
                                 <label for="graphical" id="DevlistGraphical">Graphical</label>
-                                <input type="radio" name="radiodevlistype" value="table-view" id="table-view" >
-                                <label for="table-view" id="DevlistTableView">Table View</label>
+                                <input type="radio" name="radiodevlistype" value="table-view" id="table-view">
+                                <label for="table-view" id="DevlistTableView" class="ui-btn-active" >Table View</label>
                             </fieldset>
                         </td>
 						<td>

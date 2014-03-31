@@ -77,6 +77,8 @@ var autoDPartnerSlots = [];
 var editDevInfoAdmin = false;
 var editedDevInfoAdmin = [];
 var editedDevInfoPerTabAdmin = [];
+var availParPortsAdmin = {};
+var partSlotsEditDevice = [];
 var globalLinkAction = "";
 var gblCondition = "";
 var AnotherUser="";
@@ -463,6 +465,10 @@ var globalAccActiveStatus = [];
 var globalAccInactiveStatus = [];
 var globalDomActiveStatus = [];
 var globalDomInactiveStatus = [];
+var globalDPSBoundIds = [];
+var loadDAFlag = "";
+var globalPrevDomainAdminArray = new Array();
+var globalCurrDomainAdminArray = new Array();
 /* POWER MANAGEMENT */
 var globalCIP = new Array();
 var pmpage = "";
@@ -489,7 +495,7 @@ var userNotExistArray = [];
 /* MAP LINK */
 var globalY = 0;
 var globalY2 = 0;
-
+var ReleaseFlagLoadActive = false;
 
 /*----HISTORY GLOBAL-----*/
 window['variableHistory'+pageCanvas] = new Array();
@@ -501,3 +507,5 @@ var powerDevices2=[];
 var powerOutletTableObj = {};
 var powerDEVICES = [];
 var powerDevicesState=[];
+var selectedInlet = {};
+
