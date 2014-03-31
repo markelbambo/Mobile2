@@ -2513,8 +2513,8 @@ function drawImage(flag,newscale){
         }
 	initZoom("reload");
         setTimeout(function(){
-		window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
 		window['variable' + dynamicLayer[pageCanvas]].batchDraw();
+		window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);	
 	},50);
     }else{
         $("#showTooltipInfo").hide();
