@@ -2509,14 +2509,13 @@ function drawImage(flag,newscale){
             	group = drawOneImage(x2,y2,devices[i],group);
                 window['variable' + dynamicLayer[pageCanvas]].add(group);
                	initImages(group);
-            
-            	initZoom("reload");
-            	setTimeout(function(){
-			window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
-			window['variable' + dynamicLayer[pageCanvas]].batchDraw();
-		},50);
-	    }
+            }
         }
+	initZoom("reload");
+        setTimeout(function(){
+		window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
+		window['variable' + dynamicLayer[pageCanvas]].batchDraw();
+	},50);
     }else{
         $("#showTooltipInfo").hide();
     }
