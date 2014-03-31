@@ -1,0 +1,229 @@
+<div data-role="page" id="advancedFilter" data-theme="a">
+    <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+		<h1 class="ui-title" role="heading">Advanced Filter</h1>
+	</div>
+			<div data-role="content">
+				<table>
+					<tr>
+						<td>
+							<a id="rmApplyAdvanced" href="" style="width:100%;" data-role="button" data-mini="true" data-rel="dialog" >Apply Advanced Filter</a>
+						</td>
+						<td>
+							<a id="rmClearAdvanced" href="" style="width:100%;" data-role="button" data-mini="true" data-rel="dialog" >Clear Advanced Filter</a>
+						
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td><input id='systemFilter' type='checkbox'/></td>
+						<td><b style='margin-left:30px;'><i>SOFTWARE</i></b></td>
+					</tr>
+				</table>
+				<table>
+					<tr>		
+						<td>OS:</td>
+						<td style='text-align:left;width:240px;'>
+							<select id='OSselF'>
+								<option value='Any'>Any</option>
+							</select>			
+						</td>
+						<td>Version:</td>
+						<td style='text-align:left;width:240px;'>
+							<select id='OSVersionselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>SW Package:</td>
+						<td  style='text-align:left;width:240px;'>
+							<select id='SWselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<input id='systemFilter6' type='checkbox'/></td>
+						<td><b style='margin-left:30px;'><i>SYSTEM</i></b></td>
+					</tr>
+				</table>
+				<table>
+					<tr>		
+						<td>Name:</td>
+						<td style='text-align:left;width:240px;'>
+							<select id='sysNameselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Product ID:</td>
+						<td style='text-align:left;width:240px;'>
+							<select id='ProductselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Version ID:</td>
+						<td style='text-align:left;width:240px;'>
+							<select id='VersionselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td><input id='RouteFilter' type='checkbox'/></td>
+						<td><b style='margin-left:30px'><i>ROUTE PROCESSOR</i></b></td>
+					</tr>
+				</table>
+				<table>
+					<tr>		
+						<td>Name:</td>
+						<td style='text-align:left;width:232px;'>
+							<select id='routeNameselF'>
+								<option value='Any'>Any</option>	
+							</select>
+						</td>
+						<td style='text-align:right; width:70px;'>Product ID:</td>
+						<td style='text-align:left;width:250px;'>
+							<select id='routeProductselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td style='text-align:right; width:70px;'>Version ID:</td>
+						<td style='text-align:left;width:230px;'>
+							<select id='routeVersionselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<input id='EmbeddedFilter' type='checkbox'/></td>
+						<td><b  style='margin-left:30px;'><i>EMBEDDED PROCESSOR</i></b></td>
+					</tr>
+				</table>
+				<table>
+					<tr>		
+						<td>Name:</td>
+						<td style='text-align:left;width:232px;'>
+							<select id='embNameselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Product ID:</td>
+						<td style='text-align:left;width:250px;'>
+							<select id='embProductselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Version ID:</td>
+							<td style='text-align:left;width:230px;'>
+								<select id='embVersionselF'>
+									<option value='Any'>Any</option>
+								</select>
+							</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<input id='LineFilter' type='checkbox'/></td>
+						<td><b  style='margin-left:30px;'><i>LINE CARD</i></b>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>		
+						<td>Name:</td>
+						<td style='text-align:left;width:232px;'>
+							<select id='lineNameselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Product ID:</td>
+						<td style='text-align:left;width:250px;'>
+							<select id='lineProductselF'>
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+						<td>Version ID:</td>
+							<td style='text-align:left;width:230px;'>
+								<select id='lineVersionselF'>
+									<option value='Any'>Any</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<td>
+								<input id='ModuleFilter' type='checkbox'></td>
+							<td><b  style='margin-left:30px;'><i>MODULE</i></b>
+							</td>
+						</tr>
+					</table>
+					<table>
+						<tr>		
+							<td>Name:</td>
+							<td style='text-align:left;width:232px;'>
+								<select id='modNameselF'>
+									<option value='Any'>Any</option>
+								</select>
+							</td>
+							<td>Product ID:</td>
+							<td style='text-align:left;width:250px;'>
+								<select id='modProductselF'>
+									<option value='Any'>Any</option>
+								</select>
+							</td>
+							<td>Version ID:</td>
+							<td style='text-align:left;width:230px;'>
+								<select id='modVersionselF'>
+									<option value='Any'>Any</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<td>
+								<input id='PortFilter' type='checkbox'/></td>
+							<td><b  style='margin-left:30px;'><i>PORT</i></b>
+							</td>
+						</tr>
+					</table>
+					<table class='noborders' style='width: 50%'>
+					<tr>		
+						<td>Speed:</td>
+						<td style='text-align:left'>
+							<select id='portTypeselF'>
+								<option value="Any">Any</option>
+							</select>
+						</td>
+						<td>Media:</td>
+						<td style='text-align:left'>
+							<select id='portMediaselF' >
+								<option value="Any">Any</option>
+				
+							</select>
+						</td>
+					</tr>
+				</table>
+				<table class='noborders' style='width: 50%'>
+					<tr>
+						<td>Bandwidth:</td>
+						<td style='text-align:left'>
+							<select id='portBandselF' >
+								<option value='Any'>Any</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				
+			</div>
+</div>
+

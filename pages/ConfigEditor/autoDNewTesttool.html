@@ -1,0 +1,231 @@
+<div>
+	<div>
+		<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto;">
+			<legend style="margin-left:20px;">Device Information</legend>
+			<table id="newTestTMainInfo" style="overflow:auto;margin-left:15px;text-align:center;width:95%">
+				<tr>
+					<td style="text-align:right;"><span style="color:red;">*</span>Hostname:</td>
+					<td style="text-align:left;"><input type="text" id="newTestTHostname"></td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;white-space:nowrap;"><span style="color:red;">*</span>Manufacturer:</td>
+					<td id="addNewTestTManuOptAuto" style="text-align:left;">
+						<select id="addNewTestTManuOpt" style="white-space:normal;">
+							<option>Select</option>
+							<option>Agilent</option>
+							<option>Ixia</option>
+							<option>Spirent</option>
+						</select>
+					</td>
+					<td id="addNewTestTManuOptManual" style="text-align:left;">
+						<input id="addNewTestTManuOptManualTxt" type="text" list="knowmanuS">
+						<datalist id="knowmanuS">
+							<option value="">Select</option>
+						</datalist>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;white-space:nowrap;"><span style="color:red;">*</span>Management Ip:</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTMmgmtIp" type="text" onKeyPress="return checkIPInputChar(event)">
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;">
+						<div class="ui-checkbox">
+							<label for="addNewTestTMmgmtIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+							<input type="checkbox" id="addNewTestTMmgmtIpPortChk" data-enhanced="true" data-mini="true" >	
+						</div>
+					</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTMmgmtIpPort" type="text" onKeyPress="return checkNumberInputChar(event)">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;white-space:nowrap;">Console Ip:</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTConIp" type="text" onKeyPress="return checkIPInputChar(event),'console'">
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;">
+						<div class="ui-checkbox">
+							<label for="addNewTestTConIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+							<input type="checkbox" id="addNewTestTConIpPortChk" data-enhanced="true" data-mini="true">	
+						</div>
+					</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTConIpPort" type="text" onKeyPress="return checkNumberInputChar(event)">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;white-space:nowrap;"><span style="color:transparent;">*</span>Username:</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTUserN" type="text">
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;white-space:nowrap;"><span style="color:red;">*</span>Password:</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTPassW" type="Password">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;white-space:nowrap;"><span style="color:red;">*</span>Domain:</td>
+					<td style="text-align:left;">
+					<select id="addNewTestTDomainOpt" style="white-space:normal;">
+							<option value="">Select</option>
+						</select>
+					</td>
+					<td style="width:15px"></td>
+					<td id="addNewTestTTypeHOptLbl" style="text-align:right;white-space:nowrap;"><span style="color:red;">*</span>Type:</td>
+					<td id="addNewTestTTypeHOptCont" style="text-align:left;">
+						<select id="addNewTestTTypeHOpt" style="white-space:normal;">
+							<option value="">Select</option>
+							<option>Real Hardware</option>
+							<option>Virtual Machine</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;" colspan="2">
+						<div class="ui-checkbox">
+							<label for="addNewTestTOptValChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Optional Values</label>
+							<input type="checkbox" id="addNewTestTOptValChk" data-enhanced="true" data-mini="true">	
+						</div>
+					</td>
+					<td style="width:15px"></td>
+					<td id="addNewTestTIncPartP" style="text-align:right;" colspan="2">
+						<div class="ui-checkbox">
+							<label for="addNewTestTIncPartPChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Include Partner Ports</label>
+							<input type="checkbox" id="addNewTestTIncPartPChk" data-enhanced="true" data-mini="true">	
+						</div>
+					</td>
+					<td id="addNewTestTMapPart" style="text-align:right;" colspan="2">
+						<div class="ui-checkbox">
+					<label for="addNewTestTMapPartPChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Map Partner Ports</label>
+							<input type="checkbox" id="addNewTestTMapPartPChk" data-enhanced="true" data-mini="true">	
+						</div>
+					</td>
+				</tr>
+				<tr id="addNewTestTAuxIp">
+					<td style="text-align:right;white-space:nowrap;">Auxialiary:</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTAuxIp" type="text" onKeyPress="return checkIPInputChar(event)">
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;white-space:nowrap;">
+						<div class="ui-checkbox">
+							<label for="addNewTestTAuxIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+							<input type="checkbox" id="addNewTestTAuxIpPortChk" data-enhanced="true" data-mini="true">	
+						</div>
+	
+					</td>
+					<td style="text-align:left;">
+						<input id="addNewTestTAuxIpPort" type="text">
+					</td>
+				</tr>
+				<tr id="autoDTestTSlotsIncCont">
+					<td style="text-align:left;" colspan="5">
+						<table>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="autoDTestTSlotsIncChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;width:150px;white-space:nowrap">Device Slots</label>
+										<input type="checkbox" id="autoDTestTSlotsIncChk" data-enhanced="true" data-mini="true">	
+									</div>
+								</td>
+								<td id="autoDTestTSlotsIncCountCont" style="text-align:left;" colspan="2">
+									<input id="autoDTestTSlotsIncCount" placeholder="Slot Count" type="text">
+								</td>
+							</tr>
+						</table>
+					</td>		
+				</tr>
+				<tr id="autoDTestTSlotInfoTableCont">
+					<td colspan="5"><div style="max-height:200px;overflow:auto;">
+						<table id="autoDTestTSlotInfoTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive">
+							<thead>
+								<tr class="ui-bar-d" style="text-align:left;width:100%">
+									<th id="autoDTestTSlotNum" data-colstart="1">DeviceSlotNumber</th>
+									<th id="autoDTestTSlotPortSrch" data-colstart="3">PortsToSearch</th>
+								</tr>
+								</thead>
+							<tbody id="autoDTestTSlotInfoTbody">
+							</tbody>
+						</table>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+		</fieldset>
+	</div>
+	<div><br/></div>
+	<div id="autoDTestTPartnerInfoCont">
+		<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto;">
+			<legend style="margin-left:20px;">Partner Information</legend>
+			<table id="autoDTestTPartnerInfoField" style="overflow:auto;margin-left:12px;text-align:center;width:95%">
+				<tr>
+					<td style="text-align:right;white-space:nowrap;">Partner type:</td>
+					<td style="text-align:left;">
+						<select id="autoDTestTPartTypeOpt" style="white-space:normal;">
+							<option value="">Select</option>
+							<option value="">L1 Switch</option>
+							<option value="">L2 Switch</option>
+							<option value="">Networking Device</option>
+						</select>
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;white-space:nowrap;">Partner Address:</td>
+					<td style="text-align:left;">
+						<select id="autoDTestTPartAddOpt" style="white-space:normal;">
+							<option value="">Select</option>
+						</select>
+					</td>
+				</tr>
+				<tr id="autoDTestTPartInfo1">
+					<td style="text-align:right;white-space:nowrap;">Host Name:</td>
+					<td id="newTestTPartnerDevHost" style="text-align:left;">No Selection</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;white-space:nowrap;">Manufacturer:</td>
+					<td id="newTestTPartnerDevManu" style="text-align:left;">No Selection</td>
+				</tr>
+				<tr id="autoDTestTPartInfo2">
+					<td style="text-align:right;white-space:nowrap;">Model:</td>
+					<td id="newTestTPartnerDevModel" style="text-align:left;">No Selection</td>
+				</tr>
+				<tr id="autoDTestTOptIncMappChk">
+					<td id="autoDTestTPartPortsSrchNumLbl" style="text-align:right;white-space:nowrap;">Number of Ports:</td>
+					<td id="autoDTestTPartPortsSrchNumCont" style="text-align:left;">
+						<input id="autoDTestTPartPortsSrchNum" type="text" style="width:100px;">
+					</td>
+					<td style="width:15px"></td>
+					<td style="text-align:right;" colspan="2">
+						<div class="ui-checkbox">
+							<label for="autoDTestTIncMapPortsChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Include Mapped Ports</label>
+							<input type="checkbox" id="autoDTestTIncMapPortsChk" data-enhanced="true" data-mini="true">	
+						</div>
+					</td>
+				</tr>
+				<tr id="autoDTestTPartnerInfoTableCont">
+					<td colspan="5"><div style="max-height:200px;overflow:auto;">
+						<table id="autoDTestTPartnerInfoTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive">
+							<thead>
+								<tr class="ui-bar-d" style="text-align:left;width:100%">
+									<th id="autoDTestTPortSlotNum" data-colstart="1">SlotNumber</th>
+									<th id="autoDTestTNumPId" data-colstart="2">ProductId</th>
+									<th id="autoDTestTPortSrch" data-colstart="3">PortsToSearch</th>
+								</tr>
+								</thead>
+							<tbody id="autoDTestTPartnerInfoTbody">
+							</tbody>
+						</table>
+						</div>
+					</td>
+				</tr>
+				<tr><td></br></td></tr>
+			</table>
+		</fieldset>
+	</div>
+	<div id="autoDTestbreakline"><br/></div>
+	<a href="#" id="okAutoDTestT" data-role="button" data-mini="true" data-inline="true" style="width:60px;">Ok</a>
+	<!--a href="#" id="okAutoDTestT" data-role="button" onclick="saveAutoDTestT();" data-mini="true" data-inline="true" style="width:60px;">Ok</a-->
+	<a href="#" id="cancelAutoDTestT" data-role="button" data-mini="true" data-inline="true">Cancel</a>
+</div>

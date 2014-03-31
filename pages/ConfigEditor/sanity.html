@@ -1,0 +1,217 @@
+<div>
+<div id="tabs-1" style="display: none;"><h2>DEVICE SANITY</h2>
+	<font size="3">Device Status</font><br>
+	<font size="2">Total number of devices:&nbsp;<span id="devTotalNo"></span></font>
+	<div id="tab-01"  data-role="content" style="border-top-width: 0px; padding-top: 0px;" class="datagrid">
+		<table id="devSanTable" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead style="">
+			<tr class="ui-bar-d">
+				<th data-priority="1" data-colstart="1" style="padding-top: 0px;">HostName</th>
+				<th data-priority="1" data-colstart="2" style="padding-top: 0px;">ManagementIP</th>
+				<th data-priority="2" data-colstart="3" style="padding-top: 0px;">ConsoleIP</th>
+				<th data-priority="2" data-colstart="4" style="padding-top: 0px;">Manufacturer</th>
+				<th data-priority="2" data-colstart="5" style="padding-top: 0px;">Model</th>
+				<th data-priority="3" data-colstart="6" style="padding-top: 0px;">Login</th>
+				<th data-priority="3" data-colstart="7" style="padding-top: 0px;">HostNameVerification</th>
+				<th data-priority="3" data-colstart="8" style="padding-top: 0px;">ManagementIPVerification</th>
+				<th data-priority="1" data-colstart="9" style="padding-top: 0px;">ShowCommands</th>
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div><br><br>
+	<font size="3">Device Sanity Status</font><br>
+	<div id="tab-01a"  data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+       <table id="devSanTableStat" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+          	<thead style="">
+            <tr class="ui-bar-d">
+                <th data-priority="1" data-colstart="1" style="padding-top: 0px;">TimeStamp</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">HostName</th>
+                <th data-priority="1" data-colstart="3" style="padding-top: 0px;">ManagementIP</th>
+                <th data-priority="1" data-colstart="4" style="padding-top: 0px;">ManagementInterface</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">OSVersion</th>
+                <th data-priority="1" data-colstart="6" style="padding-top: 0px;">State</th>
+                <th data-priority="1" data-colstart="7" style="padding-top: 0px;">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="tabs-2" style="display: none;"><h2>ACCESS SANITY</h2>
+   	<font size="3">Device Status</font><br>
+    <font size="2">Total number of devices:&nbsp;<span id="accTotalNo"></span></font>
+	<div id="tab-02a" data-role="content" style="border-top-width: 0px; padding-top: 0px; width: 100%;" class="datagrid">
+        <table id="accSanTable" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+            <thead style="">
+            <tr class="ui-bar-d">
+                <th data-priority="1" data-colstart="1" style="padding-top: 0px;">HostName</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">ConsoleIp1</th>
+                <th data-priority="1" data-colstart="3" style="padding-top: 0px;">ConsoleIp2</th>
+                <th data-priority="1" data-colstart="4" style="padding-top: 0px;">ManagementIp</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">Login</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+   </div><br><br>
+   <font size="3">Access Sanity Status</font><br>
+   <div id="tab-02b"  data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+   	   <table id="accSanTableStat" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+            <thead style="">
+            <tr class="ui-bar-d">
+                <th data-priority="3" data-colstart="1" style="padding-top: 0px;">TimeStamp</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">HostName</th>
+                <th data-priority="3" data-colstart="3" style="padding-top: 0px;">AccessType</th>
+                <th data-priority="3" data-colstart="4" style="padding-top: 0px;">IpAddress</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">Status1</th>
+                <th data-priority="1" data-colstart="6" style="padding-top: 0px;">Status2</th>
+                <th data-priority="1" data-colstart="7" style="padding-top: 0px;">Status3</th>
+                <th data-priority="1" data-colstart="8" style="padding-top: 0px;">State</th>
+                <th data-priority="1" data-colstart="9" style="padding-top: 0px;">Status</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+	</div>
+</div>
+<div id="tabs-3" style="display: none;"><h2>CONNECTIVITY STATUS</h2>
+	<font size="3">Device Status</font><br>
+    <font size="2">Total number of devices:&nbsp;<span id="connTotalNo" ></span></font>
+	<div id="tabs-3-1" data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+        <table id="connSanityTable" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+            <thead style="">
+            <tr class="ui-bar-d">
+                <th data-priority="1" data-colstart="1" style="padding-top: 0px;">HostName</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">ManagementIP</th>
+                <th data-priority="1" data-colstart="3" style="padding-top: 0px;">ConsoleIP</th>
+                <th data-priority="1" data-colstart="4" style="padding-top: 0px;">Manufacturer</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">Model</th>
+                <th data-priority="1" data-colstart="6" style="padding-top: 0px;">PortMapping</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+	</div><br><br>
+	<font size="3">Connectivity Status</font><br>
+	<div id="tabs-3-0" data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+        <table id="connSanityTableStat" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+            <thead style="">
+            <tr class="ui-bar-d">
+                <th data-colstart="1" style="padding-top: 0px;">TimeStamp</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">SrcDevName</th>
+                <th data-priority="1" data-colstart="3" style="padding-top: 0px;">SrcPortName</th>
+                <th data-priority="1" data-colstart="4" style="padding-top: 0px;">SrcSwitchPort</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">SrcPortStatus</th>
+                <th data-priority="1" data-colstart="6" style="padding-top: 0px;">DstDevName</th>
+                <th data-priority="1" data-colstart="7" style="padding-top: 0px;">DstPortName</th>
+                <th data-priority="1" data-colstart="8" style="padding-top: 0px;">DstSwitchPort</th>
+                <th data-priority="1" data-colstart="9" style="padding-top: 0px;">DstPortStatus</th>
+                <th data-priority="1" data-colstart="10" style="padding-top: 0px;">SwithcHostName</th>
+                <th data-priority="1" data-colstart="11" style="padding-top: 0px;">Connectivity</th>
+                <th data-priority="1" data-colstart="11" style="padding-top: 0px;">Status</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+	</div>
+</div>
+<div id="tabs-4" style="display: none;"><h2>LINK SANITY STATUS</h2>
+ 	<font size="3">Device Status</font><br>
+	<font size="2">Total number of devices:<span id="linkTotalNo" ></span></font>
+	<div id="tabs-4-1" data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+	<table id="linkSanityTable" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+	<thead style="">
+	<tr class="ui-bar-d">
+		<th data-priority="1" data-colstart="1" style="padding-top: 0px;">HostName</th>
+		<th data-priority="1" data-colstart="2" style="padding-top: 0px;">ManagementIP</th>
+		<th data-priority="1" data-colstart="3" style="padding-top: 0px;">ConsoleIP</th>
+		<th data-priority="1" data-colstart="4" style="padding-top: 0px;">Manufacturer</th>
+		<th data-priority="1" data-colstart="5" style="padding-top: 0px;">Model</th>
+		<th data-priority="1" data-colstart="6" style="padding-top: 0px;">Configuration</th>
+		<th data-priority="1" data-colstart="7" style="padding-top: 0px;">Learning_Packets</th>
+		<th data-priority="1" data-colstart="8" style="padding-top: 0px;">Forwarding_Test</th>
+	</tr>
+	</thead>
+	<tbody></tbody>
+	</table>
+	</div><br><br>
+	<font size="3">Link Sanity Status</font><br>
+ 	<div id="tabs-4-2" data-role="content" style="border-top-width: 0px; padding-top: 0px; overflow: auto;" class="datagrid">
+		<table id="linkSanityTableStat"  data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead style="">
+				<tr class="ui-bar-d">
+				<th data-priority="1" data-colstart="1" style="padding-top: 0px;">TimeStamp</th>
+				<th data-priority="1" data-colstart="2" style="padding-top: 0px;">SrcDevName</th>
+				<th data-priority="1" data-colstart="3" style="padding-top: 0px;">SrcPortName</th>
+				<th data-priority="1" data-colstart="4" style="padding-top: 0px;">SrcPortIPAddress</th>
+				<th data-priority="1" data-colstart="5" style="padding-top: 0px;">SrcPortStatus</th>
+				<th data-priority="1" data-colstart="6" style="padding-top: 0px;">DstDevName</th>
+				<th data-priority="1" data-colstart="7" style="padding-top: 0px;">DstPortName</th>
+				<th data-priority="1" data-colstart="8" style="padding-top: 0px;">DstPortIPAddress</th>
+				<th data-priority="1" data-colstart="9" style="padding-top: 0px;">DstPortStatus</th>
+				<th data-priority="1" data-colstart="10" style="padding-top: 0px;">State</th>
+				<th data-priority="1" data-colstart="11" style="padding-top: 0px;">Receive</th>
+				<th data-priority="1" data-colstart="12" style="padding-top: 0px;">Transmit</th>
+				<th data-priority="1" data-colstart="13" style="padding-top: 0px;">Min_Ave_Max</th>
+				<th data-priority="1" data-colstart="14" style="padding-top: 0px;">Status</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+<div id="tabs-5" style="display: none;"><h2>ENABLE INTERFACE</h2>
+	<font size="3">Device Status</font><br>
+	<font size="2">Total number of devices:<span id="enableTotalNo"></span></font>
+	<div id="tab-01a"  data-role="content" style="border-top-width: 0px; padding-top: 0px;" class="datagrid">
+		<table id="enaSanityTable" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+		<thead style="">
+			<tr class="ui-bar-d">
+			<th data-priority="1" data-colstart="1" style="padding-top: 0px;">HostName</th>
+			<th data-priority="1" data-colstart="2" style="padding-top: 0px;">ManagementIP</th>
+			<th data-priority="1" data-colstart="3" style="padding-top: 0px;">ConsoleIP</th>
+			<th data-priority="1" data-colstart="4" style="padding-top: 0px;">Manufacturer</th>
+			<th data-priority="1" data-colstart="5" style="padding-top: 0px;">Model</th>
+			<th data-priority="1" data-colstart="6" style="padding-top: 0px;">Login</th>
+			<th data-priority="1" data-colstart="7" style="padding-top: 0px;">Enable_Interface</th>
+			<th data-priority="1" data-colstart="8" style="padding-top: 0px;">Verification</th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+		</table>
+	</div><br><br>
+	<font size="3">Enable Interface</font><br>
+		<div id="tab-02b"  data-role="content" style="border-top-width: 0px; padding-top: 0px;" class="datagrid">
+            <table id="enaSanityTableStat" data-role="table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+            <thead style="">
+            <tr class="ui-bar-d">
+                <th data-priority="1" data-colstart="1" style="padding-top: 0px;">TimeStamp</th>
+                <th data-priority="1" data-colstart="2" style="padding-top: 0px;">SrcDevName</th>
+                <th data-priority="1" data-colstart="3" style="padding-top: 0px;">SrcPortName</th>
+                <th data-priority="1" data-colstart="4" style="padding-top: 0px;">SrcAdminStatus</th>
+                <th data-priority="1" data-colstart="5" style="padding-top: 0px;">SrcPortStatus</th>
+                <th data-priority="1" data-colstart="6" style="padding-top: 0px;">SrcSpeed</th>
+                <th data-priority="1" data-colstart="7" style="padding-top: 0px;">SrcMediaType</th>
+                <th data-priority="1" data-colstart="8" style="padding-top: 0px;">DstDevName</th>
+                <th data-priority="1" data-colstart="9" style="padding-top: 0px;">DstPortName</th>
+                <th data-priority="1" data-colstart="10" style="padding-top: 0px;">DstAdminStatus</th>
+                <th data-priority="1" data-colstart="11" style="padding-top: 0px;">DstPortStatus</th>
+                <th data-priority="1" data-colstart="12" style="padding-top: 0px;">DstSpeed</th>
+                <th data-priority="1" data-colstart="13" style="padding-top: 0px;">DstMediaType</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+   </div>
+</div>
+
+<div>
+	<center>
+	<input type="button" value="Refresh">
+	<input type="button" value="Done" onclick="cancelPopupSanity();">
+	</center>
+</div>

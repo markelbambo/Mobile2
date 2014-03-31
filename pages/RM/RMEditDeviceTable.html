@@ -1,0 +1,67 @@
+<!--Sec Page-->
+<div data-role="page" id="editDeviceTable" data-theme="a">
+	<!-- header -->
+    <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+		<h1 class="ui-title" role="heading">Resource Management</h1>
+		<a id="user-button" class="ui-btn-right" data-rel="popup" data-role="button" data-icon="user" data-iconpos="notext" data-inline="true" href="#userPanel"></a>
+    </div>
+
+	
+	<div data-role="content">
+			<nav data-role="navbar" id='ReserveEditButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+				<ul class="ui-grid-c">
+					<li class="ui-block-c" style='width:100%' ><a href="" id='rmApplyExtend' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="grid" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span id='extendApply' class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Apply</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
+				</ul>
+			</nav>
+
+
+		<div style="float: left;margin-top:0.5em;">
+			<!--<td>
+				<a id="rmApplyExtend" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='extendApply'>Apply</span></a>
+			</td>--!>
+    		<span>Total Matches: <span id="totalMatchesEditTable">0</span></span>
+        </div>
+	</br></br></br></br>	
+ 	<table data-role="table" id="editReservationTable" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+  			<thead>
+    		<tr class="ui-bar-d">
+
+			    <th data-priority="1">Host Name</th>
+			    <th data-priority="1">Start Date</th>
+			    <th data-priority="1">Start Time</th>
+				<th data-priority="1">Interval</th>
+				<th data-priority="1">Iteration</th>
+				<th data-priority="1">Iteration No.</th>
+				<th data-priority="1">End Date</th>
+				<th data-priority="1">End Time</th>
+			</tr>
+		  	</thead>
+			<tbody>
+			</tbody>
+
+		</table>
+
+	<!-- footer -->
+        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
+            <div id="dock">
+                <ul>
+                    <li>
+                        <a href="#"><span>Config</span><img class="configCar2" src="../../img/configeditor.png" alt="[Config Editor]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>Admin</span><img class="adminCar" src="../../img/Admin.png" alt="[Administration]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>RM</span><img class="rmCar" src="../../img/RM.png" alt="[Resource Management]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>PM</span><img class="pmCar" src="../../img/PM.png" alt="[Power Management]" /></a>
+                    </li>
+                    <li>   
+                        <a href="#"><span>Stats</span><img class="statCar" src="../../img/Statistics.png" alt="[Statistics]" /></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+

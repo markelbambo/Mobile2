@@ -1,0 +1,511 @@
+<div data-role="page" id="addUserPopUp" data-mini="true">
+	<div style="text-align:center;padding:10px;" data-role="header" data-theme="d" role="banner" class="ui-header ui-bar-d">Add User</div>
+	<div role="main" align="center">
+		<div role="tab">
+		<div data-role="navbar" id="navbar">
+			<ul>
+				<li><a href="#" data-tab-class="usertab-1" class="ui-btn-active" data-mini="true">User Data</a></li>
+				<li><a href="#" data-tab-class="usertab-2" data-mini="true">Resource Domain</a></li>
+				<li><a href="#" data-tab-class="usertab-3" data-mini="true">Access Rights</a></li>
+				<li><a href="#" data-tab-class="usertab-4" data-mini="true">Reservation Limits</a></li>
+			</ul>
+		<!--</div>-->
+			<div class="tabPanel">
+				<div class="usertab-1">
+					<fieldset class="ui-grid-b">
+						<div class="ui-block-a">
+								<div class="title"><h3  style="text-align:center" >User Information</h3></div>
+								<div id="UserAccordions">
+									<table class="ui-responsive">
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input type="text" id="addtxtFirstName" maxlength="30" name="txtUserEdit" placeholder="First Name" data-mini="true" data-theme="d" class="inputDesign" onblur="validateFirstName(id)"/>
+											</td>
+											<td>
+												<div id="spanaddtxtFirstName"/>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input type="text" id="addtxtMiddleName" maxlength="30" name="txtUserEdit" placeholder="Middle Name" data-mini="true" data-theme="d" class="inputDesign" onblur="validateMiddleName(id)"/>
+											</td>
+											<td>
+												<div id="spanaddtxtMiddleName"/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input id="addtxtLastName" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateLastName(id)" placeholder="Last Name" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtLastName"/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<div data-role="fieldcontain">
+													<select id="addtxtCountry" name="txtUserEdit" data-inline='true' data-mini="true" onchange="changeContactFormat('addtxtCountry')" class="select" data-native-menu="false"></select>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style='padding-left:143px;'>
+												<input type='button' class="buttonDesign buttonDesign-text" value='edit' onclick='editCountry();' data-theme="d" data-mini="true" data-inline="true"/>
+											</td>
+										</tr>
+										<div id="delCountryPopUp"></div>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtHomePhoneNo" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateHomePhoneNo(id)" placeholder="Home Phone Number" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtHomePhoneNo"/>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style='padding-left:70px;'>
+												<div id='addHomePhoneNoFormat'>+1-(xxx)-xxx-xxxx</div>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtMobileNo" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateMobileNo(id)" placeholder="Cellphone Number" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtMobileNo"/>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style='padding-left:70px;'>
+												<div id='addMobileNoFormat'>+xx-xxx-xxx-xxxx</div>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtHomeAdd" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateHomeAdd(id)" placeholder="Home Address" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtHomeAdd"/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input id="addtxtEmail" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateEmail(id)" placeholder="E-mail Address" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtEmail"/>
+											</td>
+										</tr>
+									</table>
+								</div>
+						</div>
+						<div class="ui-block-b">
+								<div class="title" id='EmployeeInfoAccordion' ><h3 style="text-align:center">Employee Information</h3></div>
+								<div id="UserAccordions">
+									<table class="form">
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<div data-role="filedcontain">
+													<select id="addtxtCompany" name="txtUserEdit" data-inline='true' data-mini="true" class="select" data-native-menu="false"></select>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style='padding-left:143px;'>
+												<input type='button' class="buttonDesign buttonDesign-text" value='edit' onclick='editCompany();' data-theme="d" data-mini="true" data-inline="true"/>
+											</td>
+										</tr>
+										<div id='delCompanyPopUp'></div>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtEmployNo" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateEmployNo(id)" placeholder="Employee Number" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtEmployNo"/>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtOfficeAdd" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateOfficeAdd(id)" placeholder="Office Address" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtOfficeAdd"/>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtPhoneNo" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validatePhoneNo(id)" placeholder="Business Phone Number" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtPhoneNo"/>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style='padding-left:70px;'>
+												<div id='addPhoneNoFormat'>+1-(xxx)-xxx-xxxx</div>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>
+												<input id="addtxtDivision" maxlength="30" name="txtUserEdit" class='inputDesign' type="text" onblur="validateDivision(id)" placeholder="Technology Division" data-theme="d" data-mini="true"/>
+											</td>
+											<td>
+												<div id="spanaddtxtDivision"/>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<select name="txtUserEdit" id ="directreportselect2" name="txtUserEdit" data-inline='true' data-mini="true" class="select" data-native-menu="false"></select>
+											</td>
+											<td>
+												<!--<div style="display:none" id="spanaddtxtDirectReport"/>-->
+											</td>
+										</tr>
+										<!--<tr>
+											<td colspan="2">
+												<input style="left:58px;"  type="button" id="addManager" value="Add Manager"  data-mini="true" class="buttonDesign buttonDesign-text" data-theme="d"/>
+											</td>
+										</tr>-->
+									</table>
+								</div>
+						</div>
+						<div class="ui-block-c">
+								<div class="title"><h3 style="text-align:center">Account Information</h3></div>
+								<div id="UserAccordions">
+									<table class="form">
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input id="addtxtUserName" maxlength="20" name="txtUserEdit" class='inputDesign' type="text" onblur="validateUserName(id)" onkeyup="validateUserName(id)" onkeypress="validateUserName(id)" data-theme="d" onkeydown="validateUserName(id)" data-mini="true" placeholder="User Name"/>
+											</td>
+											<td><div id="addUsernamediv"></div></td>
+										</tr>
+										<tr>
+											<td id="excesstd" style = "display:none"/>
+											<td id="unameresult" style = "display:none"/>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<!--<label for="addtxtUserLevel">User Type</label>-->
+												<select onchange="changeDROption(this.value,'directreportdiv')" id='addtxtUserLevel' data-inline="true" name="txtUserEdit" data-mini="true" class="select" data-native-menu="false">
+													<option data-placeholder="true">User Type</option>
+													<option value="User">User</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input id="addtxtPassword" class='inputDesign' name="txtUserEdit" type="password" onblur="validatePassword(id)" onkeypress="validatePasswordFormat(this.value,'')" onkeyup="validatePasswordFormat(this.value,'')" onkeydown="validatePasswordFormat(this.value,'')" onpaste="return false" placeholder="Password" data-theme="d" data-mini="true"/>
+												<br>Enter min. of 6 characters
+											</td>
+											<td width="100px">&nbsp;&nbsp;<span class="passwordStrength" id='passwordStrength' style="border:none;width:100px;text-align:center;font-weight:bold;" /></td>
+										</tr>
+										<tr>
+											<td>
+												<span style="color: red">*</span>
+											</td>
+											<td>
+												<input id="addtxtRePassword" name="txtUserEdit" class='inputDesign' type="password" onblur="validatePassword(id)" data-theme="d" onpaste="return false" data-mini="true" placeholder="Re-enter Password"/>
+											</td>
+										</tr>
+															
+									</table>
+								</div>
+							</div>
+					</fieldset>
+					<br/>
+					<!--<div style='padding-left:850px;padding-top:150px;'>
+						<div id='cbdomPriv'>
+							<input type="checkbox" name="domPriviledge" id="domPriviledge" value='enabled' data-mini="true"/>Priviledged to add/edit a Domain
+						</div>
+					</div>-->
+				</div>
+				<div class="usertab-2 ui-screen-hidden">
+					<!--<ul data-role="listview" data-inset="true">
+						<li><a href="#">Acura</a></li>
+						<li><a href="#">Audi</a></li>
+						<li><a href="#">BMW</a></li>
+						<li><a href="#">Cadillac</a></li>
+						<li><a href="#">Ferrari</a></li>
+					</ul>-->
+					<div data-role="content">
+						<div style="float: left;margin-top:0.5em;">
+							<span>Total Matches: <span id="domaintotalMatches">0</span></span>
+						</div>
+						<br/><br/>
+						<div>
+							<table data-role="table" id="userDomainsAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+								<thead>
+									<tr class="ui-bar-d">
+										<th data-priority="1">Domain Name</th>
+										<th data-priority="1">Domain Description</th>
+										<th data-priority="1">Number of Devices</th>
+										<th data-priority="1">Number of Zones</th>
+										<th data-priority="1">Bound DPS</th>
+										<th data-priority="1">Status</th>
+									</tr>
+								</thead>
+								<tbody id='tbUserDomain'>
+								</tbody>
+							</table>
+						</div>
+						<div id="userZoneTab">
+							<div role="tabs">
+								<div data-role="navbar" id="zonenavbar">
+									<ul id="zoneTab"><li></li></ul>
+									<div class="zoneTabPanel" id="zoneTabPanel"> 
+										<div id-"zonetab-0">
+										<div style="float: left;margin-top:0.5em;">
+											<span>Total Matches: <span id="zonetotalMatches">0</span></span>
+										</div>
+										<br/><br/>
+										<table data-role="table" id="userZoneAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+											<thead>
+												<tr class="ui-bar-d">
+													<th data-priority="1">Zone Name</th>
+													<th data-priority="1">Zone Description</th>
+													<th data-priority="1">Number of Groups</th>
+													<th data-priority="1">Number of Devices</th>
+												</tr>
+											</thead>
+											<tbody id='tbUserZone'>
+											</tbody>
+										</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="userGroupTab">
+							<div role="tabs">
+								<div data-role="navbar" id="groupnavbar">
+									<ul id="groupTab"><li></li></ul>
+									<div class="groupTabPanel">
+										<div style="float: left;margin-top:0.5em;">
+											<span>Total Matches: <span id="grouptotalMatches">0</span></span>
+										</div>
+										<br/><br/>
+										<table data-role="table" id="userGroupsAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+											<thead>
+												<tr class="ui-bar-d">
+													<th data-priority="1">Group Name</th>
+													<th data-priority="1">Description</th>
+													<th data-priority="1">Number of Devices</th>
+													<th data-priority="1">Status</th>
+												</tr>
+											</thead>
+											<tbody id='tbUserGroup'>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="usertab-3 ui-screen-hidden">
+					<br/><br/>
+					<div data-role="navbar" id="useraccritab">
+						<ul>
+							<li><a href="#" data-tab-class="useraccritab-1" class="ui-btn-active" data-mini="true">User Policy</a></li>
+							<li><a href="#" data-tab-class="useraccritab-2" data-mini="true">Group Policy</a></li>
+						</ul>
+						<div class="tabPanel">
+							<div class="useraccritab-1">
+								<div data-role="content">
+									<div style="float: left;margin-top:0.5em;">
+										<span>Total Matches: <span id="useraccritotalMatches">0</span></span>
+									</div>
+									<br/><br/>
+									<div>
+										<table data-role="table" id="userAccRiAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+											<thead>
+												<tr class="ui-bar-d">
+													<th data-priority="1">Access Rights Name</th>
+													<th data-priority="1">Action</th>
+													<th data-priority="1">Entity Type</th>
+													<th data-priority="1">Description</th>
+													<th data-priority="1">Status</th>
+												</tr>
+											</thead>
+											<tbody id='tbUserAccRi'>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="useraccritab-2 ui-screen-hidden">
+								<div data-role="content">
+									<div style="float: left;margin-top:0.5em;">
+										<span>Total Matches: <span id="ugroupaccritotalMatches">0</span></span>
+									</div>
+									<br/><br/>
+									<div>
+										<table data-role="table" id="ugroupAccRiAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+											<thead>
+												<tr class="ui-bar-d">
+													<th data-priority="1">Access Rights Name</th>
+													<th data-priority="1">Action</th>
+													<th data-priority="1">Entity Type</th>
+													<th data-priority="1">Description</th>
+													<th data-priority="1">Group Name</th>
+													<th data-priority="1">Domain Name</th>
+												</tr>
+											</thead>
+											<tbody id='tbuGroupAccRi'>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="usertab-4 ui-screen-hidden">
+					<div id="UserAccordions">
+						<table>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="maxResNumCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Maximum Number Of Reservation:</label>
+										<input type="checkbox" name='resLimit' id='maxResNumCB' data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td>
+									<input id='maxResNum' type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" style="width:100px; padding-left:5px;" disabled="true" data-theme="d" data-mini="true"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="maxActResCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Maximum Number Of Active Reservation:</label>
+										<input type="checkbox" name='resLimit' id="maxActResCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td>
+									<input id='maxActRes' type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" style="width:100px;  padding-left:5px;"disabled="true" data-theme="d" data-mini="true"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="maxDevNumCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Maximum Number Of Device(s) Per Reservation:</label>
+										<input type="checkbox" name='resLimit' id="maxDevNumCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td>
+									<input id="maxDevNum" type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false"disabled="true" data-theme="d" data-mini="true"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="maxExtNumCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Maximum Number Of Extension Per Reservation:</label>
+										<input type="checkbox" name='resLimit' id="maxExtNumCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td>
+									<input id="maxExtNum" type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" style="width:100px;  padding-left:5px;"disabled="true" data-mini="true" data-theme="d"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="maxResDurCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Maximum Reservation Duration:</label>
+										<input type="checkbox" name='resLimit' id="maxResDurCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td>
+									<select id='UserReservationTimeInfo' disabled="true" onchange="disableDuration(this.value)" style="width:100px" class='optionDes a-btn' data-mini="true">
+										<option value="Limited">Limited</option>
+										<option value="Unlimited">Unlimited</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+								<td>
+									<div id='maxResDurMoDay'>
+										<input id="durMM" type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" disabled="true" data-mini="true" data-theme="d"/> Month(s)
+										<input id="durDD" type="text" class='inputDesign' onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" disabled="true" data-mini="true" data-theme="d"/> Day(s)
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+								<td>
+									<div id='maxResDurHrMin' style="margin-top:8px;">
+										<select id="durH" disabled="true" class='optionDes a-btn' style=" padding-left:5px;" data-mini="true"></select> Hour(s)
+										<select id="durM" disabled="true" class='optionDes a-btn' style=" padding-left:5px; margin-left:7px;" data-mini="true"></select> Minute(s)
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="emailNotCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">E-mail Notification:</label>
+										<input type="checkbox" name='resLimit' id="emailNotCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+								<td style='padding-top:10px;'>
+									<input id="emailNot" type="text"  class='inputDesign'  onkeydown="return validateKey(event)" onkeyup="return validateKey(event)" onkeydown="return validateKey(event)" onpaste="return false" style="width:100px; padding-left:5px;"disabled="true" data-mini="true" data-theme="d"> minute(s) before release
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="ui-checkbox">
+										<label for="disableIterationCB" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Disable Iteration</label>
+										<input type="checkbox" name='resLimit' id="disableIterationCB" data-enhanced="true" data-mini="true">
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<table>
+		<tr>
+			<td>
+				<a id="saveUser" href="#" data-role="button" data-mini="true" data-theme="d">Add</a>
+			</td>
+			<td>
+				<a id="cancelAdd" href="#" data-role="button" data-mini="true" data-theme="d">Cancel</a>
+			</td>
+		</tr>
+	</table>
+</div>

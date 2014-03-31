@@ -2,19 +2,18 @@
 <div data-role="page" id="RMManageDevice" data-theme="a">
 	<!-- header -->
     <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
-		<h1 class="ui-title" role="heading">Resource Management</h1>
+		<h1 class="ui-title" role="heading">Manage Devices</h1>
     </div>
 	<div data-role="content" style="margin-top:50px;">
-	<nav data-role="navbar" id='ManageButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+	<nav data-role="navbar" style='display:none;' id='ManageButtons' class="ui-navbar ui-mini" role="navigation">
     <ul class="ui-grid-c">
 
-      <li class="ui-block-b"><a href="" id='ManageAdd' data-rel="page" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Add</span><span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span></span></a></li>
 
-      <li class="ui-block-b"><a href="" id='ManageEdit' data-rel="page" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Edit</span><span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span></span></a></li>
+      <li style='width:33.3%' class="ui-block-b"><a href="" id='ManageEdit' data-rel="page" data-corners="false" data-icon="grid" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Edit</span><span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span></span></a></li>
 
-      <li class="ui-block-c"><a href="" id='ManageDelete' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Delete</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
+      <li style='width:33.3%' class="ui-block-c"><a href="RHistoryClear.html" id='ManageDelete' data-transition='pop' data-icon="delete" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Delete</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
 
-      <li class="ui-block-d"><a href=""  id='ManageGenerateReport' data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+	  <li style='width:33.3%' class="ui-block-d"><a href=""  id='ManageGenerateReport' data-rel="dialog"  data-corners="false" data-icon="arrow-d" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Generate Report</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
     </ul>
   </nav>
 
@@ -25,9 +24,47 @@
 			</div>--!>
 		</div>
 		<div style="float: left;margin-top:0.5em;">
-			<td>
-				<a id="rmManageSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
-			</td>
+			<table>
+				<tr>
+					<td>
+						<a id="ManageAdd" href="RMAddDevice.html" style="width:100px;" data-role="button" data-mini="true" data-rel="page" >Add</a>
+					</td>
+					<td>
+
+						<a id="rmManageSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>
+						<select id="filterManage"  data-mini="true">
+							<option value="hostname">Host Name</option>
+							<option value="zone">Zone</option>
+							<option value="domain">Domain</option>
+							<option value="managementip">Management IP</option>
+							<option value="managementinterface">Management Interface</option>
+							<option value="macaddress">Mac Address</option>
+							<option value="consoleip">Console IP</option>
+							<option value="manufacturer">Manufacturer</option>
+							<option value="model">Model</option>
+							<option value="serialno">Serial Number</option>
+							<option value="techsupport">Technical Support</option>
+							<option value="discovery">Discovery</option>
+							<option value="cpuspeed">CPU Speed</option>
+							<option value="systemmemory">System Memory</option>
+							<option value="nvram">NVRAM/CF</option>
+							<option value="osversion">OS Version</option>
+						</select>
+					</td>
+					<td><input type='text' placeholder='Search' class='ManageFilter' id='searchManage'/></td>
+				</tr>
+				<tr>
+					<td style='float:right;'><input type='checkbox' id='devAdvanced' class='devAdvancedFilter'/></td>
+					<td>Advanced Filter</td>
+				</tr>
+			</table>
+
 
         	<span>Total Matches: <span id="totalMatchesManageDevice">0</span></span>
         </div>
@@ -42,16 +79,17 @@
 	            <option value="2">Calendar View</option>
 		    </select>
 		</fieldset>-->
-		<table data-role="table" id="RMManageDevice-table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+		<table data-role="table" id="RMManageDevice-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
   			<thead>
     		<tr class="ui-bar-d">
 			    <th>ID</th>
 			    <th data-priority="6">Date Added</th>
 			    <th data-priority="1">HostName</th>
-      			<th data-priority="1">Domain</th>
-				<th data-priority="6">Zone</th>
+      			<th data-priority="1">Zone</th>
+				<th data-priority="6">Domain</th>
 				<th data-priority="6">Group</th>
 				<th data-priority="1">MgmtIp</th>
+				<th data-priority="1">Management Interface</th>
 				<th data-priority="1">Mgmt MAC Address</th>
 				<th data-priority="6">Console IP</th>
 				<th data-priority="1">Manufacturer</th>
@@ -61,32 +99,19 @@
 				<th data-priority="6">Technical Support</th>	
 				<th data-priority="6">Discovery</th>	
 				<th data-priority="6">CPU Speed</th>	
+				<th data-priority="6">System Memory</th>	
+				<th data-priority="6">NVRAM/CF</th>	
+				<th data-priority="6">OS Version</th>	
 			</tr>
 		  	</thead>
 			<tbody>
 			</tbody>
 		</table>
+			<div>
+				<center>
+					<span href='' id='showMore' class='Showmore' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+				</center>
+			</div>
+
 	</div>
-	<!-- footer -->
-        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
-            <div id="dock">
-                <ul>
-                    <li>
-                        <a href="#"><span>Config</span><img class="configCar2" src="../../img/configeditor.png" alt="[Config Editor]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>Admin</span><img class="adminCar" src="../../img/Admin.png" alt="[Administration]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>RM</span><img class="rmCar" src="../../img/RM.png" alt="[Resource Management]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>PM</span><img class="pmCar" src="../../img/PM.png" alt="[Power Management]" /></a>
-                    </li>
-                    <li>   
-                        <a href="#"><span>Stats</span><img class="statCar" src="../../img/Statistics.png" alt="[Statistics]" /></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
 </div>

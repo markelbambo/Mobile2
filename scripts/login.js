@@ -4,7 +4,15 @@
 
 /*Event binding for login page init, login button, register button*/
 $( document ).on( "pageinit", "#Login", function( event ) {
+	$("#RegisterButton").removeClass("ui-btn");
+	$("#RegisterButton").addClass("ui-btn-gloss");
 	$( "#loginLoader" ).dialog({ create: function( event, ui ) {} });
+	if(globalCurrPage == "Config Editor"){
+    	loadConfigEditor();
+        CommitAction();
+        populateCombo();
+        outOfFocus();
+	}
 	$("#configFooter").hide();
 });
 $(document).on('click', '#LoginButton', function() {
@@ -82,7 +90,7 @@ function ValidateIPaddress(ipaddress){
 	if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)){
 		return "true";
 	} else{
-	  	alert("You have entered an invalid IP address!");
+	  	error("You have entered an invalid IP address!","Notification");
     	return "false";
 	}
 } 
@@ -100,18 +108,11 @@ function ValidateIPaddress(ipaddress){
  *
 */
 function login() {
-	//$("#loginLoader").dialog("open");
-//	var load="<center><div style='font-size: 10px;background-color: white'><b>Logging-In...</b><br/><img src='../styles/images/preloader.gif' height='30px' width='30px'></div></center>";
-//	$("#loginLoader").empty().append(load);
-		
 	var usrName = document.getElementById('UserName').value;
 	var passWord = document.getElementById('Password').value;
-		
-//	var newpass = CheckExpirepassword(usrName);
-//	var newpass = 1;
 	var IPTxt = $("#ipAddTxt").val();
     if(IPTxt == ""){
-        alert("Ip Address are required.");
+        error("Ip Address are required.","Notification");
 		loading('hide');
 		return;
     }else{
@@ -120,32 +121,61 @@ function login() {
 			CURRENT_IP = IPTxt;
 		}
     }	
+	
 	globalUserName = usrName;
 	var pass = $.md5(passWord);
-	var urls = "http://"+CURRENT_IP+"/cgi-bin/Final/AutoCompleteAdmin/FQueryCgiAdminPy.py?action=Authenticate&query=User="+usrName+"^Pass="+pass;
+	var query = {'QUERY':[{'User':usrName,'Pass':pass}]};
+	query = JSON.stringify(query);
+	var urls = getURL("ADMIN1","JSON")+"action=Authenticate&query="+query;//User="+usrName+"^Pass="+pass;
 	$.ajax({
 		url: urls,
 		timeout: 120000,
 		dataType: 'html',
 		success: function(data) {
+			globalDeviceType = 'Mobile';
+			//data = "Ok";
 			data = $.trim(data);
-			if(data == 'Ok'){				
+			var dat = data.replace(/'/g,'"');
+            var dat2 = $.parseJSON(dat);
+            var res = dat2.RESULT[0].Result;
+			if(res.toLowerCase() == 'ok' || res==1){				
 				globalLoginFlag =1;
-				$.mobile.changePage( $("#configEditorPage"), {
-		        	transition: "flow",
-          			reverse: false,
-          			changeHash: true
-    			});
+				localStorage.usernameNFastMobile = usrName;
+				if(globalCurrPage == "Config Editor"){					
+					$.mobile.changePage( $("#configEditorPage"), {
+			        	transition: "flow",
+        	  			reverse: false,
+          				changeHash: true
+	    			});
+					setTimeout(function(){
+						loadGridMenuContent();
+					},100);
+				}else if(globalCurrPage == "RM"){
+					$.mobile.changePage($('#rmDialog'),{
+			            transition: "pop",
+                        changeHash: true
+			        });
+				}else if(globalCurrPage == "PM"){
+					$.mobile.changePage($('#pmDialog'),{
+			            transition: "pop",
+                        changeHash: true
+			        });
+				}else if(globalCurrPage == "Admin"){
+                    $.mobile.changePage($('#adminDialog'),{
+                        transition: "pop",
+                        changeHash: true
+                    });
+                }else if(globalCurrPage == "Statistics"){
+                    $.mobile.changePage($('#statsDialog'),{
+                        transition: "pop",
+                        changeHash: true
+                    });
+                }
 				globalUserName = usrName;
 				userInformation2();
-				setTimeout(function(){
-					$("#configFooter").show();
-					loadGridMenuContent();
-				},100);
 				loading('hide');
-	//			window.location.href="https://"+CURRENT_IP+"/Mobile/index.html";
 			}else{
-				alert("Username and Password invalid.");
+				error("Username and Password invalid.");
 				loading('hide');
 				globalLoginFlag = 0;
 			}
@@ -165,6 +195,7 @@ function login() {
  *
 */
 function signout(){
+	localStorage.usernameNFastMobile = '';
 	globalLoginFlag = 0;
 	globalUserName="";
 	$.mobile.changePage( $("#Login"), {
@@ -174,22 +205,7 @@ function signout(){
     });
 	$("#configFooter").hide();
 	clearCanvas();
-}
-
-/*
- *
- *	FUNCTION NAME : txtfocus
- *	AUTHOR		  : 
- *	DATE		  :	
- *	MODIFIED BY	  :	
- *	REVISION DATE : 
- *	DESCRIPTION	  : focuses on the username input box
- *	PARAMETERS	  : none
- *
-*/
-
-function txtfocus() {
-	document.getElementById('Username').focus();
+	location.reload();
 }
 
 /*
@@ -206,16 +222,10 @@ function txtfocus() {
 */
 
 function createAccount() {
-
-	/*$("#loginLoader").dialog("open");
-	var load="<center><div style='font-size: 10px;background-color: white'><b>Gathering Information...</b><br/><img src='../styles/images/preloader.gif' height='30px' width='30px'></div></center>";
-	$("#loginLoader").empty().append(load);*/
-
 	$('#RegisterBtn').empty().load('pages/Register.html',function() {
 		$("#loginLoader").dialog("close");
 		$('#RegisterBtn').dialog('open');
 		$('.ui-dialog :button').blur();
-	//	$('#addtxtUserName').focus();
 	});
 
 }

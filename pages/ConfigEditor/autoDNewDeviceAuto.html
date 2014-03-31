@@ -1,0 +1,215 @@
+<div>
+		<div>
+			<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto;">
+				<legend style="margin-left:20px;">Device Information</legend>
+				<table id="newDeviceMainInfo" style="overflow:auto;margin-left:15px;text-align:center;width:95%">
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Device type: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+							<select id="addDevTypeOpt" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Manufacturer: <span style="color:red;">*</span></td>
+						<td id="addNewDevManuOptAuto" style="text-align:left;">
+						<select id="addNewDevManuOpt" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Management Ip: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+							<input id="addNewDevMmgmtIp" type="text" onKeyPress="return checkIPInputChar(event)">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;">
+							<div class="ui-checkbox">
+								<label for="addNewDevMmgmtIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+								<input type="checkbox" id="addNewDevMmgmtIpPortChk" data-enhanced="true" data-mini="true">	
+							</div>
+						</td>
+						<td style="text-align:left;">
+							<input id="addNewDevMmgmtIpPort" type="text" onKeyPress="return checkNumberInputChar(event,this,'65535');">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Console Ip: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+							<input id="addNewDevConIp" type="text" onKeyPress="return checkIPInputChar(event,'console')">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;">
+							<div class="ui-checkbox">
+								<label for="addNewDevConIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port: <span style="color:red;">*</span></label>
+								<input type="checkbox" id="addNewDevConIpPortChk" data-enhanced="true" data-mini="true">	
+							</div>
+						</td>
+						<td style="text-align:left;">
+							<input id="addNewDevConIpPort" type="text" onKeyPress="return checkNumberInputChar(event,this,'65535')">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Username: <span style="color:transparent;">*</span></td>
+						<td style="text-align:left;">
+							<input id="addNewDevUserN" type="text" onKeyPress="return checkValConfigText(event);">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;" onKeyPress="return checkValConfigText(event);">Password: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+							<input id="addNewDevCPassW" type="Password">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Type: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+							<select id="addNewDevTypeHOpt" style="white-space:normal;">
+								<option value="">Select</option>
+								<option>Real Hardware</option>
+								<option>Virtual Machine</option>
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Domain: <span style="color:red;">*</span></td>
+						<td style="text-align:left;">
+						<select id="addNewDevDomainOpt" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;" colspan="2">
+							<div class="ui-checkbox">
+								<label for="addNewDevOptValChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Optional Values</label>
+								<input type="checkbox" id="addNewDevOptValChk" data-enhanced="true" data-mini="true">	
+							</div>
+						</td>
+						<td style="width:15px"></td>
+						<td id="addNewDevIncPartP" style="text-align:right;" colspan="2">
+							<div class="ui-checkbox">
+								<label for="addNewDevIncPartPChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Include Partner Ports</label>
+								<input type="checkbox" id="addNewDevIncPartPChk" data-enhanced="true" data-mini="true">	
+							</div>
+						</td>
+					</tr>
+					<tr id="addNewDevAuxIp">
+						<td style="text-align:right;white-space:nowrap;">Auxialiary:</td>
+						<td style="text-align:left;">
+							<input id="addNewDevAuxIp" type="text" onKeyPress="return checkIPInputChar(event)">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">
+							<div class="ui-checkbox">
+								<label for="addNewDevAuxIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+								<input type="checkbox" id="addNewDevAuxIpPortChk" data-enhanced="true" data-mini="true">	
+							</div>
+
+						</td>
+						<td style="text-align:left;">
+							<input id="addNewDevAuxIpPort" type="text" onKeyPress="return checkNumberInputChar(event)">
+						</td>
+					</tr>
+					<tr id="autoDDevSlotsIncCont">
+						<td style="text-align:left;" colspan="5">
+							<table>
+								<tr>
+									<td>
+										<div class="ui-checkbox">
+											<label for="autoDDevSlotsIncChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;width:150px;white-space:nowrap">Device Slots</label>
+											<input type="checkbox" id="autoDDevSlotsIncChk" data-enhanced="true" data-mini="true">	
+										</div>
+									</td>
+									<td id="autoDDevSlotsIncCountCont" style="text-align:left;" colspan="2">
+										<input id="autoDDevSlotsIncCount" placeholder="Slot Count" type="text">
+									</td>
+								</tr>
+							</table>
+						</td>		
+					</tr>
+					<tr id="autoDDevSlotInfoTableCont">
+						<td colspan="5"><div style="max-height:200px;overflow:auto;">
+							<table id="autoDDevSlotInfoTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive">
+								<thead>
+									<tr class="ui-bar-d" style="text-align:left;width:100%">
+										<th id="autoDDevSlotNum" data-colstart="1">DeviceSlotNumber</th>
+										<th id="autoDDevSlotPortSrch" data-colstart="3">PortsToSearch</th>
+									</tr>
+									</thead>
+								<tbody id="autoDDevSlotInfoTbody">
+								</tbody>
+							</table>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div><br/></div>
+		<div id="autoDPartnerInfoCont">
+			<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto;">
+				<legend style="margin-left:20px;">Partner Information</legend>
+				<table id="autoDPartnerInfoField" style="overflow:auto;margin-left:12px;text-align:center;width:95%">
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Partner type:</td>
+						<td style="text-align:left;">
+							<select id="autoDPartTypeOpt" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Partner Address:</td>
+						<td style="text-align:left;">
+							<select id="autoDPartAddOpt" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+					</tr>
+					<tr id="autoDPartInfo1">
+						<td style="text-align:right;white-space:nowrap;">Host Name:</td>
+						<td id="newDevPartnerDevHost" style="text-align:left;">No Selection</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Manufacturer:</td>
+						<td id="newDevPartnerDevManu" style="text-align:left;">No Selection</td>
+					</tr>
+					<tr id="autoDPartInfo2">
+						<td style="text-align:right;white-space:nowrap;">Model:</td>
+						<td id="newDevPartnerDevModel" style="text-align:left;">No Selection</td>
+					</tr>
+					<tr id="autoDOptIncMappChk">
+						<td id="autoDPartPortsSrchNumLbl" style="text-align:right;white-space:nowrap;">Total PortsToSearch:</td>
+							<td id="autoDPartPortsSrchNumCont" style="text-align:left;">
+							<input id="autoDPartPortsSrchNum" type="text" style="width:100px;">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;" colspan="2">
+							<div class="ui-checkbox">
+								<label for="autoDIncMapPortsChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Include Mapped Ports</label>
+								<input type="checkbox" id="autoDIncMapPortsChk" data-enhanced="true" data-mini="true">	
+							</div>
+						</td>
+					</tr>
+					<tr id="autoDPartnerInfoTableCont">
+						<td colspan="5"><div style="max-height:200px;overflow:auto;">
+							<table id="autoDPartnerInfoTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive">
+								<thead>
+									<tr class="ui-bar-d" style="text-align:left;width:100%">
+										<th id="autoDPortSlotNum" data-colstart="1">SlotNumber</th>
+										<th id="autoDSlotNumPId" data-colstart="2">ProductId</th>
+										<th id="autoDPortSrch" data-colstart="3">PortsToSearch</th>
+									</tr>
+									</thead>
+								<tbody id="autoDPartnerInfoTbody">
+								</tbody>
+							</table>
+							</div>
+						</td>
+					</tr>
+					<tr><td></br></td></tr>
+				</table>
+			</fieldset>
+		</div>
+		<div id="autoDbreakline"><br/></div>
+		<a href="#" id="okAutoDDevice" data-role="button" data-mini="true" data-inline="true" style="width:60px;">Ok</a>
+    	<a href="#" id="cancelAutoDDevice" data-role="button" data-mini="true" data-inline="true">Cancel</a>
+</div>

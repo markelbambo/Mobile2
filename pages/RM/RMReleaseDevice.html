@@ -3,13 +3,28 @@
             <h2>Release Device</h2>
         </div>
         <div data-role="content" data-theme="a">
-			<table class="ui-responsive" data-mini="true" style="width: 100%">
-				<tr>
-					<div style="float: left;margin-top:0.5em;">
-        	<span>Total Matches: <span id="totalMatchesReservedRelease">0</span></span>
-        </div>
+		<nav data-role="navbar" id='ReserveReleaseButtons' style="display:none;" class="ui-navbar ui-mini" role="navigation">
+    <ul class="ui-grid-c">
 
-					<table data-role="table" id="RMReleaseDevice-table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+<!--      <li class="ui-block-c" style='width:50%'><a href="ClearReleaseAll.html" id='ReserveReleaseAll' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Release All</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>--!>
+
+      <li class="ui-block-d" style='width:100%'><a href="RHistoryClear.html"  id='ReserveRelease' data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Release</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+    </ul>
+  </nav>
+		<div style="float: left;margin-top:0.5em;">
+			<td>
+				<a id="ReserveReleaseAll" href="ClearReleaseAll.html" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='txtreservedSelectAll'>Release All</span></a>
+			</td>
+			<td>
+				<a id="rmReleaseSelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='txtreservedSelectAll'>Select All</span></a>
+			</td>
+
+
+        	<span>Total Matches: <span id="totalMatchesRelease">0</span></span>
+        </div>
+		
+
+	<table data-role="table" id="RMReleaseDevice-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
   			<thead>
     		<tr class="ui-bar-d">
 			    <th>Hostname</th>
@@ -28,22 +43,5 @@
 			<tbody>
 			</tbody>
 		</table>
-			<table>
-				<tr>		
-					<td colspan="2" align="right">
-						<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align:right" >
-							<table>	
-								<tr>
-									<td>
-										<a id="ReleaseAll" href="RMRelease" data-role="button" style="width:100px;" data-mini="true">Release All</a>
-									</td>
-									<td>
-										<a id="ReleaseSpecificReserve" href="RMRelease.html" data-role="button" style="width:100px;" data-mini="true">Release</a>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</td>
-				</tr>
-			</table>
+
         </div>

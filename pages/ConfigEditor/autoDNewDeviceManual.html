@@ -1,0 +1,198 @@
+<div>
+		<div>
+			<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto;">
+				<legend style="margin-left:20px;">Device Information</legend>
+				<table style="overflow:auto;margin-left:15px;text-align:center;width:95%">
+					<tr>
+						<td style="text-align:right;">Hostname:</td>
+						<td style="text-align:left;"><input type="text" id="newhostnameid" onkeyup="checkHostNameInput(this.value);" onKeyPress="return checkValConfigText(event);"/></td>
+
+                        <td style="width:15px"></td>
+                        <td style="text-align:right;white-space:nowrap;">Manufacturer:</td>
+                        <td style="text-align:left;">
+                            <input id="newdevmanufacturer" disabled type="text">
+                            <datalist id="newdevmanufacturer">
+                                <option value="">Select</option>
+                            </datalist>
+                        </td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Device type:</td>
+						<td>
+							<select id="dropdowndevicetype" disabled style="white-space:normal;" onchange="clickDeviceType(this.value);">
+								<option value="">Select</option>
+		                        <option value="Select">Select</option>
+        		                <option value="L1">L1 Switch</option>
+                        		<option value="L2">L2 Switch</option>
+	                    	    <option value="Neworking Devices">Neworking Devices</option>
+    	            	        <option value="Appliance">Appliance</option>
+    		                    <option value="Pass through device">Pass through device</option>
+	        	                <option value="Terminal Server">Terminal Server</option>
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Operating System:</td>
+						<td id="addNewDevManuOptManual1" style="text-align:left;">
+							<input id="newdevoperatingsystem" disabled type="text" list="knowmanuS1">
+							<datalist id="knowmanuS1">
+								<option value="">Select</option>
+							</datalist>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Management Ip:</td>
+						<td style="text-align:left;">
+							<input id="newdevmanagementip" disabled type="text" onkeyup="manageipenable(this.value);" onKeyPress="return checkIPInputChar(event,'management');">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;">Port:
+							<!--<div class="ui-checkbox">
+								<label for="addNewDevMmgmtIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+								<input type="checkbox" id="addNewDevMmgmtIpPortChk" data-enhanced="true" data-mini="true">
+							</div>-->
+						</td>
+						<td style="text-align:left;">
+							<input id="newdevmanageaddress" disabled type="text">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Console Ip:</td>
+						<td style="text-align:left;">
+							<input id="newdevconsoleip" disabled type="text" onkeyup="manageipenable(this.value);" onKeyPress="return checkIPInputChar(event,'console')">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;">Port:
+							<!--<div class="ui-checkbox">
+								<label for="addNewDevConIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+								<input type="checkbox" id="addNewDevConIpPortChk" data-enhanced="true" data-mini="true">	
+							</div>-->
+						</td>
+						<td style="text-align:left;">
+							<input id="newdevconsoleaddress" disabled type="text">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Username:</td>
+						<td style="text-align:left;">
+							<input id="newdevusername" disabled type="Password" onkeyup="newDeviceUserPassEnable(this.value);">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Password:</td>
+						<td style="text-align:left;">
+							<input id="newdevpassword" disabled type="Password" onkeyup="newDeviceUserPassEnable(this.value);">
+						</td>
+					</tr>
+					<tr style="display:none" class='deviceInfoHideAndShow'>
+						<td style="text-align:right;white-space:nowrap;">Model:</td>
+						<td style="text-align:left;">
+							<select id="newdevmodel" style="white-space:normal;">
+								<!--<option value="">Select</option>
+								<option>Real Hardware</option>
+								<option>Virtual Machine</option>-->
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Product Family:</td>
+						<td style="text-align:left;">
+						<select id="newdevproductfamily" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+					</tr>
+					<tr style= "display:none" class='deviceInfoHideAndShow'>
+						<td style="text-align:right;white-space:nowrap;">Domain:</td>
+						<td style="text-align:left;">
+							<select id="dropdowndomain" style="white-space:normal;">
+								<option value="">Select</option>
+							</select>
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;white-space:nowrap;">Management Interface:</td>
+						<td style="text-align:left;">
+							<input id="newdevmanageinterface" disabled type="text">
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto; display:none;" class='deviceInfoHideAndShow'>
+				<legend style="margin-left:20px;">Optional Detail</legend>
+				<table id="newDeviceMainInfo" style="overflow:auto;margin-left:15px;text-align:center;width:95%">
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Auxiliary:</td>
+						<td style="text-align:left;">
+							<input id="newdevauxiliary" disabled type="text" onKeyPress="return checkIPInputChar(event)">
+						</td>
+						<td style="width:15px"></td>
+						<td style="text-align:right;">Port:
+							<!--<div class="ui-checkbox">
+								<label for="addNewDevMmgmtIpPortChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Port:</label>
+								<input type="checkbox" id="addNewDevMmgmtIpPortChk" data-enhanced="true" data-mini="true">	
+							</div>-->
+						</td>
+						<td style="text-align:left;">
+							<input id="addNewDevMmgmtIpPort" type="text">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;white-space:nowrap;">Description:</td>
+						<td style="text-align:left;">
+							<input id="newdevdescription" type="text" onKeyPress="return checkIPInputChar(event)">
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;overflow:auto; display:none;" class='deviceInfoHideAndShow'>
+				<legend style="margin-left:20px;">Device Structure</legend>
+				<table id="newDeviceMainInfo" style="overflow:auto;margin-left:15px;text-align:center;width:95%">
+					<tr>
+                        <td style="text-align:right;white-space:nowrap;">Device Structure:</td>
+                        <td style="text-align:left;">
+                            <select id="dropdownstruction" style="white-space:normal;">
+    							<option value="">Select</option>
+   		                 	    <option value="devport">Device->Port</option>
+            		            <option value="devslotport">Device->Slot->Port</option>
+    	    	                <option value="devmodport">Device->Module->Port</option>
+    		                    <option value="devslotmod">Device->Slot->Module->Port</option>
+	        	                <option value="devrackslotport">Device->Rark->Slot->Module->Port</option>
+                	        </select>
+                        </td>
+                        <td style="width:15px"></td>
+                        <td style="text-align:right;white-space:nowrap;">Port per device:</td>
+                        <td style="text-align:right;">
+                            <input id="portperdevice" maxlength="3" type="text" onKeyPress="return checkNumberInputChar(event);" onkeyup="deviceStructureContent(this.value); checkPortsDeviceStructure(this.value);"/>
+                        </td>
+					</tr>
+					<tr>
+                        <td style="text-align:right;white-space:nowrap;">Pysical port type:</td>
+                        <td style="text-align:left;">
+                            <select id="dropdownphysicalporttype" style="white-space:normal;">
+                                <option value="">Select</option>
+								<option value="Select">Select</option>
+        		                <option value="ATM">ATM</option>
+		                        <option value="Ethernet">Ethernet</option>
+                        		<option value="GigabitEhernet">GigabitEhernet</option>
+                		        <option value="TenGigabitEthernet">TenGigabitEthernet</option>
+        		                <option value="FortyGigabitEthernet">FortyGigabitEthernet</option>
+		                        <option value="HundredGigabitEthernet">HundredGigabitEthernet</option>
+                		        <option value="POS">POS</option>
+        		                <option value="Serial">Serial</option>
+		                        <option value="EmbeddedService">Embedded Service</option>
+                            </select>
+                        </td>
+						<td style="width:15px"></td>
+                        <td style="text-align:right;white-space:nowrap;">Page:</td>
+                        <td id="addNewDevManuOptManual1" style="text-align:left;">
+                        	<select id="" style="white-space:normal;">
+                                <option value="">Select</option>
+                            </select>
+						</td>
+					</tr>
+				</table>
+				<div data-role="navbar" id="devicetypetabs">
+				</div>
+			</fieldset>
+		</div>
+		<div id="autoDbreakline"><br/></div>
+		<a href="#" id="OKSaveNewDevice" onclick ="saveNewDeviceInfo('newserverPopup')" data-role="button" data-mini="true" data-inline="true" style="width:60px;">Ok</a>
+    	<a href="#" id="cancelAutoDDevice" data-role="button" data-mini="true" data-inline="true">Cancel</a>
+</div>

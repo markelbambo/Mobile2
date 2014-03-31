@@ -1,0 +1,144 @@
+<div data-role="page" id="AccRightsPopUp" data-mini="true">
+	<div style="text-align:center;padding:10px;" data-role="header" data-theme="d" role="banner" class="ui-header ui-bar-d">Add Access Rights</div>
+	<div role="main" align="center">
+		<div class="content-container" style="min-height: 300px;min-width: 500px;max-width: 600px;max-height:500px;border-radius: 5px;margin: 15px;padding: 5px;">
+			<table style='width:550px;' class="ui-responsive">
+				<tr>
+					<td style="text-align:left;">
+						<label for="SecPolName"><b>Access Rights Name: </b></label>
+						<input id='SecPolName' class='inputDesign' type='text' maxlength="30" data-mini="true" data-theme="d"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<label for="SecPolDesc"><b>Description: </b></label>
+						<input id='SecPolDesc' type='text' class='inputDesign' maxlength="30" data-mini="true" data-theme="d"/>
+					</td>
+				</tr>
+				 <tr>
+					<td colspan='2' style="text-align:left;">
+						<div class="ui-grid-solo">
+							<div class="ui-block-a">
+								<legend><b>Entity Type:</b></legend>
+								<table>
+									<tr>
+										<td style="text-align:left;">
+											<label for="CECbox" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Config Editor</label>
+											<input id='CECbox' type='checkbox' onclick='showAccess("CEChoices",this)' data-mini="true"/>
+										</td>
+										<td style="text-align:left;">
+											<div id='CEChoices' style="display:none">
+												<fieldset data-role="controlgroup" data-type="horizontal">
+													<label for="CEaddSecPolView" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">View</label>
+													<label for="CEaddSecPolAdd" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Add</label>
+													<label for="CEaddSecPolEdit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Edit</label>
+													<label for="CEaddSecPolDel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Delete</label>
+													<input type="checkbox" id="CEaddSecPolView" data-mini="true"/>
+													<input type="checkbox" id="CEaddSecPolAdd" data-mini="true"/>
+													<input type="checkbox" id="CEaddSecPolEdit" data-mini="true"/>
+													<input type="checkbox" id="CEaddSecPolDel" data-mini="true"/>
+												</fieldset>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align:left;">
+											<label for="RMCbox" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Resource Management</label>
+											<input id="RMCbox" onclick='showAccess("RMChoices",this)' type='checkbox' data-mini="true">
+										</td>
+										<td style="text-align:left;">
+											<div id='RMChoices' style="display:none">
+												<fieldset data-role="controlgroup" data-type="horizontal">
+													<label for="RMaddSecPolView" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">View</label>
+													<label for="RMaddSecPolAdd" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Add</label>
+													<label for="RMaddSecPolEdit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Edit</label>
+													<label for="RMaddSecPolDel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Delete</label>
+												   <input type="checkbox" id="RMaddSecPolView" data-mini="true"/>
+												   <input type="checkbox" id="RMaddSecPolAdd" data-mini="true"/>
+												   <input type="checkbox" id="RMaddSecPolEdit" data-mini="true"/>
+												   <input type="checkbox" id="RMaddSecPolDel" data-mini="true"/>
+											   </fieldset>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align:left;">
+											<label for="ADCbox" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Administration</label>
+											<input id='ADCbox' onclick="showAccess('ADChoices',this)" type='checkbox' data-mini="true">
+										</td>
+										<td style="text-align:left;">
+											<div id='ADChoices' style="display:none">
+												<fieldset data-role="controlgroup" data-type="horizontal">
+													<label for="ADaddSecPolView" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">View</label>
+													<label for="ADaddSecPolAdd" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Add</label>
+													<label for="ADaddSecPolEdit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Edit</label>
+													<label for="ADaddSecPolDel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Delete</label>
+												   <input type="checkbox" id="ADaddSecPolView" data-mini="true"/>
+												   <input type="checkbox" id="ADaddSecPolAdd" data-mini="true"/>
+												   <input type="checkbox" id="ADaddSecPolEdit" data-mini="true"/>
+												   <input type="checkbox" id="ADaddSecPolDel" data-mini="true"/>
+											   </fieldset>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align:left;">
+											<label for="PMCbox2" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Power Management></label>
+											<input id='PMCbox2' onclick="showAccess('PMChoices2',this)" type='checkbox' data-mini="true">
+										</td>
+										<td style="text-align:left;">
+											<div id='PMChoices2' style="display:none">
+												<fieldset data-role="controlgroup" data-type="horizontal">
+													<label for="PM2addSecPolView" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">View</label>
+													<label for="PM2addSecPolAdd" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">On</label>
+													<label for="PM2addSecPolEdit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Off</label>
+													<label for="PM2addSecPolDel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Cycle</label>
+												   <input type="checkbox" id="PM2addSecPolView" data-mini="true"/>
+												   <input type="checkbox" id="PM2addSecPolAdd" data-mini="true"/>
+												   <input type="checkbox" id="PM2addSecPolEdit" style="margin-left:10px;" data-mini="true"/>
+												   <input type="checkbox" id="PM2addSecPolDel" style="margin-left:10px;" data-mini="true"/>
+											   </fieldset>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align:left;">
+											<label for="SRCbox" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Statistics and Reports</label>
+											<input id='SRCbox' onclick="showAccess('SRChoices',this)" type='checkbox' data-mini="true"> 
+										</td>
+										<td style="text-align:left;">
+											<div id='SRChoices' style="display:none">
+												<fieldset data-role="controlgroup" data-type="horizontal">
+													<label for="SRaddSecPolView" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">View</label>
+													<label for="SRaddSecPolAdd" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Generate Report</label>
+													<label for="SRaddSecPolEdit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Show Graph</label>
+													<label for="SRaddSecPolDel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off">Reset</label>
+												   <input type="checkbox" id="SRaddSecPolView" data-mini="true"/>
+												   <input type="checkbox" id="SRaddSecPolAdd" data-mini="true"/>
+												   <input type="checkbox" id="SRaddSecPolEdit" data-mini="true"/>
+												   <input type="checkbox" id="SRaddSecPolDel" data-mini="true"/>
+												</fieldset>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>	   
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<table>
+				<tr>
+					<td>
+						<a id="addEditAccRi" href="#" data-role="button" data-mini="true" data-theme="d" data-rel="popup">Save</a>
+					</td>
+					<td>
+						<a id="cancelAccRi" href="#" data-role="button" data-mini="true" data-theme="d" data-rel="popup">Cancel</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

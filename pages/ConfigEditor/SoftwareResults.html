@@ -1,0 +1,83 @@
+<div id="softwareSaveImageMainDiv" style="display:none;">
+	<h2>DEVICE CONFIGURATION STATUS</h2>
+	<div id="runningResultStatus"></div><br>
+	<font size="3">Device Status</font><br>
+	<font size="2">Total Number of Devices:&nbsp;<span id="devTotalNo"></span> </font>
+	<div id="table1" class="datagrid">
+		<table id="devStatusTable">
+			<thead>
+				<tr>
+					<th>Host Name</th>
+					<th>Management IP</th>
+					<th>Console IP</th>
+					<th>Manufacturer</th>
+					<th>Model</th>
+					<th>Login</th>
+					<th>Save Image</th>
+					<th>Verify Image</th>
+				</tr>
+			</thead>
+			<tbody id="devStatusBody"></tbody>
+		</table>
+	</div>
+	<font size="3">Save Software Image Status</font><br>
+	<div id="table2" class="datagrid">
+		<table id="saveSoftwareImageStatusTable">
+			<thead>
+				<tr>
+					<th>Time Stamp</th>
+					<th>Host Name</th>
+					<th>Management IP</th>
+					<th>Image Name</th>
+					<th>State</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody id="saveSoftImgBody"></tbody>
+		</table>
+	</div>
+</div>
+<div id="softwareLoadImageMainDiv" style="display:none;">
+	<h2>DEVICE CONFIGURATION STATUS</h2>	
+	<div id="runningResultStatusforLoad"></div><br>
+	<font size="3">Device Status</font><br>
+	<font size="2">Total Number of Devices:&nbsp;<span id="devTotalNoforLoad"></span> </font>
+	<div id="loadImageSoftwareTable1" class="datagrid">
+		<table id="devLoadStatusTable">
+			<thead>
+				<tr>
+					<th>Host Name</th>
+					<th>Management IP</th>
+					<th>Console IP</th>
+					<th>Manufacturer</th>
+					<th>Model</th>
+					<th>Login</th>
+					<th>Save Config</th>
+					<th>Verification</th>
+				</tr>
+			</thead>
+			<tbody id="devStatusBody"></tbody>
+		</table>
+	</div>
+	<font size="3">Load Software Image Status</font><br>
+	<div id="loadImageSowftawreTable2" class="datagrid">
+		<table id="loadSoftwareImageStatusTable">
+			<thead>
+				<tr>
+					<th>Time Stamp</th>
+					<th>Host Name</th>
+					<th>Management IP</th>
+					<th>Config Name</th>
+					<th>State</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody id="saveSoftImgBody"></tbody>
+		</table>
+	</div>
+</div>
+<div id="buttons" style="text-align:center;top:20px;">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="Refresh">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="Done" onclick="cancelPopup();">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="Cancel" onclick="cancelPopup();">
+</div>

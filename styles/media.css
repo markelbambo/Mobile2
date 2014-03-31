@@ -1,0 +1,169 @@
+.menuHide2 img, .menuHide img, .canvasNav img{
+    width: 60px;
+    margin-top: -13px;
+    padding: 0;
+}
+#grid-button{
+	width: 65px;
+	margin-left: 25px;
+	margin-top: 0px;
+	border-radius: 100px;
+	padding: 0px;
+	position: absolute;
+}
+/*
+@media only screen and (min-width: 640px) and (max-width: 960px) {
+		#grid-button{
+			width: 68px;
+			margin-top: -5px;
+			margin-left: 9px;
+			border-radius: 100px;
+			padding: 0px;
+			position: absolute;
+		}
+
+		.menuHide2 img, .menuHide img, .canvasNav img {
+			width: 38px;
+			margin-top: -1px;
+			padding: 0;
+		}
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1120px) {
+		.menuHide2 img, .menuHide img, .canvasNav img {
+			width: 44px;
+			margin-top: -4px;
+			padding: 0;
+		}
+		#grid-button{
+			width: 68px;
+			margin-left: 17px;
+			margin-top: -3px;
+			border-radius: 100px;
+			padding: 0px;
+			position: absolute;
+		}
+
+}
+@media only screen and (max-width: 1366px) {
+  	.menuHide2 {
+		width: 23%;
+		height: 50px;
+		padding-top: 3px;
+		margin-left: auto;
+		margin-right: auto;
+    }
+ }
+
+@media only screen and (max-width: 1180px) {
+.menuHide2 img, .menuHide img, .canvasNav img{
+    	width: 58px;
+    	height: auto;
+    	padding: 2px 3px 0px 3px;
+  	}
+
+}
+@media only screen and (max-width: 800px) {
+.menuHide2 img, .menuHide img, .canvasNav img{
+		width: 25px;
+		height: auto;
+		padding: 1px 2px 0px 2px;
+	}
+	.menuNarraLogo {
+		width: auto;
+		margin-left: 10px;
+		position: absolute;
+	}
+	#logoNarraBtn img {
+		width: 30px;
+		padding-top: 8px;
+		padding: 9px 0px 0px 0px;
+	}
+}
+*/
+
+
+
+/* ===Mac Book Pro 15in=== */
+@media only screen and (min-width: 1367px){
+	.menuHide2 img, .menuHide img, .canvasNav img{
+    	width: 56px;
+	    margin-top: -7px;
+	    padding: 0;
+	}
+}
+/* ===Some Laptops=== */
+@media only screen and (min-width: 1281px) and (max-width: 1366px){
+	.menuHide2 img, .menuHide img, .canvasNav img{
+		width: 56px;
+		margin-top: -11px;
+	    padding: 0;
+	}
+}
+/* ===MacBook Air 08=== */
+@media only screen and (min-width: 1025px) and (max-width: 1280px){
+	.menuHide2 img, .menuHide img, .canvasNav img{
+    	width: 52px;
+	    margin-top: -6px;
+	    padding: 0;
+	}
+	.menuHide2 {
+		width: 26%;
+		height: 50px;
+		padding-top: 3px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+/* === Most Netbooks === */
+@media only screen and (min-width: 961px) and (max-width: 1024px){
+	.menuHide2 img, .menuHide img, .canvasNav img {
+		width: 48px;
+		margin-top: -5px;
+		padding: 0;	
+	}
+	.menuHide2 {
+		width: 28%;
+		height: 50px;
+		padding-top: 3px;
+		margin-left: 370px;
+		margin-right: auto;
+	}
+	#grid-button {
+		width: 65px;
+		margin-left: 13px;
+		margin-top: -2px;
+		border-radius: 100px;
+		padding: 0px;
+		position: absolute;
+	}
+	.menuButton2{
+		padding-left: 30px;
+	}
+}
+/* === iPhone 4 === */
+@media only screen and (min-width: 801px) and (max-width: 960px){
+	.menuHide2 img, .menuHide img, .canvasNav img {
+		width: 46px;
+		margin-top: -5px;
+		padding: 0;	
+	}
+	.menuHide2 {
+		width: 24%;
+		height: 50px;
+		padding-top: 3px;
+		margin-left: 367px;
+		margin-right: auto;
+	}
+	#grid-button {
+		width: 60px;
+		margin-left: 12px;
+		margin-top: 0px;
+		border-radius: 100px;
+		padding: 0px;
+		position: absolute;
+	}
+	.menuButton2{
+		padding-left: 30px;
+	}
+}

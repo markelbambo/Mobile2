@@ -1,0 +1,132 @@
+<div id='ReserveOptionEndDiv' style='height:auto'>
+	<table style="width:100%;height:100%;" >
+		<tr style="height:50%;" >
+			<td class='defaultGrid' >
+				<div id='ReserveOptionSaveImageDiv' style='margin-top:6%;'>
+					<div style='text-align:left'>Save Image Option</div>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='SaveImageDetailedView' type='checkbox' onclick='detailedView("saveImage");'/>
+							</td>
+							<td>
+								Detailed View
+							</td>
+						</tr>
+					</table>
+					<center>
+						<div id='ReservationDevicesSaveImage' style="overflow:auto;height:155px;width:98%" class="datagrid" >
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "SaveImageTable" style="width:100%;overflow:auto;">
+			                <tr class="ui-widget-header ui-header ui-bar-d">
+            			        <th class='tableHeaderDes corner-top-left' >
+                        			<input id="SaveImageAll"  type="checkbox" onclick="LoadSaveOption(this,'SaveImage','saveImage','')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+            			        <th class='tableHeaderDes'  style='width:15%' >Type</th>
+			                    <th class='tableHeaderDes corner-top-right'  style='width:40%' >Destination (URL)</th>
+			                </tr>
+							<tbody id="saveImageBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<center>
+						<div id='ReservationDevicesSaveImageDetail' style="overflow:auto;height:155px;width:98%;display:none;" class="datagrid">
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggletable-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "SaveImageDetailTable" style="width:100%;overflow:auto;">
+			                <tr class="ui-widget-header ui-header ui-bar-d">
+            			        <th class='tableHeaderDes'>
+                        			<input id="SaveImageDetailAll" type="checkbox" onclick="LoadSaveOption(this,'SaveImage','saveImage','Detail')" />
+				                </th>
+                			    <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+				                <th class='tableHeaderDes'>Type</th>
+			       			    <th class='tableHeaderDes'>Protocol</th>
+            			        <th class='tableHeaderDes'>Server</th>
+			                    <th class='tableHeaderDes'>Path</th>
+			                    <th class='tableHeaderDes'>Filename</th>
+            			    </tr>
+							<tbody id="saveImageDetailBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='SaveImageSetValues' type='checkbox' onclick='' disabled=true/>
+							</td>
+							<td>
+								Set New Values
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr style="height:50%;" >
+			<td class='defaultGrid' >
+				<div id='ReserveOptionSaveConfigDiv' style='margin-top:6%;'>
+					<div style='text-align:left' >Save Configuration Option</div>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='SaveConfigDetailedView' type='checkbox' onclick='detailedView("saveConfig");'/>
+							</td>
+							<td>
+								Detailed View
+							</td>
+						</tr>
+					</table>
+					<center>
+						<div id='ReservationDevicesSaveConfig' style="overflow:auto;height:155px;width:98%" class="datagrid">
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable>" id = "SaveConfigTable" style="width:100%;overflow:auto;">
+			                <tr class="ui-widget-header ui-header ui-bar-d">
+            			        <th class='tableHeaderDes corner-top-left'>
+                        			<input id="SaveConfigAll" type="checkbox" onclick="LoadSaveOption(this,'SaveConfig','saveConfig','')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+            			        <th class='tableHeaderDes'  style='width:15%' >Type</th>
+			                    <th class='tableHeaderDes corner-top-right'  style='width:40%' >Destination (URL)</th>
+                			</tr>
+							<tbody id="saveConfigBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<center>
+						<div id='ReservationDevicesSaveConfigDetail' style="overflow:auto;height:155px;width:98%;display:none;" class="datagrid" >
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "SaveConfigDetailTable" style="width:100%;overflow:auto;">
+			                <tr class="ui-widget-header ui-header ui-bar-d">
+        			            <th class='tableHeaderDes'>
+                    			    <input id="SaveConfigDetailAll" type="checkbox" onclick="LoadSaveOption(this,'saveConfig','saveConfig','Detail')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+			                    <th class='tableHeaderDes'>Type</th>
+			                    <th class='tableHeaderDes'>Protocol</th>
+            			        <th class='tableHeaderDes'>Server</th>
+			                    <th class='tableHeaderDes'>Path</th>
+            			        <th class='tableHeaderDes'>Filename</th>
+        			        </tr>
+							<tbody id="saveConfigDetailBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='SaveConfigSetValues' type='checkbox' onclick='' disabled=true/>
+							</td>
+							<td>
+								Set New Values
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div style="text-align:center;top:20px;">
+		<input id="endReservationOk" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="OK" onclick="saveEndReservation(1);">
+		<input id="endReservationCancel" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="Cancel" onclick="cancelstartEndReserve('end',1);">
+	</div>
+</div>

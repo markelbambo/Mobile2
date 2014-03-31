@@ -1,49 +1,53 @@
-	<div data-role="page" id="EditDevice" data-theme="a">
-        <div data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
-            <h2>Edit Device</h2>
+<div data-role="dialog" id="EditDevice" data-theme="a">
+      <div data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+            <h2>Extend Reservation</h2>
         </div>
         <div data-role="content" data-theme="a">
-			<table class="ui-responsive" data-mini="true" style="width: 100%">
+			<center>
+			<table>
 				<tr>
-					<div style="float: left;margin-top:0.5em;">
-        	<span>Total Matches: <span id="totalMatchesReservedRelease">0</span></span>
-        </div>
-
-					<table data-role="table" id="RMReleaseDevice-table" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th>Hostname</th>
-			    <th data-priority="1">Start Date</th>
-			    <th data-priority="1">Start Time</th>
-      			<th data-priority="2">User</th>
-				<th data-priority="3">Application</th>
-				<th data-priority="6">Interval</th>
-				<th data-priority="6">Iteration</th>
-				<th data-priority="6">Iteration No.</th>
-				<th data-priority="1">End Date</th>
-				<th data-priority="1">End Time</th>
-				<th data-priority="6">Status</th>
-			</tr>
-		  	</thead>
-			<tbody>
-			</tbody>
-		</table>
-<!--			<table>
-				<tr>		
-					<td colspan="2" align="right">
-						<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align:right" >
-							<table>	
-								<tr>
-									<td>
-										<a id="ReleaseAll" href="#" data-role="button" style="width:100px;" data-mini="true">Release All</a>
-									</td>
-									<td>
-										<a id="ReleaseSpecificReserve" href="#" data-role="button" style="width:100px;" data-mini="true">Release</a>
-									</td>
-								</tr>
-							</table>
-						</div>
+					<td>Apply To:</td>
+					<td>
+						<select id='toAppExt'>
+							<option value='all'>All Devices</option>
+							<option value='Specific'>Specific Device</option>
+						</select>
 					</td>
 				</tr>
-			</table>--!>
-        </div>
+				<tr>
+					<td>Iteration:</td>
+					<td>
+						<select id='iterxt'>
+							<option value='all'>All Iteration</option>
+							<option value='Specific'>Specific Iteration</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			</center>
+			<!--	<fieldset data-role="controlgroup" data-mini="true">
+   				 	<input type="radio" name="radio-mini" id="radio-mini-1" value="choice-1" checked="checked" />
+			    	<label for="radio-mini-1">Apply Same Duration</label>
+					<input type="radio" checked='true' name="radio-mini" id="radio-mini-2" value="choice-2"  />
+			 	   	<label for="radio-mini-2">Extend</label>
+    	
+				</fieldset>--!>
+				<table>
+						<tr>
+							<td style='margin-left:30px; width:80px;'><input type="radio" id='applySame' name='extendRes'></td>
+							<td>Apply Same Duration</td>
+						</tr>
+						<tr>
+							<td style='margin-left:30px;'><input type="radio" id='modifyRes' name='extendRes' checked='checked'></td>
+							<td>Modify Reservation</td>
+						</tr>
+				</table>
+					<div id='specificTable' style='display:none'>
+						<fieldset data-role="controlgroup"></fieldset>		
+					</div>
+						<div id='specificIterTable' style='display:none'></div>
+
+					<a id="okEditDevice" href="RMEditDeviceTable.html" data-role="button" style="width:100px;" data-mini="true">Ok</a>
+
+		</div>
+</div>

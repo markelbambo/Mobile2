@@ -1,15 +1,15 @@
 <div data-role="page" id="RMHistory" data-theme="a">
 	<!-- header -->
     <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
-		<h1 class="ui-title" role="heading">Resource Management</h1>
+		<h1 class="ui-title" role="heading">Reservation History</h1>
     </div>
 	<div data-role="content" style="margin-top:50px;">
-	<nav data-role="navbar" id='RHistoryButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+	<nav data-role="navbar" id='RHistoryButtons' class="ui-navbar ui-mini" role="navigation">
     <ul class="ui-grid-c">
 
-      <li class="ui-block-c" style='width:50%'><a href="" id='HistoryClearAll' data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Clear All</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
+      <li class="ui-block-c" style='width:50%'><a href="ClearReleaseAll.html" id='RHistoryClearAll' data-icon="minus" data-transition='pop' data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span"  data-theme="a" data-inline="true"  style='height:40px;' ><span class="ui-btn-inner"><span style='padding-top:5px;' class="ui-btn-text">Clear All</span><span class="ui-icon ui-icon-search ui-icon-shadow">&nbsp;</span></span></a></li>
 
-      <li class="ui-block-d" style='width:50%'><a href="RHistoryClear.html"  id='HistoryClear' data-rel="dialog"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Clear</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+      <li class="ui-block-d" style='width:50%'><a href="RHistoryClear.html"  id='HistoryClear' data-rel="dialog"  data-corners="false" data-icon="delete" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Clear</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
     </ul>
   </nav>
 
@@ -23,6 +23,21 @@
 			<td>
 				<a id="rmHistorySelectAll" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Select All</a>
 			</td>
+			<table>
+				<tr>
+					<td>
+						<select id="filterHistory"  data-mini="true">
+							<option value="hostName">Hostname</option>
+							<option value="managementip">Management IP</option>
+							<option value="manufacturer">Manufacturer</option>
+							<option value="model">Model</option>
+							<option value="user">User</option>
+						</select>
+					</td>
+					<td><input type='text' placeholder='Search' class='HistoryFilter' id='searchHistory'/></td>
+				</tr>
+			</table>
+
 
         	<span>Total Matches: <span id="totalMatchesHistory">0</span></span>
         </div>

@@ -1,0 +1,167 @@
+<div data-role="panel" id="sidepanel" data-position="left" data-display="overlay" data-theme="a" style="width:160px;margin-top: 87px;">
+
+	<div class="menu-hover" style="overflow-y: scroll;overflow-x: hidden;">
+		<div id="sideMenu" class="side-menu">
+	<!--RESOURCE DOMAIN-->
+	<div style="text-align: center;">
+        <table style="width:100%;">
+            <tr>
+                <td class="unwrap us-form darktest" style="width: 10%;">
+                    <input type="checkbox" id="resDomChkbox" data-enhanced="true" data-corners="false" />
+                </td>
+                <td class="unwrap us-form darktest">
+<!--                    <select id="resDomSelect" data-mini="true" style="padding-right: 0px;width: 100px;" disabled="disabled">
+                    </select>-->
+					<select name="resDomSelect" id="resDomSelect" data-native-menu="false" data-mini="true" disabled="disabled">
+						<option value="" data-placeholder="true">Resource Domain</option>
+					</select>
+                </td>
+            </tr>
+        </table>
+    </div>
+	<!--New Slide-->
+		<div id="sidePanelIcons">
+			<ul id="sidePanelUL">
+				<li id="testToolIn"><table><tbody><tr><td><img src="img/grid/testtool.png"><center>Test Tool</center></td></tr></tbody></table></li>
+				<li id="deviceIn"><table><tbody><tr><td><img src="img/grid/device.png"><center>Device</center></td></tr></tbody></table></li>
+				<li id="serverIn"><table><tbody><tr><td><img src="img/grid/Server.png"><center>Server</center></td></tr></tbody></table></li>
+				<li id="connectivityIn"><table><tbody><tr><td><img src="img/grid/Connectivity.png"><center>Connectivity</center></td></tr></tbody></table></li>
+				<li id="interfaceIn"><table><tbody><tr><td><img src="img/grid/Interface.png" /><center>Interface</center></td></tr></tbody></table></li>
+			</ul>
+
+			<div id="testToolMain" class="testtoolSubDiv" data-role="popup" style="top: 140px;left: 90px;text-align:center;">
+<!--				<div class="sidePanelHeader">
+        	        <div class="bckPalette" id="testToolBck"><img src="img/backArrow.png" style="width: 20px;margin-top: 3px;display: none;"></div>
+					<div style="" id="testToolPaletteTitle" class="PaletteTitle">Test Tool</div>
+            	</div>-->
+				<div class="sidePanelHeader">
+					<img title="First" id="testTool-First" class="activeBtn" src="img/firstpage.png" style="float:left;width: 50px;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+					<img title="Previous" id="testTool-Back" class="activeBtn" src="img/prevpage.png" style="float:left;width: 30px;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+					<div style="" id="testToolPaletteTitle" class="PaletteTitle">Test Tool</div>
+					<img title="Last" id="testTool-Last" class="activeBtn" src="img/lastpage.png" style="width: 50px;margin-top: 3px;float: right;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+					<img title="Next" id="testTool-Next" class="activeBtn" src="img/nextpage.png" style="width: 30px;margin-top: 3px;float: right;position: relative;z-index: 99;">&nbsp;
+				</div>
+				<table id="testToolPalette">
+					<tr style="display:none;"></tr>
+				    <tr id="testToolPaletteSubTrMain" class="" level="Test Tool">
+				    </tr>
+				    <tr id="testToolPaletteSubTrProdFamily" style="display:none;" class="" level="Product Family">
+			    	</tr>
+				    <tr id="testToolPaletteSubTrModel" style="display:none;" class="" level="Model">
+				    </tr>
+				    <tr id="testToolPaletteSubTrIPAdd" style="display:none;" class="" level="Management IP">
+				    </tr>
+				</table>
+			</div>
+
+	<!--DEVICE-->
+			<div id="deviceMain" class="deviceSubDiv" data-role="popup" style="top: 250px;left: 86px;text-align:center;">
+<!--				<div class="sidePanelHeader">
+					<div class="bckPalette" id="deviceBck"><img src="img/backArrow.png" style="width: 20px;margin-top: 3px;display: none;"></div>
+					<div style="" id="devicePaletteTitle" class="PaletteTitle">Device</div>
+				</div>-->
+				<div class="sidePanelHeader">
+                    <img title="First" id="device-First" class="activeBtn" src="img/firstpage.png" style="width: 50px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+                    <img title="Previous" id="device-Back" class="activeBtn" src="img/prevpage.png" style="width: 30px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+					<div style="" id="devicePaletteTitle" class="PaletteTitle">Device</div>
+                    <img title="Last" id="device-Last" class="activeBtn" src="img/lastpage.png" style="width: 50px;float: right;margin-top: 3px;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+                    <img title="Next" id="device-Next" class="activeBtn" src="img/nextpage.png" style="width: 30px;float: right;margin-top: 3px;position: relative;z-index: 99;">&nbsp;
+                </div>
+				<table id="devicePalette">
+					<tr style="display:none;"></tr>
+					<tr id="devicePaletteSubTrMain" class="" level="Device">
+				    </tr>
+				    <tr id="devicePaletteSubTrOSType" style="display:none;" class="" level="OS Type">
+			    	</tr>
+				    <tr id="devicePaletteSubTrProdFamily" style="display:none;" class="" level="Product Family">
+				    </tr>
+				    <tr id="devicePaletteSubTrModel" style="display:none;" class="" level="Model">
+				    </tr>
+			    	<tr id="devicePaletteSubTrHostname" style="display:none;" class="" level="Hostname">
+				    </tr>
+				</table>
+			</div>
+	<!--SERVER-->
+		<div id="serverMain" class="serverSubDiv" data-role="popup" style="top: 355px;left:92px;text-align:center;">
+<!--			<div class="sidePanelHeader">
+				<div class="bckPalette" id="serverBck"><img src="img/backArrow.png" style="width: 20px;margin-top: 3px;display: none;"/></div>
+				<div style="" id="serverPaletteTitle" class="PaletteTitle">Server</div>
+			</div>-->
+			<div class="sidePanelHeader">
+				<img title="First" id="server-First" class="activeBtn" src="img/firstpage.png" style="width: 50px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+				<img title="Previous" id="server-Back" class="activeBtn" src="img/prevpage.png" style="width: 30px;margin-top: 3px;float: left;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+				<div style="" id="serverPaletteTitle" class="PaletteTitle">Server</div>
+				<img title="Last" id="server-Last" class="activeBtn" src="img/lastpage.png" style="width: 50px;margin-top: 3px;float: right;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+				<img title="Next" id="server-Next" class="activeBtn" src="img/nextpage.png" style="width: 30px;float: right;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+			</div>
+			<table id="serverPalette">
+				<tr style="display:none;"></tr>
+				<tr id="serverPaletteSubTrMain">
+			        <td><img class="icon" did="newserver" id="serverSubNew" src="img/model_icons/6500catalyst.png" /><p>New Server</p></td>
+			    </tr>
+			</table>
+		</div>
+
+	<!--CONNECTIVITY-->
+		<div id="connectivityMain" class="connectivitySubDiv" data-role="popup" style="top: 465px;left: 94px;text-align:center;">
+<!--			<div class="sidePanelHeader">
+				<div class="bckPalette" id="connectivityBck"><img src="img/backArrow.png" style="width: 20px;margin-top: 3px;display: none;"/></div>
+				<div style="" id="connectivityPaletteTitle" class="PaletteTitle">Connectivity</div>
+			</div>-->
+			<div class="sidePanelHeader">
+				<img title="First" id="connectivity-First" class="activeBtn" src="img/firstpage.png" style="width: 50px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+				<img title="Previous" id="connectivity-Back" class="activeBtn" src="img/prevpage.png" style="width: 30px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;		
+				<div style="" id="connectivityPaletteTitle" class="PaletteTitle">Connectivity</div>
+				<img title="Last" id="connectivity-Last" class="activeBtn" src="img/lastpage.png" style="width: 50px;float: right;margin-top: 3px;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+				<img title="Next" id="connectivity-Next" class="activeBtn" src="img/nextpage.png" style="width: 30px;float: right;margin-top: 3px;position: relative;z-index: 99;">&nbsp;
+			</div>
+			<table id="connectivityPalette">
+				<tr style="display:none;"></tr>
+			    <tr id="connectivityPaletteSubTrMain">
+			        <td><img model="any" class="connectivityPaletterTr connectGeneric" did="connectivity" speed="1000" linktype="Any" id="connectivityAny" src="img/connectivity/any_55px.png" /><p>Any(L1/L2)</p></td>
+			        <td><img model="direct" class="connector" did="connectivity" speed="" linktype="Open" id="connectivitySubDirect" src="img/connectivity/any_55px.png" /><p>Direct Connect</p></td>
+			    </tr>
+			    <tr id="connectivityPaletteSubTrL1L2" style="display:none;">
+			    </tr>
+			    <tr id="connectivityPaletteSubTrL1" style="display:none;">
+			    </tr>
+			    <tr id="connectivityPaletteSubTrL1Sub" style="display:none;">
+			    </tr>
+				<tr id="connectivityPaletteSubTrL2" style="display:none;">
+			    </tr>
+			    <tr id="connectivityPaletteSubTrL2Sub" style="display:none;">
+			    </tr>
+			</table>
+		</div>
+			
+	<!--INTERFACE-->
+		<div id="interfaceMain" class="interfaceSubDiv" data-role="popup" style="top: 573px;left:89px;text-align:center;">
+<!--			<div class="sidePanelHeader">
+				<div class="bckPalette" id="interfaceBck"><img src="img/backArrow.png" style="width: 20px;margin-top: 3px;display: none;"/></div>
+				<div style="" id="connectivityPaletteTitle" class="PaletteTitle" >Interface</div>
+			</div>-->
+			<div class="sidePanelHeader">
+                <img title="First" id="connectivity-First" class="activeBtn" src="img/firstpage.png" style="width: 50px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;
+                <img title="Previous" id="connectivity-Back" class="activeBtn" src="img/prevpage.png" style="width: 30px;float: left;margin-top: 3px;display:none;position: relative;z-index: 99;">&nbsp;&nbsp;&nbsp;
+                <div style="" id="interfacePaletteTitle" class="PaletteTitle">Interface</div>
+                <img title="Last" id="connectivity-Last" class="activeBtn" src="img/lastpage.png" style="width: 50px;float: right;margin-top: 3px;position: relative;z-index: 99;display:none;">&nbsp;&nbsp;&nbsp;
+                <img title="Next" id="connectivity-Next" class="activeBtn" src="img/nextpage.png" style="width: 30px;float: right;margin-top: 3px;position: relative;z-index: 99;display:none;">&nbsp;
+            </div>
+			<table id="interfacePalette">
+				<tr style="display:none;"></tr>
+				<tr id="interfacePaletteSubTrMain">
+			        <td><img id="interfaceSubIPV4" src="img/interface/IPv4.png" style="width: 40px;" /><p>IPV4</p></td>
+			        <td><img class="icon" id="interfaceSubVLAN" did="interface" model="VLAN" src="img/interface/vlan.png" /><p>VLAN</p></td>
+			        <td><img id="interfaceSubPortMonit" src="img/interface/portmonitoring.png" style="width: 40px;"  /><p>Port Monitoring</p></td>
+			    </tr>
+			</table>
+		</div>
+		<div class="triggerSideMenu">
+			<div class="sideMenuTriggerDiv">
+				<img src="img/slideMenu.png" style="margin-top: 265px;margin-left: 5px;"/>
+			</div>
+		</div>
+	  </div> <!--end of side-menu-->
+	</div> <!--end of menu-hover-->
+
+</div>

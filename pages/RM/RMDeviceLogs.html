@@ -1,7 +1,7 @@
 <div data-role="page" id="RMDeviceLogs" data-theme="a">
 	<!-- header -->
     <div id="header" data-role="header" data-theme="d" >
-		<h1 class="ui-title" role="heading">Device Logs</h1>
+		<h1 class="ui-title" role="heading"></h1>
     </div>
 	<div data-role="content">
 		<div>
@@ -11,8 +11,15 @@
 			</div>--!>
 		</div>
 		<table style='width:35%'>
+	<!--		<fieldset data-role="controlgroup" data-mini="true">
+    			<input type="radio" name="SanityLogs" id="linkSanity" value="choice-1" checked="checked" />
+ 			   	<label for="linkSanity">Link Sanity</label>
+
+				<input type="radio" name="SanityLogs" id="deviceSanity" value="choice-2"  />
+    			<label for="deviceSanity">Device Sanity</label>
+			</fieldset>--!>
 			<tr>
-				<td><input type='radio' id='linkSanity' class='SanityLogs' name='SanityLogs'/></td>
+				<td><input type='radio' id='linkSanity' class='LinkLogs' name='SanityLogs'/></td>
 				<td>Link Sanity</td>
 			</tr>
 			<tr>
@@ -27,11 +34,7 @@
 			<td>	
 			<a id="rmRefreshLogs" href="RMDeviceLogs.html" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Refresh</a>
 			</td>
-			<td>	
-			<a id="rmCloseLogs" href="" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" >Close</a>
-			</td>
-
-		</tr>
+	</tr>
 	
 		</table>
 		</div>

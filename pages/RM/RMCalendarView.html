@@ -1,0 +1,39 @@
+<div data-role="page" id="RMCalendar" data-theme="a">
+	<div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+    </div>
+	<div data-role="content" style="margin-top:50px;">
+	<div data-role="navbar" id="tabsReservation">
+		<ul id='ulCalendar'>
+			<li id='liCalendar' style='width:auto;'><a href='#liTabCalendar'>Calendar</a></li>
+		</ul>
+		<div id='liTabCalendar'>
+			<table id='calFormRow'>
+				<tr>
+					<td>Select Month:</td>
+					<td><select class="optionDes a-btn" size=1 name="vMonths" id="ViewMonths">
+							<option value="1">January</option>
+							<option value="2">February</option>
+							<option value="3">March</option>
+							<option value="4">April</option>
+							<option value="5">May</option>
+							<option value="6">June</option>
+							<option value="7">July</option>
+							<option value="8">August</option>
+							<option value="9">September</option>
+							<option value="10">October</option>
+							<option value="11">November</option>
+							<option value="12">December</option>
+						</select>
+				<!--		<input align="left" class="buttonDesign buttonDesign-text" style="font-size:12px" type="button" id="btnload" value="Refresh" onClick="window.location.href='../popUp/ReservationPopUp.php?DeviceId='">--!>
+					</td>
+				</tr>
+				<tr>
+					<td class='defaultGrid'  id = "tdCalendar1">
+						<div id="calendar1">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

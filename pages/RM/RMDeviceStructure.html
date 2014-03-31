@@ -1,0 +1,227 @@
+<div data-role="page" id='DevStructurePopup'>
+	<div data-role="header" data-theme="d" class="ui-corner-top ui-header ui-bar-d" role="banner">
+		<h2>Device Information</h2>
+	</div>
+			<div data-role="navbar" style='display:none;' id="divDevice">
+				<ul id="ulDevice">
+					<li id="liDevice" style="width: auto;"><a href="#rmStructabs-1">Device</a></li>
+				</ul>
+				<div id='rmStructabs-1' data-role="content" style="border-top-width:0px; padding-top:0px;">
+					<center>
+						<table>
+							<tr>
+								<td>Console Ip</td>
+								<td><input type='text' id='DeviceConsoleIp'/></td>
+								<td>Management Ip</td>
+								<td><input type='text' id='DeviceManagementIp'/></td>
+								<td>Host Name</td>
+								<td><input type='text' id='Devicehostname'/></td>
+							</tr>
+							<tr>
+								<td>Software Version</td>
+								<td><input type='text' id='DevicesoftwareVersion'/></td>
+								<td>Model Type</td>
+								<td><input type='text' id='DevicemodelType'</td>
+								<td>Device Type</td>
+								<td>
+									<select>
+										<option value=''></option>
+										<option value='Server'>Server</option>
+										<option value='Storage'>Storage</option>
+										<option value='SAN Switch'>SAN Switch</option>
+										<option value='Test Tool'>Test Tool</option>
+										<option value='Device'>Device</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Description</td>
+								<td><input type='text' id='Devicedescription'/></td>
+								<td>Manufacturer</td>
+								<td><input type='text' id='Devicemanufacturer'/></td>
+								<td>Serial Number</td>
+								<td><input type='text' id='DeviceserialNumber'/></td>
+							</tr>
+						</table>
+					</center>
+				</div>
+			</div>
+			<div data-role="navbar" id="divSlot" style='display:none;'>
+				<ul id="ulDeviceSlotPort">
+					<li id="liDeviceSlotPort" style="width: auto;"><a href="#rmStructabs-2">Slot</a></li>
+				</ul>
+				<div id='rmStructabs-2'>
+					<center>
+						<table>
+							<tr>
+								<td><a id="rmButtonAddSlot" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmSlot'>Add Slot</span></a>
+								</td>
+								<td><a id="rmButtonDeleteSlot" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmDelSlot'>Delete Slot</span></a>
+								</td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>Software Version</td>
+								<td><input type='text' id='SlotsoftwareVersion'/></td>
+								<td>Hardware Version</td>
+								<td><input type='text' id='SlothardwareVersion'/></td>
+								<td>Number</td>
+								<td><input type='text' id='Slotnumber' value='1'/></td>
+							</tr>
+							<tr>
+								<td>Serial Number</td>
+								<td><input type='text' id='SlotserialNumber'/></td>
+								<td>Product Number</td>
+								<td><input type='text' id='SlotproductNumber'/></td>
+								<td>Description</td>
+								<td><input type ='text' id='Slotdescription'/></td>
+							</tr>
+						</table>
+					</center>
+				</div>
+			</div>
+			<div data-role="navbar" id="divPort">
+				<ul id="ulDevicePort">
+					<li id="liDevicePort" style="width: auto;"><a href="#rmStructabs-3">Port</a></li>
+				</ul>
+				<div id='rmStructabs-3'>
+					<center>
+						<table>
+							<tr>
+								<td><a disabled='disabled' id="rmButtonAddPort" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmPort'>Add Port</span></a>
+								</td>
+								<td><a disabled='disabled' id="rmButtonDeletePort" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmDelPort'>Delete Port</span></a>
+								</td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>Duplexity</td>
+								<td><input type='text' id='Portduplexity'/></td>
+								<td>Bandwidth</td>
+								<td><input type='text' id='Portbandwidth'/></td>
+								<td>Number</td>
+								<td><input type='text' id='number2' value='1'/></td>
+							</tr>
+							<tr>
+								<td>Mtu</td>
+								<td><input type='text' id='Portmtu'/></td>
+								<td>Model</td>
+								<td><input type='text' id='Portmodel'/></td>
+								<td>Media Type</td>
+								<td><input type ='text' id='PortmediaType'/></td>
+							</tr>
+							<tr>
+								<td>Port Name</td>
+								<td><input type='text' id='portName'/></td>
+								<td>Speed</td>
+								<td><input type='text' id='Portspeed'/></td>
+								<td>Hardware Version</td>
+								<td><input type ='text' id='PorthardwareVersion'/></td>
+							</tr>
+							<tr>
+								<td>Description</td>
+								<td><input type='text' id='Portdescription'/></td>
+							</tr>
+						</table>
+						<table>
+							<h3>Partner Port Information</h3>
+							<tr>
+								<td>Ip Address</td>
+								<td<input type='text' id='PartnerPortipAddress'/></td>
+								<td>Slot Number</td>
+								<td>
+									<select id='Portslotnumber'>
+										<option value=''></option>
+									</select>
+								</td>
+								<td>Port Number</td>
+								<td>
+									<select id='portportnumber'>
+										<option value=''></option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</center>
+				</div>
+			</div>
+			<div data-role="navbar" id="divpic">
+				<ul id="ulDevicePort">
+					<li id="liDevicePort" style="width: auto;"><a href="#rmStructabs-4">Pic</a></li>
+				</ul>
+				<div id='rmStructabs-4'>
+					<center>
+						<table>
+							<tr>
+								<td><a id="rmButtonAddPic" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmPic'>Add Pic</span></a>
+								</td>
+								<td><a id="rmButtonDeletePic" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmDelPic'>Delete Pic</span></a>
+								</td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>Number</td>
+								<td><input type='text' id='Picnumber' value='1'/></td>
+								<td>Version</td>
+								<td><input type='text' id='Picversion'/></td>
+								<td>Description</td>
+								<td><input type='text' id='Picdescription'/></td>
+							</tr>
+							<tr>
+								<td>Assembly Id</td>
+								<td><input type='text' id='PicassemblyId'/></td>
+								<td>Pic Type</td>
+								<td><input type='text' id='PicType'/></td>
+							</tr>
+						</table>
+					</center>
+				</div>
+			</div>
+			<div data-role="navbar" id="divModule" style='display:none;'>
+				<ul id="ulModule">
+					<li id="liModule" style="width: auto;"><a href="#rmStructabs-5">Module</a></li>
+				</ul>
+				<div id='rmStructabs-5'>
+					<center>
+						<table>
+							<tr>
+								<td><a id="rmButtonAddModule" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmModule'>Add Module</span></a>
+								</td>
+								<td><a id="rmButtonDeleteModule" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmDelModule'>Delete Module</span></a>
+								</td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>Hardware Version</td>
+								<td><input type='text' id='Modulehardwareinfo'/></td>
+								<td>Description</td>
+								<td><input type='text' id='Moduledescription'/></td>
+							</tr>
+							<tr>
+								<td>Software Version</td>
+								<td><input type='text' id='Modulesoftwareversion'/></td>
+								<td>Number</td>
+								<td><input type='text' id='Modulenumber' value='1'/></td>
+							</tr>
+						</table>
+					</center>
+				</div>
+			</div>
+			<div id='strucButtons'>
+				<table>
+					<tr>
+						<td><a id="rmButtonSave" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span d='rmSave'>Save</span></a>
+						</td>
+						<td><a id="rmButtonCancel" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmCancel'>Cancel</span></a>
+						</td>
+						<td><a id="rmButtonChangeStruc" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span id='rmChangeStruc'>Change Device Structure</span></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+</div>

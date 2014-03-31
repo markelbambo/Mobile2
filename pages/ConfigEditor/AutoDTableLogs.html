@@ -1,0 +1,44 @@
+<div data-role="content" style="margin-top:0%;">
+	<div>
+		<div>
+			<div style="/*margin-bottom:-4%;*/">Device Status:</div>
+			<table data-role="table" id="autodDevInfoTable" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-popup-theme="a" data-mini="true" style="width:100%;">
+				<thead>
+	  				<tr class="ui-bar-d">
+					    <th data-priority="1">ManageMentIp</th>
+						<th data-priority="1">Accessibility</th>
+						<th data-priority="1">Device Preparation</th>
+						<th data-priority="1">Search Mapping</th>
+						<th data-priority="1">Gathering Information</th>	
+					</tr>
+	  			</thead>
+				<tbody id="autodDevInfoTableBody"></tbody>
+			</table>
+		</div>
+		<div id="autodLinkInfo" style="display:none;height:140px;margin-top:2%;">
+			<div style="padding-top:10px;/*margin-bottom:-4%;*/">Search Mapping Status:</div>
+			<table data-role="table" id="autodLinkInfoTable" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-popup-theme="a" data-mini="true" style="width:100%;">
+				<thead>
+	  				<tr class="ui-bar-d">
+					    <th data-priority="1">ManagementIp</th>
+						<th data-priority="1" id="portHeaderChange">Candidate_Port</th>
+						<th data-priority="1">Partner_Port</th>
+						<th data-priority="1">Partner_Device</th>
+					</tr>
+	 	 		</thead>
+				<tbody id="autodLinkInfoTableBody"></tbody>
+			</table>
+		</div>
+	</div>
+	<div style="margin-top:2%;">
+		<fieldset style="border:2px solid #1c5a8d;border-radius:5px;">
+			<legend style="margin-left: 25px;">Auto Discovery Logs:</legend>
+			<div id="autodLogsContent" style="color:white;background-color:black;border:1px solid #1c5a8d;height:300px;overflow:auto;border-radius:5px;margin:10px;"></div>
+		</fieldset>
+	</div>
+	<div style="text-align:center;padding-top:1%;">
+		<a href="#" id="okAutoDStatus" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" role="button">Ok</a>
+		<a href="#" id="cancelAutoDStatus" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" role="button">Cancel</a>
+	</div>
+</div>
+

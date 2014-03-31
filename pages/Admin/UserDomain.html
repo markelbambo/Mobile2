@@ -1,0 +1,35 @@
+<!--Fourth Page-->
+<div data-role="page" id=DomainPage" data-theme="a">
+	<!-- header -->
+    <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-iconpos="notext"  data-position="fixed">
+		<h1 class="ui-title" role="heading">Domain</h1>
+		<a id="user-button" class="ui-btn-right" data-rel="popup" data-role="button" data-icon="user" data-iconpos="notext" data-inline="true" href="#userPanel"></a>
+    </div>
+    <!-- /content -->
+	<div data-role="content">
+		<!--<div style="width:100%;margin-bottom:36px;">
+			<div id="paginations" style="float: right;width:50%;text-align: right;">
+			</div>
+		</div>-->
+		<div style="float: left;margin-top:0.5em;">
+			<span>Total Matches: <span id="totalMatches">0</span></span>
+        </div>
+		<div>
+			<table data-role="table" id="userDomainsAdmin-table" data-mode="reflow" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+	  			<thead>
+    				<tr class="ui-bar-d">
+					    <th data-priority="1">Domain Name</th>
+					    <th data-priority="1">Domain Description</th>
+    		  			<th data-priority="1">Number of Devices</th>
+						<th data-priority="1">Number of Zones</th>
+						<th data-priority="1">Number of Profiles</th>
+						<th data-priority="1">Bound DPS</th>
+						<th data-priority="1">Status</th>
+					</tr>
+			  	</thead>
+				<tbody id='tbUserDomain'>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

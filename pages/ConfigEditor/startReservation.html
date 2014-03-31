@@ -1,0 +1,207 @@
+<div id='ReserveOptionStartDiv' style='height:auto'>
+	<table style="width:100%;height:100%;" >
+		<tr style="height:50%;" >
+			<td class='defaultGrid' >
+				<div id='ReserveOptionLoadImageDiv' style='margin-top:6%;'>
+					<div style='text-align:left'><font size="3">Load Image Option</font></div>
+					<table >
+						<tr>
+							<td>
+								<input id='LoadImageDetailedView' type='checkbox' value="loadImage" onclick='detailedView("loadImage");'/>
+							</td>
+							<td>
+								Detailed View
+							</td>
+						</tr>
+					</table>
+					<center>
+						<div id='ReservationDevicesLoadImage' style="overflow:auto;height:155px;width:98%" class="datagrid" >
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadImageTable" style="width:100%;overflow:auto;">
+							<tr class="ui-widget-header ui-header ui-bar-d">
+		                    	<th class='tableHeaderDes corner-top-left'>
+        			                <input id="LoadImageAll"  type="checkbox" onclick="LoadSaveOption(this,'LoadImage','loadImage','')" />
+		            	        </th>
+        		           		<th class='tableHeaderDes'>Host Name</th>
+    	                		<th class='tableHeaderDes'>Model</th>
+	                    		<th  class='tableHeaderDes' style='width:15%'>Type</th>
+                    			<th  class='tableHeaderDes'  style='width:40%'>Source (URL)</th>
+                   				<th  class='tableHeaderDes corner-top-right' style='width:10%'>Destination</th>
+			                </tr>
+							<tbody id="loadImageBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<center>
+						<div id='ReservationDevicesLoadImageDetail' style="overflow:auto;height:155px;width:98%;display:none;" class="datagrid">
+						 <table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadImageDetailTable" style="width:100%;overflow:auto;">
+							<tr class="ui-widget-header ui-header ui-bar-d">
+			                    <th class='tableHeaderDes'>
+            			            <input id="LoadImageDetailAll"  type="checkbox" onclick="LoadSaveOption(this,'LoadImage','loadImage','Detail')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+			                    <th class='tableHeaderDes'>Type</th>
+            			        <th class='tableHeaderDes'>Protocol</th>
+			                    <th class='tableHeaderDes'>Server</th>
+			                    <th class='tableHeaderDes'>Path</th>
+			                    <th class='tableHeaderDes'>Filename</th>
+			                    <th class='tableHeaderDes'>Destination</th>
+            			    </tr>
+							<tbody id="loadImageDetailBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='LoadImageSetValues' type='checkbox' onclick='' disabled=true/>
+							</td>
+							<td>
+								Set New Values
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr style="height:50%;" >
+			<td class='defaultGrid' >
+				<div id='ReserveOptionLoadConfigDiv' style='margin-top:6%;'>
+					<div style='text-align:left'><font size="3">Load Configuration Option</font></div>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='LoadConfigDetailedView' type='checkbox' onclick='detailedView("loadConfig");'/>
+							</td>
+							<td>
+								Detailed View
+							</td>
+						</tr>
+					</table>
+					<center>
+						<div id='ReservationDevicesLoadConfig' style="overflow:auto;height:155px;width:98%" class="datagrid">
+						 <table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadConfigTable" style="width:100%;overflow:auto;">
+							<tr class="ui-widget-header ui-header ui-bar-d">
+			                    <th class='tableHeaderDes'>
+			                        <input id="LoadConfigAll" type="checkbox" onclick="LoadSaveOption(this,'LoadConfig','loadConfig','')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+			                    <th class='tableHeaderDes'  style='width:15%' >Type</th>
+		    	                <th class='tableHeaderDes' style='width:40%'>Source (URL)</th>
+			                    <th class='tableHeaderDes'  style='width:10%' >Destination</th>
+                			</tr>
+							<tbody id="loadConfigBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<center>
+						<div id='ReservationDevicesLoadConfigDetail' style="overflow:auto;height:155px;width:98%;display:none;" class="datagrid">
+						 <table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadConfigDetailTable" style="width:100%;overflow:auto;">
+							 <tr class="ui-widget-header ui-header ui-bar-d">
+		    	                <th class='tableHeaderDes'>
+        	        		        <input id="LoadConfigDetailAll"  type="checkbox" onclick="LoadSaveOption(this,'LoadConfig','loadConfig','Detail')" />
+		    	                </th>
+    	            		    <th class='tableHeaderDes'>Host Name</th>
+	    		                <th class='tableHeaderDes'>Model</th>
+                			    <th class='tableHeaderDes'>Type</th>
+			                    <th class='tableHeaderDes'>Protocol</th>
+            			        <th class='tableHeaderDes'>Server</th>
+			                    <th class='tableHeaderDes'>Path</th>
+            			        <th class='tableHeaderDes'>Filename</th>
+			                    <th class='tableHeaderDes'>Destination</th>
+			                </tr>
+							<tbody id="loadConfigDetailBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='LoadConfigSetValues' type='checkbox' onclick='' disabled=true/>
+							</td>
+							<td>
+								Set New Values
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr style="height:50%;" >
+			<td class='defaultGrid' >
+				<div id='ReserveOptionLoadPieDiv' style='margin-top:6%;display:none;'>
+					<div style='text-align:left'><font size="3">Load Pie Option</font></div>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='LoadPieDetailedView' type='checkbox' onclick='detailedView("loadPie");'/>
+							</td>
+							<td>
+								Detailed View
+							</td>
+						</tr>
+					</table>
+					<center>
+						<div id='ReservationDevicesLoadPie' style="overflow:auto;height:155px;width:98%" class="datagrid">
+						 <table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadPieTable" style="width:100%;overflow:auto;">
+							<tr class="ui-widget-header ui-header ui-bar-d">
+			                    <th class='tableHeaderDes corner-top-left'>
+            			            <input id="LoadPieAll"  type="checkbox" onclick="LoadSaveOption(this,'LoadPie','loadPie','')" />
+			                    </th>
+            			        <th class='tableHeaderDes'>Host Name</th>
+			                    <th class='tableHeaderDes'>Model</th>
+			                    <th  class='tableHeaderDes' style='width:15%'>Type</th>
+			                    <th  class='tableHeaderDes'  style='width:40%'>Source (URL)</th>
+			                    <th  class='tableHeaderDes corner-top-right' style='width:10%'>Destination</th>
+            			    </tr>
+							<tbody id="loadPieBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<center>
+						<div id='ReservationDevicesLoadPieDetail' style="overflow:auto;height:155px;width:98%;display:none;" class="datagrid">
+						<table class="table-stroke ui-body-f ui-shadow ui-responsive ui-table ui-table-columntoggle border-radius statReportTable" id = "LoadPieDetailTable" style="width:100%;overflow:auto;">
+							 <tr class="ui-widget-header ui-header ui-bar-d">
+		    	                <th class='tableHeaderDes'>
+        	        		        <input id="LoadPieDetailAll" type="checkbox" onclick="LoadSaveOption(this,'LoadPie','loadPie','Detail')" />
+		    	                </th>
+    	            		    <th class='tableHeaderDes'>Host Name</th>
+	    		                <th class='tableHeaderDes'>Model</th>
+                			    <th class='tableHeaderDes'>Type</th>
+			                    <th class='tableHeaderDes'>Protocol</th>
+            			        <th class='tableHeaderDes'>Server</th>
+			                    <th class='tableHeaderDes'>Path</th>
+            			        <th class='tableHeaderDes'>Filename</th>
+			                    <th class='tableHeaderDes'>Destination</th>
+			                </tr>
+							<tbody id="loadPieDetailBody"></tbody>
+						</table>
+						</div>
+					</center>
+					<table class='noborders' >
+						<tr>
+							<td>
+								<input id='LoadPieSetValues' type='checkbox' onclick='' disabled=true/>
+							</td>
+							<td>
+								Set New Values
+							</td>
+							<td>
+								<button data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" id='addPieButton' onclick='openAddPie();'>
+									Add Pie
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div style="text-align:center;top:20px;">
+		<input id="startReservationOk" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="OK" onclick="saveReservation(1);">
+		<input id="startReservationCancel" data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" value="Cancel" onclick="cancelstartEndReserve('start',1);">
+	</div>	
+	<div id='addPiePopUp'>
+	</div>
+</div>

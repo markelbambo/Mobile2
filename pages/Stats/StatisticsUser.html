@@ -1,0 +1,144 @@
+<!--Fifth Page-->
+<div data-role="page" id="statisticsUserPage" data-theme="a">
+	<!-- header -->
+    <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+		<h1 class="ui-title" role="heading">Reservation Statistics</h1>
+    </div>
+	<!-- /content -->
+	<div data-role="content" id="domainContent">
+		<div>
+			<tr>
+				<td>
+					<select name="select-native-2" id="ulDomain"><option value='Any'>Domain: All</option></select>
+				</td>
+			</tr>
+		</div>
+		<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="">
+			<table data-inline="true">
+				<tr>
+					<td>
+		   	             <select name="select-native-2" id="StatSelectUser" data-mini="true" data-inline="true"> 
+							<option value="Detailed">Detailed</option>
+							<option value="Summary">Summary</option>
+						</select>
+					</td>
+					<td id="StatsViewNewUser"></td>
+   			        <!--     <select name="select-native-2" id="statsViewNew" data-inline="true">
+							<option value="Utilization">Utilization</option>
+							<option value="Reservation">Reservation</option>
+						</select>
+					</td>-->
+					<td>
+						<select  data-inline="true" id="statsView">
+							<!--option value="0" style="display:none">View</option>-->
+							<option value="Daily">Daily</option>
+							<option value="Weekly">Weekly</option>
+							<option value="Monthly">Monthly</option>
+							<option value="Quarterly">Quartery</option>
+							<option value="Annually">Annunally</option>
+							<option value="Custom">Custom</option>
+						</select>
+					</td>
+					<td id="statsView2"></td>
+				</tr>
+			<!--<span id="pickerContainer" ></span>-->
+			</table>
+			<table>
+				<tr>
+					<td>
+						<a id="statSelectAll" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span>Select All</span></a>
+					</td>
+					<td>
+						<select id="filterStatUsers"></select>
+					</td>
+					<td><input type='text' placeholder='Search' class='DomainSearchFilter' id='searchDomain'/></td>
+				</tr>
+			</table>
+			<span>Total Matches: <span id="totalMatchesUser"></span></span>
+    	</div>
+	<div>
+
+	</div>
+
+		<table data-role="table" id="domain-table1" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true"></table>
+		<div>
+			<center>
+				<span href='' id='showMoreStat' class='ShowmoreStat' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+			</center>
+		</div>	
+		<div>
+			<table>
+				<tr>
+					<td>
+						<input id="StatisticOptions" type="button" value="&nbsp; Options &nbsp;">
+					</td>
+					<td>
+						<input id='ShowGraph' type='button' value='&nbsp; Show Graph &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+					<td>
+						<input id='GenReportUser' type='button' value='&nbsp; Show Graph &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+<!--  			<thead id=rmResStat>
+    		<tr class="ui-bar-d">
+			    <th data-priority="2">ID</th>
+			    <th>Date Added</th>
+			    <th data-priority="2">HostName</th>
+      			<th data-priority="6">MgmtIP</th>
+				<th data-priority="6">Console IP</th>
+				<th data-priority="6">Manufacturer</th>
+				<th data-priority="2">Model</th>
+				<th data-priority="6">Device Type</th>
+				<th data-priority="2">Idle(Hrs/Mins)</th>
+				<th data-priority="2">Reservation</th>
+				<th data-priority="2">Idle(%)</th>
+				<th data-priority="2">Reservation (%)</th>
+				<th data-priority="6">OS Version</th>
+				<th data-priority="6">System Memory</th>
+			</tr>
+		  	</thead>
+			<tbody id="tbodyDevice">
+		    <tr>
+			    <th>1</th>
+			    <td>2013-11-05</td>
+				<td>1</td>
+			    <td>5</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+				<td>1</td>
+				<td>1</td>
+				<td>0</td>
+                <td>0</td>
+		   	</tr>
+			</tbody>
+		</table>-->
+		<table style="display:none" data-role="table" id="domain-table6" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true"></table>
+
+	</div>
+    <!-- footer -->
+        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
+            <div id="dock">
+                <ul>
+                    <li>
+                        <a href="#"><span>Config</span><img class="configCar2" src="../../img/configeditor.png" alt="[Config Editor]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>Admin</span><img class="adminCar" src="../../img/Admin.png" alt="[Administration]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>RM</span><img class="rmCar" src="../../img/RM.png" alt="[Resource Management]" /></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>PM</span><img class="pmCar" src="../../img/PM.png" alt="[Power Management]" /></a>
+                    </li>
+                    <li>   
+                        <a href="#"><span>Stats</span><img class="statCar" src="../../img/Statistics.png" alt="[Statistics]" /></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>

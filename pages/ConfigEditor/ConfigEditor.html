@@ -1,109 +1,270 @@
+<!--End History--->
 <div id="header" data-role="header" data-theme="d" data-position="fixed">
-	<a id="grid-button"  data-rel="popup" data-role="button" data-icon="grid" data-iconpos="notext" data-inline="true" href="#gridPanel" style=""></a>
-	<div id="actionButtons">
-		<a class="tooltip"><img class="actBtn" src="img/action_buttons/applyall.png" id="applyall"><span>Apply All</span></a>
-		<a class="tooltip"><img class="actBtn" src="img/action_buttons/loadactive.png" id="loadactive"><span>Load Active</span></a>
-		<a class="tooltip"><img class="actBtn" src="img/action_buttons/clear.png" id="clearcanvas"><span>Clear </span></a>
-		<a class="tooltip"><img class="actBtn" src="img/action_buttons/commit.png" id="committopology"><span>Commit </span></a>
-        <a class="tooltip"><img class="actBtn" src="img/action_buttons/cancel.png" id="cancelreservation"><span>Cancel </span></a>
+		<img src="img/narraLogo.png" id="grid-button"  data-rel="popup" />
+	<!--Menu slide down/up-->
+	<div id="divMenuButton" class="menuHide">
+		<ul class="menuButton">
+			<li title="Config Editor">
+				<a href="#"><img class="configCar imgMenuBtn imgReflect" src="img/configeditor.png" alt="[Config Editor]"></a>
+	<!--			<p>Config Editor</p>-->
+			</li>
+			<li title="Resource Management">
+				<a href="#"><img class="rmCar imgMenuBtn imgReflect" src="img/RM.png" alt="[Resource Management]"></a>
+	<!--			<p>Resource Management</p>-->
+			</li>
+			<li title="Administration">
+				<a href="#"><img class="adminCar imgMenuBtn imgReflect" src="img/Admin.png" alt="[Administration]"></a>
+	<!--			<p>Administration</p>-->
+			</li>
+			<li title="Power Management">
+				<a href="#"><img class="pmCar imgMenuBtn imgReflect" src="img/PM.png" alt="[Power Management]"></a>
+	<!--			<p>Power Management</p>-->
+			</li>
+			<li title="Statistics">
+				<a href="#"><img class="statCar imgMenuBtn imgReflect" src="img/Statistics.png" alt="[Statistics]"></a>
+	<!--			<p>Statistics</p>-->
+			</li>
+		</ul>
 	</div>
 
-	<a id="user-button"  data-rel="popup" data-role="button" data-icon="user" data-iconpos="notext" data-inline="true" href="#userPanel" style="" class="ui-btn-right"></a>
-	<a id="bars-button"  data-rel="popup" data-role="button" data-icon="bars" data-iconpos="notext" data-inline="true" href="#barsPanel" style="margin-top: 1.2%;float: right;margin-right: 60px;"></a>
+	<!--Menu action buttons down/up-->
+  <div id="divMenuButton2" class="menuHide2">
+		<ul class="menuButton2">
+            <li title="Commit">
+                <a href="#"><img class="actBtn imgMenuBtn imgReflect" src="img/action_buttons/commit.png" id="committopology"></a>
+		<!--			<p>Commit</p-->
+            </li>
+            <li title="Cancel">
+                <a href="#"><img class="actBtn imgMenuBtn imgReflect" src="img/action_buttons/cancel.png" id="cancelreservation"></a>
+		<!--			<p>Cancel</p>-->
+            </li>
+            <li title="Clear">
+                <a href="#"><img class="actBtn imgMenuBtn imgReflect" src="img/action_buttons/clear.png" id="clearcanvas"></a>
+		<!--			<p>Clear</p>-->
+            </li>
+            <li title="Load Active">
+                <a href="#"><img class="actBtn imgMenuBtn imgReflect" src="img/action_buttons/loadactive.png" id="loadactive"></a>
+			<!--		<p>Load Active</p-->
+            </li>
+            <li title="Apply All" style="display:none;">
+                <a href="#"><img class="actBtn imgMenuBtn imgReflect" src="img/action_buttons/applyall.png" id="applyall" /></a>
+		<!--			<p>Apply All</p>-->
+            </li>
+        </ul>
+         	<!--       <div class="menuButtonDiv2">
+            <img src="img/slideTrigger.png" id="menuOpener2" style="margin-bottom: -3px;" />
+        </div>--> 
+    </div>
+	<div class="canvasNav">
+            <ul class="canvasNavul">
+                <li class="" title="Configuration Name" id="configNameBtn">
+					<a href="#"><img src="img/configname.png" class="imgReflect" ></a>
+				</li>
+				<li title="Canvas Mapping" id="mapBtn" >
+					<a href="#"><img src="img/canvasmapping.png" class="imgReflect" ></a>
+				</li>
+                <li title="History" id="historyBtn" >
+					<a href="#"><img src="img/historyIcon.png" class="imgReflect" ></a>
+				</li>
+                <li title="Zoom : INACTIVE" id="magnify" >
+					<a href="#"><img src="img/action_buttons/magnify_default.png" class="imgReflect" ></a>
+				</li> 
+<!--				<li title="Chat and Console" id="chatsession" >
+					<a href="#"><img src="img/action_buttons/magnify_default.png" class="imgReflect" ></a>
+				</li>-->
+				<li>
+					<div class="paginationDiv" style='margin-top: 11px;padding-left: 28px;'>
+                		<ol id="paginationcanvas">
+                    		<li><a id="a0" class="active" onclick="pageCanvas=0;paginateCanvas()">0</a></li>
+                		</ol>
+                		<div title="Add Canvas" id="add-canvas-cont" onclick="dynamicCanvas('')"><a href="#"><img id="add-canvas-btn" src="img/addCanvas.png" class="imgNavBtn"></a></div>
+            		</div>
+				</li>          
+			</ul>
+    	</div>
+<!--	<a id="user-button"  data-rel="popup" data-role="button" data-icon="user" data-iconpos="notext" data-inline="true" href="#userPanel" style="" class="ui-btn-right"></a>-->
+<!--	<a id="bars-button"  data-rel="popup" data-role="button" data-icon="bars" data-iconpos="notext" data-inline="true" href="#barsPanel" style="margin-top: -55px;float: right;margin-right: 60px;"></a>-->
 </div>
 
-	<a data-role="button"  data-icon="info" data-iconpos="notext" data-inline="true" href="#" id="triggerDomain" class="trigger2 left" ></a>
-	<div id="panel3" class="panel3 left" style="position: absolute;padding: 6px 3px 6px 5px; display: block;">
-		<p id="confi">Domain Name:<span id="domainText"></span</p>
-	</div>
-
-
-	<a data-role="button"  data-icon="gear" data-iconpos="notext" data-inline="true" href="#" id="trigger2" class="trigger right" ></a>
-	<div id="panel2" class="panel3 right" style="position: absolute;padding: 6px 3px 6px 5px; display: none;">
-		<p id="confi">Config Name:<span id="configText"></span</p>
-	</div>
-<div data-role="content" id="configContent" style="margin-bottom: -114px;margin-top:0px;">
-  	<canvas id="configCanvas" style="border: 4px solid gray;border-radius: 10px;"></canvas>
-</div>
-<div data-role="footer" data-theme="c" class="ui-bar" data-position="fixed" style="display:none;" id="configFooter">
- 	<div id="dock">
-       	<ul>
-          	<li><a href="#"><span>Config Editor</span><img class="configCar" src="img/configeditor.png" alt="[Config Editor]" /></a></li>
-	        <li><a href="#"><span>Administration</span><img class="adminCar" src="img/Admin.png" alt="[Administration]" /></a></li>
-            <li><a href="#"><span>Resource Management</span><img class="rmCar" src="img/RM.png" alt="[Resource Management]" /></a></li>
-            <li><a href="#"><span>Power Management</span><img class="pmCar" src="img/PM.png" alt="[Power Management]" /></a></li>
-            <li><a href="#"><span>Statistics and Reports</span><img class="statCar" src="img/Statistics.png" alt="[Statistics]" /></a></li>
-       </ul>
-   </div>
-</div>
-
-    <div data-role="popup" style="right: 10%;top:48px;" id="barsPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true">
-		<div id="exampleArrow-t" class="ui-popup-arrow-container ui-popup-arrow-t" style="position: absolute;right: 4%;">
-        	<div style="" class="ui-popup-arrow ui-body-inherit ui-overlay-shadow"></div>
-        </div>
-	</div>
-    <div data-role="popup" style=" left: -13px; top: 48px;" id="gridPanel" data-theme="a" data-display="overlay" data-position="left" class="panelCont" data-mini="true">
-    	<div id="exampleArrow-t" class="ui-popup-arrow-container ui-popup-arrow-t" style="margin-left: 12px;">
-           	<div style="" class="ui-popup-arrow ui-body-inherit ui-overlay-shadow"></div>
+	<div class="logout">
+		<div class="userDisplay">
+           	<ul class="navigation">
+               	<a class="main" href="#url">Welcome&nbsp;<span id="spanUserLabel">admin</span><span class="division">|</span><span onclick="signout();" href="#" class="logoutstyle">Logout<span></span></span></a>
+            </ul>
         </div>
     </div>
+<div data-role="content" id="divCanvas" style="margin-bottom: -114px;margin-top:0px;">
+	<div id="closCanvaseBtn" style="z-index: 100; display: none;" class="closeCanvasBtn" onclick="closeCanvas()"></div>
+	<img id="activeSelected" style="position: absolute;right: 21px; top: 140px; width: 35px;display:none;z-index:999999;" />
+	<div class="sideOpener" id="sideOpener" style=" position: absolute;left: 1px;height: 100%; width: 35px;z-index:99">
+		<img class="sideOpener" src="img/slideMenu.png" style="margin-top: 250px;margin-left: 2px;">
+	</div>
+	<div id="configContent0" class="">
+	  	<canvas id="configCanvas" style="border: 4px solid gray;border-radius: 10px;"></canvas>
+	</div>
+<!--	<div id="canvasRoulete" class="container csstransforms" style="height:0px;width:0px;display:none;z-index:10;">
+		<div class="component">
+			<button class="cn-button" id="cn-button">+</button>
+			<div class="cn-wrapper" id="cn-wrapper">
+				<ul style="position:relative;">
+				</ul>
+			</div>
+		</div>
+    </div>-->
+	<div id="dockContainer" style="display:none;">
+	  	<div id="dockWrapper">
+			<div class="cap left">
+				<div id="clearDockBtn" style="z-index: 100;top: 80px;left: 11px;width: 15px;height: 15px;background-size: 15px;" class="closeCanvasBtn" onclick="$('#osxDocUL').html('');$('#dockContainer').hide();"></div>
+			</div>
+			<ul class="osx-dock" id="osxDocUL">
+			</ul>
+		</div>
+	</div>
 
-	<div data-role="popup" style="right: 8%;top: 48px;" id="userPanel" data-theme="g" data-display="overlay" data-position="right" class="panelCont" data-mini="true">
-        <div id="exampleArrow-t" class="ui-popup-arrow-container ui-popup-arrow-t" style="position: absolute;right: 10px;">
-            <div style="" class="ui-popup-arrow ui-body-inherit ui-overlay-shadow"></div>
-        </div>
+<!-- /container -->
+	<div class='' id ='showTooltipInfo' style='z-index:1; display:none;'></div>
+
+	<div id="configNameContainer" style="display: none;">
+		<div id="configName" class="configName" style="display: block;">
+	        <!--<div id="editConfigName">--><div id="saveConfname" class="buttonDesign ui-btn-gloss"><center style="padding: 4px; font-size: 12pt;">EDIT</center></div>  
+	    	<input type="text" id="configText" name="configName" placeholder="Configuration Name:" class="configNameTextBox" data-mini="true" style="height: 25px; font-size: 13px;" />
+	  	</div> 
+    </div>
+	
+	<div id="mappingCanvasContainer" class="mappingCanvas minicanvas" style="display: none;width: 220px;height: 130px;position: absolute;right: 170px;top: 91px;z-index:11;">
+		<div class="screenFrame minicanvas" id="scrFrameMini">
+	    	<div id="closeMap">
+	        	<div type="button" name="add" value="--" class="closeMap">--</div>
+	        </div>
+	    </div>
+		<div id="divMiniCanvas">
+    		<div id="miniMap0" class="screen minicanvas"></div>
+		</div>
+	</div>
+	
+	<div id="historyContainer" style="display: none;">
+		<div id="history" class="historyDesign" style="display: block;">
+        	<h4 role="heading" id="history-title ui-title" style="text-align:center; color: 1c5a8d; font-weight:bold;"><a>History</a></h4>
+			<div>
+			</div>
+			<div id="historyDiv">
+               	<ul class="ulDeco">
+               	</ul>
+            </div>
+		</div>
+	</div>
+
+    <div data-role="popup" style="/*right: 10%;top:48px;*/left: -10px; top: 35px;" id="barsPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true" data-arrow="true">
+	</div>
+    <div data-role="popup" style=" left: -13px; top: 48px;" id="gridPanel" data-theme="a" data-display="overlay" data-position="left" class="panelCont" data-mini="true" data-arrow="true">
+    </div>
+
+	<div data-role="popup" style="right: 8%;top: 48px;" id="userPanel" data-theme="g" data-display="overlay" data-position="right" class="panelCont" data-mini="true" data-arrow="true">
 		<div style="padding: 5px;">
 			<a style="padding: 10px;" href="#" id="logOut">Signout</a>
 		</div>
     </div>
 
-	<div data-role="popup" style="width: 120px;right: -9px;top: 0px;" id="deviceMenuPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true">
-		<div data-role="header" data-theme="d">
-			<h1 style="padding: 8px 0px 8px 0px;margin: 0 10%;text-overflow: initial;">
-				Device Menu
-			</h1>
-		</div>
-		<div data-role="content">
-			<ul data-role="listview" data-mini="true" data-inset="true">
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="deviceList">Device</a></li>
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="deviceToolsList">Tools</a></li>
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="deviceLogsList">Logs</a></li>
-			</ul>
-			<div id="rightDeviceSubList" style="min-width: 100px;height: 100px;right;position: absolute;top: 35px;left: 122px;display:none;">
-				<ul data-role="listview" data-mini="true" data-inset="true" id="deviceSubList">
-					<li data-mini="true"><a href="#" data-transition="flow" id="deviceMapDevMenu">Map</a></li>
-    	            <li data-mini="true"><a href="#" data-transition="flow" id="delDevDevMenu">Delete</a></li>
-        	        <li data-mini="true"><a href="#" data-transition="flow" id="devConfDevMenu">Configuration</a></li>
-	                <li data-mini="true"><a href="#" data-transition="flow">Filter</a></li>
-				</ul>
-				<ul data-role="listview" data-mini="true" data-inset="true" id="deviceToolsSubList">
-					<li data-mini="true"><a href="#" data-transition="flow">Link Sanity</a></li>
-					<li data-mini="true"><a href="#" data-transition="flow">Software Image</a></li>
-					<li data-mini="true"><a href="#" data-transition="flow">Configuration</a></li>
-					<li data-mini="true"><a href="#" data-transition="flow" id="autoDDevMenu">Auto Discover</a></li>
-				</ul>
-			</div>
-        </div>
-    </div>	
+	<div data-role="popup" style="width: auto;" id="deviceMenuPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true" data-position-to="window">
+		<table id="deviceMenu" data-theme="c" style="min-width: 300px;">
+			<tr style="height: 60px;">
+ 	        	<td colspan="4">
+           			<div style="" data-role="header" id="PaletteTitle3" data-theme="d"><span class="devMenuTitle">Device Menu</span></div>
+		        </td>
+		    </tr>
+			<tr id="" data-mini="true" data-inset="true">
+   	            <td data-mini="true"><img width="45px" src="img/devpopup/device.png" data-transition="flow" class="devListMain" id="deviceList" /><p>Device</p></td>
+                <td data-mini="true"><img width="45px" src="img/devpopup/tools.png" data-transition="flow" class="devListMain" id="deviceToolsList" /><p>Tools</p></td>
+               	<td data-mini="true"><img width="45px" src="img/devpopup/logs.png" data-transition="flow" class="devListMain" id="deviceLogsList" /><p>Logs</p></td>
+               	<td data-mini="true"><img width="45px" src="img/devpopup/logs.png" data-transition="flow" class="devListMain" id="deviceConsole" /><p>Open Console</p></td>
+			</tr>
+		</table>
+		<table id="deviceconsoleTools" style="display:none;width: 392px;" data-theme="c">
+		    <tr style="height: 60px;">
+         		<td colspan="5">
+   	         		<a href="#" data-role="button" data-icon="back" data-iconpos="notext" data-theme="d" data-mini="true" style="margin-top: -25px; position: absolute; z-index: 999; " class="bckDeviceMenu"></a>
+       			    <div style="" data-role="header" id="PaletteTitle2" data-theme="d" data-add-back-btn="false"></div>
+		        </td>
+		    </tr>
+	
+			<tr>
+		       <td><img style='width:62px;height:62px;' did='telnet' src="img/devpopup/logs.png"/ id="deviceconsoleTelnet"><p>Telnet</p></td>
+    		   <td><img style='width:62px;height:62px;' did='ssh' src="img/devpopup/logs.png"/ id="deviceconsoleSSH" ><p>SSH</p></td>
+		       <td><img style='width:62px;height:62px;' did='ssl' src="img/devpopup/logs.png"/ id="deviceconsoleSSL" ><p>SSL</p></td>
+		    </tr>
+		</table>
+		<table id="deviceListSub" data-theme="c" style="min-width: 300px;display: none;">
+			<tr style="height: 60px;">
+         		<td colspan="5">
+   	         		<a href="#" data-role="button" data-icon="back" data-iconpos="notext" data-theme="d" data-mini="true" style="margin-top: -25px; position: absolute; z-index: 999; " class="bckDeviceMenu"></a>
+       			    <div style="" data-role="header" id="PaletteTitle2" data-theme="d" data-add-back-btn="false"></div>
+		        </td>
+		    </tr>
+			<tr id="" data-mini="true" data-inset="true" style="margin-top:10px;">
+				<td data-mini="true"><img width="45px" src="img/devpopup/map.png" data-transition="flow" class="devListMain" id="deviceMapDevMenu" /><p>Map</p></td>
+   	            <td data-mini="true"><img width="45px" src="img/devpopup/delete.png" data-transition="flow" class="devListMain" id="delDevDevMenu" /><p>Delete</p></td>
+       	        <td data-mini="true"><img width="45px" src="img/devpopup/configuration.png" data-transition="flow" class="devListMain"  id="devConfDevMenu"><p>Configuration</p></td>
+       		    <td data-mini="true"><img width="45px" src="img/devpopup/filter.png" data-transition="flow" class="devListMain"><p>Filter</p></td>
+       	        <td data-mini="true"><img width="45px" src="img/devpopup/configuration.png" data-transition="flow" class="devListMain"  id="devAddPartner"><p>Add Partner Port</p></td>
+			</tr>
+		</table>
+		<table id="deviceToolsListSub" data-theme="c" style="min-width: 300px;display: none;">
+			<tr style="height: 60px;">
+         		<td colspan="4">
+   	         		<a href="#" data-role="button" data-icon="back" data-iconpos="notext" data-theme="d" data-mini="true" style="margin-top: -25px; position: absolute; z-index: 999; " class="bckDeviceMenu"></a>
+       			    <div style="" data-role="header" id="PaletteTitle2" data-theme="d" data-add-back-btn="false"></div>
+		        </td>
+		    </tr>
+			<tr data-role="listview" data-mini="true" data-inset="true" id="deviceToolsSubList">
+				<td data-mini="true"><img id="devToolsLinkSan" width="45px" src="img/devpopup/linksanity.png" data-transition="flow" /><p>Link Sanity</p></td>
+				<td data-mini="true"><img id="devToolsSoft" width="45px" src="img/devpopup/softwareimage.png" data-transition="flow" /><p>Software Image</p></td>
+				<td data-mini="true"><img id="devToolsConf" width="45px" src="img/devpopup/configuration.png" data-transition="flow" /><p>Configuration</p></td>
+				<td data-mini="true"><img width="45px" src="img/devpopup/autodiscover.png" data-transition="flow" id="autoDDevMenu" /><p>Auto Discover</p></td>
+			</tr>
+		</table>
+		<table id="deviceLogsListSub" data-theme="c" style="min-width: 300px;display: none;">
+			<tr style="height: 60px;">
+         		<td colspan="4">
+   	         		<a href="#" data-role="button" data-icon="back" data-iconpos="notext" data-theme="d" data-mini="true" style="margin-top: -25px; position: absolute; z-index: 999; " class="bckDeviceMenu"></a>
+					<div style="" data-role="header" id="PaletteTitle3" data-theme="d" data-add-back-btn="false"><span class="devMenuTitle">Link Menu</span></div><div style="" data-role="header" id="PaletteTitle3" data-theme="d" data-add-back-btn="false"><span class="devMenuTitle">Logs</span></div>
+       			    <!--<div style="" data-role="header" id="PaletteTitle2" data-theme="d" data-add-back-btn="false"></div>-->
+		        </td>
+		    </tr>
+			<tr data-role="listview" data-mini="true" data-inset="true" id="deviceLogsSubList">
+				<td data-mini="true"><img id="DeviceLogs" class="showlogs" width="45px" src="img/devpopup/device_logs.png" data-transition="flow" title="Device Logs" /><p>Device</p></td>
+				<td data-mini="true"><img id="ConnectivityLogs" class="showlogs" width="45px" src="img/devpopup/connectivity_logs.png" data-transition="flow" title="Connectivity Logs" /><p>Connectivity</p></td>
+				<td data-mini="true"><img id="LinkSanityLogs" class="showlogs" width="45px" src="img/devpopup/linksanity_logs.png" data-transition="flow" title="Link Sanity Logs" /><p>Link Sanity</p></td>
+			</tr>
+		</table>
+   </div>	
 
-	<div data-role="popup" style="width: 120px;right: -9px;top: 0px;" id="linkMenuPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true">
-		<div data-role="header" data-theme="d">
-			<h1 style="padding: 8px 0px 8px 0px;margin: 0 10%;text-overflow: initial;">
-				Link Menu
-			</h1>
-		</div>
-		<div data-role="content">
-			<ul data-role="listview" data-mini="true" data-inset="true">
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="linkList">Link</a></li>
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="linkToolsList">Tools</a></li>
-                <li data-mini="true"><a href="#" data-transition="flow" class="devListMain" id="linkLogsList">Logs</a></li>
-			</ul>
-			<div id="rightLinkSubList" style="min-width: 100px;height: 100px;right;position: absolute;top: 35px;left: 122px;display:none;">
-				<ul data-role="listview" data-mini="true" data-inset="true" id="linkSubList">
-					<li data-mini="true"><a href="#" data-transition="flow">Map</a></li>
-    	            <li data-mini="true"><a href="#" data-transition="flow" id="delLinkDevMenu">Delete</a></li>
-				</ul>
-			</div>
-        </div>
+	<div data-role="popup" style="width: auto;" id="linkMenuPanel" data-theme="a" data-display="overlay" data-position="right" class="panelCont" data-mini="true" data-position-to="window">
+		<table id="linkMenu" data-theme="c" style="min-width: 300px;">
+			<tr style="height: 60px;">
+	    		<td colspan="3">
+       			    <div style="" data-role="header" id="PaletteTitle3" data-theme="d" data-add-back-btn="false"><span class="devMenuTitle">Link Menu</span></div>
+	       		</td>
+		    </tr>
+			<tr data-role="listview" data-mini="true" data-inset="true">
+               	<td data-mini="true"><img width="45px" src="img/devpopup/linksanity.png" data-transition="flow" class="devListMain" id="linkList" /><p>Link</p></td>
+               	<td data-mini="true"><img width="45px" src="img/devpopup/tools.png" data-transition="flow" class="devListMain" id="linkToolsList" /><p>Tools</p></td>
+               	<td data-mini="true"><img width="45px" src="img/devpopup/logs.png" data-transition="flow" class="devListMain" id="linkLogsList" /><p>Logs</p></td>
+			</tr>
+			</table>
+		<table id="subLink" data-theme="c" style="min-width: 300px;display: none;">
+			<tr style="height: 60px;">
+         		<td colspan="2">
+   	         		<a href="#" data-role="button" data-icon="back" data-iconpos="notext" data-theme="d" data-mini="true" style="margin-top: -25px; position: absolute; z-index: 999; " class="bckLinkMenu"></a>
+       			    <div style="" data-role="header" id="PaletteTitle2" data-theme="d" data-add-back-btn="false"></div>
+		        </td>
+		    </tr>
+			<tr data-role="listview" data-mini="true" data-inset="true" id="linkSubList">
+				<td data-mini="true" id="linkConnect"><img width="45px" src="img/devpopup/linkconnect.png" data-transition="flow" id="alinkConnect"/><p>Connect</p></td>
+				<td data-mini="true" id="linkDisconnect"><img width="45px" src="img/devpopup/linkdisconnect.png" data-transition="flow" id="alinkDisconnect"/><p>Disconnect</p></td>
+				<td data-mini="true" id="linkFlap"><img width="45px" src="img/devpopup/linkflap.png" data-transition="flow" id="alinkFlap"/><p>Flap</p></td>
+				<td data-mini="true"><img width="45px" src="img/devpopup/map-link.png" data-transition="flow" id="alinkMap"/><p>Map</p></td>
+               	<td data-mini="true"><img width="45px" src="img/devpopup/delete.png" data-transition="flow" id="delLinkDevMenu" /><p>Delete</p></td>
+			</tr>
+		</table>
     </div>	
 

@@ -1,0 +1,56 @@
+<div id="" style="margin-top:7%;">
+	<font size="3">DEVICE INFORMATION</font><br>
+	<span>Interval (ms): <input type="text" style="width: 20px" id="intervalID" value="5"></span><br>
+	<div id="" class="datagrid">
+		<table data-role="table" data-mode="columntoggle" data-mini="true" id="deviceInfoTable" style="width: 99%" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a">
+			<thead class="header">
+				<tr class="ui-bar-d">
+					<th data-priority="1">ID</th>
+					<th data-priority="1">Host Name</th>
+					<th data-priority="1">Management IP</th>
+					<th data-priority="1">Console IP</th>
+					<th data-priority="1">Manufacturer</th>
+					<th data-priority="1">Model</th>
+				</tr>
+			</thead>
+			<tbody id="devPowerInfo"></tbody>
+		</table>
+	</div><br><br>
+	<font size="3">POWER STATISTICS</font><br>
+	<div id="powerstatTable" class="datagrid">
+	<table data-role="table" data-mode="columntoggle" data-mini="true" id="powerStatsTable" style="width: 99%" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a">
+		<thead class="header">
+				<tr class="ui-bar-d">
+					<th data-priority="1"><input type="checkbox" name="multiple" id="selectAl" class="checkAll" onclick="selectAll('powerCheck');"></th>
+					<th data-priority="1">Host Name</th>
+					<th data-priority="1">Power Supply</th>
+					<th data-priority="1">Controller Name</th>
+					<th data-priority="1">Controller IP</th>
+					<th data-priority="1">Status</th>
+					<th data-priority="1">State</th>
+					<th data-priority="1">Outlet Name</th>
+					<th data-priority="1">Outlet Number</th>
+					<th data-priority="1">RMS Current</th>
+					<th data-priority="1">RMS Voltage</th>
+					<th data-priority="1">Power Factor</th>
+					<th data-priority="1">Active Power</th>
+					<th data-priority="1">Apparent Power</th>
+					<th data-priority="1">Active Energy</th>
+				</tr>
+			</thead>
+			<tbody id="powerStats"></tbody>
+		</table>
+	</div>
+</div>
+<div style="margin-top:2%;">
+	<center>
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" name="" value="Refresh">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" id="onID" name="" value="On" style="display: none" onclick="powerAlert('onVal');">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" id="offID" name="" value="Off" style="display:none" onclick="powerAlert('offVal');">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" id="cycleID" name="" value="Cycle" style="display:none" onclick="powerAlert('cycleVal');">
+	<input data-role="button" data-mini="true" data-inline="true" class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini" type="button" name="" value="Close" onclick="cancelPowerInfo();">
+	</center>
+</div>
+<div id="powerAlertDiv" style="display: none"></div>
+
+

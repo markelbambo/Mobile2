@@ -1,0 +1,165 @@
+<div data-role="collapsible" id="autoDSaveDevInfo" data-collapsed="false" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;margin-top:0px;">
+	<!--legend style="margin-left:15px">Device Access Information</legend-->
+	<h1>Device Access Information</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;">Host Name:</td>
+			<td><input id="autoDSaveHost" type="text" onKeyPress="return checkValConfigText(event);"></td>
+			<td style="text-align:right;100px;white-space:nowrap;">UserName:</td>
+			<td><input id="autoDSaveUsername" type="text" onKeyPress="return checkValConfigText(event);"></td>
+			<td style="text-align:right;100px;white-space:nowrap;">Password:</td>
+			<td><input id="autoDSavePassword" type="Password" onKeyPress="return checkValConfigText(event);"></td>
+		</tr>
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;">Management Ip:</td>
+			<td><input id="autoDSaveMgmtIp" type="text" onKeyPress="return checkIPInputChar(event);"></td>
+			<td style="text-align:right;100px;white-space:nowrap;">Net Mask:</td>
+			<td><input id="autoDSaveNetMask" type="text" onKeyPress="return checkIPInputChar(event);"></td>
+			<td style="text-align:right;100px;white-space:nowrap;">Management Interface:</td>
+			<td><input id="autoDSaveMgmtIntf" type="text"></td>
+		</tr>
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;">TFTP Server Ip:</td>
+			<td><input id="autoDSaveTftpServer" type="text" onKeyPress="return checkIPInputChar(event,'console');"></td>
+			<td style="text-align:right;100px;white-space:nowrap;">Default Gateway:</td>
+			<td><input id="autoDSaveGateway" type="text" onKeyPress="return checkIPInputChar(event);"></td>
+			<td colspan="2" style="text-align:center;"><div class="ui-checkbox">
+				<label for="autoDSaveProtoChk" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="border:none;background:none;font-weight:normal;">Prototype</label>
+				<input type="checkbox" id="autoDSaveProtoChk" data-enhanced="true" data-mini="true">	
+				</div>
+			</td>
+		</tr>
+		<tr id="autoDSaveRP1">
+			<td colspan=6">
+				<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;text-align:left;">
+					<legend style="margin-left:20px;">Route Processor 1</legend>
+					<table style="width:100%;">
+						<tr>
+							<td style="text-align:right;100px;white-space:nowrap;width:100px;">Console Ip:</td>
+							<td><input id="autoDSaveRP1ConAdd" type="text" placeholder="Ip Address:" onKeyPress="return checkIPInputChar(event,'console');"></td>
+							<td><input id="autoDSaveRP1ConPort" type="text" placeholder="Port:" onKeyPress="return checkNumberInputChar(event,this,'65535');"></td>
+							<td style="text-align:right;100px;white-space:nowrap;width:100px;">Auxiliary Ip:</td>
+							<td><input id="autoDSaveRP1AuxAdd" type="text" placeholder="Ip Address:" onKeyPress="return checkIPInputChar(event);"></td>
+							<td><input id="autoDSaveRP1AuxPort" type="text" placeholder="Port:" onKeyPress="return checkNumberInputChar(event,this,'65535');"></td>
+						</tr>
+					</table>
+				</fieldset>
+			</td>
+		</tr>
+		<tr id="autoDSaveRP2">
+			<td colspan=6">
+				<fieldset style="border:2px solid #1c5a8d;border-radius:10px;width:100%;text-align:left;">
+					<legend style="margin-left:20px;">Route Processor 2</legend>
+					<table style="width:100%;">
+						<tr>
+							<td style="text-align:right;100px;white-space:nowrap;width:100px;">Console Ip:</td>
+							<td><input id="autoDSaveRP2ConAdd" type="text" placeholder="Ip Address:" onKeyPress="return checkIPInputChar(event,'console');"></td>
+							<td><input id="autoDSaveRP2ConPort" type="text" placeholder="Port:" onKeyPress="return checkNumberInputChar(event,this,'65535');"></td>
+							<td style="text-align:right;100px;white-space:nowrap;width:100px;">Auxiliary Ip:</td>
+							<td><input id="autoDSaveRP2AuxAdd" type="text" placeholder="Ip Address:" onKeyPress="return checkIPInputChar(event);"></td>
+							<td><input id="autoDSaveRP2AuxPort" type="text" placeholder="Port:" onKeyPress="return checkNumberInputChar(event,this,'65535');"></td>
+						</tr>
+					</table>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+</div>
+<div data-role="collapsible" id="autoDSaveSoftInfo" data-collapsed="false" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;">
+	<h1>Software Image Information</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:110px;">Primary:</td>
+			<td><input id="autoDSaveSoftPriImg" type="text"></td>
+		</tr>
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:110px;">Secondary:</td>
+			<td><input id="autoDSaveSoftSecImg" type="text"></td>
+		</tr>
+	</table>
+</div>
+<div data-role="collapsible" id="autoDSaveConfInfo" data-collapsed="false" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;">
+	<h1>Configuration Information</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:110px;">Primary:</td>
+			<td><input id="autoDSaveConfPriImg"  type="text"></td>
+		</tr>
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:110px;">Secondary:</td>
+			<td><input id="autoDSaveConfSecImg" type="text"></td>
+		</tr>	
+	</table>
+</div>
+<div data-role="collapsible" id="autoDSavePowerMan" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;">
+	<h1>Power Management</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:120px;">No. of power supply:</td>
+			<td><input id="autoDSavePowerCount" type="text" onKeyPress="return createPowerManAutoD(event,this)"></td>
+			<td style="text-align:right;100px;white-space:nowrap;width:110px">Accessibility:</td>
+			<td style="text-align:left;">
+				<select id="autoDPwrAccess" style="white-space:normal;">
+					<option value="">Select</option>
+					<option>Telnet</option>
+					<option>SSH</option>
+					<option>SNMP</option>
+				</select>
+			</td>
+		</tr>
+		<tr id="autoDSavePowerTableCont">
+			<td colspan="4">
+				<div style="max-height:200px;overflow:auto;">
+					<table id="autoDSavePowerTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive" data-mini="true">
+						<thead>
+							<tr class="ui-bar-d" style="text-align:left;width:100%">
+								<!--th id="autoDSavePowerAccess" data-colstart="1">Access Type</th-->
+								<th id="autoDSavePowerIp" data-colstart="1">Ip Address</th>
+								<th id="autoDSavePowerUser" data-colstart="2">Username</th>
+								<th id="autoDSavePowerPass" data-colstart="3">Password</th>
+								<th id="autoDSavePowerPort" data-colstart="4">Port Number</th>
+							</tr>
+						</thead>
+						<tbody id="autoDSavePowerTbody">
+						</tbody>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">Warning: Wrong power management information might cause malfunction or conflict to other device</td>
+		</tr>
+	</table>
+</div>
+<div data-role="collapsible" id="autoDSaveNATInfo" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;">
+	<h1>NAT Information</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td style="text-align:right;100px;white-space:nowrap;width:150px;">No. of NAT Address:</td>
+			<td><input id="autoDSaveNatAddCount" type="text"></td>
+		</tr>
+		<tr id="autoDSaveNATTableCont">
+			<td colspan="2"><div style="max-height:200px;overflow:auto;">
+				<table id="autoDSaveNATTable" data-role="table" class="table-stroke ui-body-d ui-shadow ui-responsive" data-mini="true">
+					<thead>
+						<tr class="ui-bar-d" style="text-align:left;width:100%">
+							<th id="autoDSaveNATType"  data-colstart="1">Type</th>
+							<th id="autoDSaveNATAdd"  data-colstart="2">Address</th>
+							<th id="autoDSaveNATPort"  data-colstart="3">Port</th>
+						</tr>
+					</thead>
+					<tbody id="autoDSaveNATContent">
+					</tbody>
+				</table></div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div data-role="collapsible" id="autoDSaveFusionInfo" style="border:2px solid #7F99AD;border-raduis:10px;margin-bottom:5px;">
+	<h1>Fusion License Information</h1>
+	<table style="text-align:left;margin-left:5px;margin-right:5px;width:100%;">
+		<tr>
+			<td>Fusion cards found. Please select licensed cards</td>
+		</tr>
+	</table>
+</div>

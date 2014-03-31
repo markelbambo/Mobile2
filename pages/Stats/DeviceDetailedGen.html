@@ -1,0 +1,408 @@
+<!--DeviceDetailed Generate Report PopUp--->
+<div data-role="page" id="DeviceDetailedGen" class="popUpPage" data-dismissible="false"  data-corners="true" data-disabled="false" data-shadow="true" data-overlay-theme="a" data-position-to="window" data-mini="true">
+	<center>
+	<div data-role="header" data-theme="d">
+		<h2> </h2>
+	</div>
+	<div>
+		<table>
+			<h2>Device Custom View</h2>
+			<tr>
+				<font size="3em" color="gray">
+					<i>(Please select column header(s) to include in the report)</i>
+				</font>
+			</tr>
+			<tr style="align:center">
+				<td style="width:68px; font-size:10pt; ">
+					File Type :
+				</td>
+				<td style="width: 15px; font-size:10pt;"><input type="radio" id="csvdevice" checked='true' name='csvdevice' data-mini="true"/></td>
+				<td style="width: 50px; font-size:10pt;">CSV</td>
+				<td style="width: 10px; font-size:10pt;">
+				<input type="radio" id="pdfdevice" name='pdfdevice' data-mini="true"/></td>
+				<td style="width: 50px; font-size:10pt;">Pdf
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div>
+	<center>
+		<table>
+         <tr>
+            <td>
+                <table>
+					<tr>
+	                    <td>
+							<div id='DefaultDeviceChoices'>  <!--Device Detailed -->
+								<table>
+									<tr>
+										<td>
+											<div class='ui-checkbox'>
+												<label for='DeviceDefaultDateAdded' class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">DateAdded</label>
+							                    <input type="checkbox" id="DeviceDefaultDateAdded"  data-enhanced="true" data-mini="true">
+											</div>
+
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultDeviceId" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">ID</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultDeviceId" name='DeviceDefaultDeviceId'/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultHostName" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">HostName</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultHostName" name='DeviceDefaultHostName'/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ExpandedManagementIp" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">ManagementIp</label>
+    				 	                    	<input type="checkbox" id="ExpandedManagementIp" name="ExpandedManagementIp"/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ExpandedConsoleIp" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">ConsoleIp</label>
+    				 	                    	<input type="checkbox" id="ExpandedConsoleIp" name="ExpandedConsoleIp"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultManufacturer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Manufacturer</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultManufacturer" name="DeviceDefaultManufacturer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultModel" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Model</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultModel" name="DeviceDefaultModel"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ExpandedDeviceType" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Device Type</label>
+    				 	                    	<input type="checkbox" id="ExpandedDeviceType" name="ExpandedDeviceType"/>
+											</div>
+										</td>
+									</tr>			
+									<tr id='DeviceDetailed1'>
+										<td>
+											<div class='ui-checkbox'>
+											<label for="DeviceDefaultIdle" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Idle(Hrs Mins)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultIdle" name="DeviceDefaultIdle"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultIdlePer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Idle(%)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultIdlePer" name="DeviceDefaultIdlePer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultReservation" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Reservation(Hrs Mins)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultReservation" name="ExpandedConsoleIp"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultReservationPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Reservation(%)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultReservationPer" name="DeviceDefaultReservationPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='DeviceDetailed2'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultNoScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">No.Of Scheduled</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultNoScheduled" name="DeviceDefaultNoScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultNoRescheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Rescheduled</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultNoRescheduled" name="DeviceDefaultNoRescheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Scheduled(%)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultScheduled" name="DeviceDefaultScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultRescheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Re-Scheduled(%)</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultRescheduledPer" name="DeviceDefaultRescheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='DeviceDetailed3'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultGenericPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultGenericPer" name="DeviceDefaultGenericPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultGenericReScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultGenericReScheduled" name="DeviceDefaultGenericReScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultGenericScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultGenericScheduledPer" name="DeviceDefaultGenericScheduledPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultGenericReScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultGenericReScheduledPer" name="DeviceDefaultGenericReScheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='DeviceDetailed4'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultExplicitPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultExplicitPer" name="DeviceDefaultExplicitPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultExplicitReScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultExplicitReScheduled" name="DeviceDefaultExplicitReScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultExplicitScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultExplicitScheduledPer" name="DeviceDefaultExplicitScheduledPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="DeviceDefaultExplicitReScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="DeviceDefaultExplicitReScheduledPer" name="DeviceDefaultExplicitReScheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ExpandedOSVersion" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">OS Version</label>
+    				 	                    	<input type="checkbox" id="ExpandedOSVersion" name="ExpandedOSVersion"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ExpandedSystemMem" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">System Memory</label>
+    				 	                    	<input type="checkbox" id="ExpandedSystemMem" name="ExpandedSystemMem"/>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div id="DefaultSlotChoices">	<!--Slot Detailed-->
+								<table>
+									<tr>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultDeviceId" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">ID</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultDeviceId" name="SlotDefaultDeviceId"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultDateAdded" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Date Added</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultDateAdded" name="SlotDefaultDateAdded"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultHostName" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">HostName</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultHostName" name="SlotDefaultHostName"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultRackNo" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Rack No</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultRackNo" name="SlotDefaultRackNo"/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultNumber" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Number</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultNumber" name="SlotDefaultNumber"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultProductId" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Product Identifier</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultProductId" name="SlotDefaultProductId"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultDescription" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Description</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultDescription" name="SlotDefaultDescription"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultRackDesc" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Rack Desc</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultRackDesc" name="SlotDefaultRackDesc"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='SlotDetailed1'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultIdle" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Idle(Hrs Mins)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultIdle" name="SlotDefaultIdle"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultIdlePer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Idle(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultIdlePer" name="SlotDefaultIdlePer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultReservation" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Reservation(Hrs Mins)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultReservation" name="SlotDefaultReservation"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultReservationPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Reservation(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultReservationPer" name="SlotDefaultReservationPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='SlotDetailed2'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultNoScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">No.Of Scheduled</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultNoScheduled" name="SlotDefaultNoScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultNoRescheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">No.Of Re-Scheduled</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultNoRescheduled" name="SlotDefaultNoRescheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Scheduled(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultScheduled" name="SlotDefaultScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultRescheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Re-Scheduled(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultRescheduledPer" name="SlotDefaultRescheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='SlotDetailed3'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultGeneric" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultGeneric" name="SlotDefaultGeneric"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultGenericReScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultGenericReScheduled" name="SlotDefaultGenericReScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultGenericScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultGenericScheduledPer" name="SlotDefaultGenericScheduledPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultGenericReScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Generic(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultGenericReScheduledPer" name="SlotDefaultGenericReScheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='SlotDetailed4'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultExplicit" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultExplicit" name="SlotDefaultExplicit"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultExplicitReScheduled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultExplicitReScheduled" name="SlotDefaultExplicitReScheduled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultExplicitScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultExplicitScheduledPer" name="SlotDefaultExplicitScheduledPer"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="SlotDefaultExplicitReScheduledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Explicit(%)</label>
+    				 	                    	<input type="checkbox" id="SlotDefaultExplicitReScheduledPer" name="SlotDefaultExplicitReScheduledPer"/>
+											</div>
+										</td>
+									</tr>
+									<tr id='SlotDetailed5'>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ModuleDefaultCancelled" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Cancelled</label>
+    				 	                    	<input type="checkbox" id="ModuleDefaultCancelled" name="ModuleDefaultCancelled"/>
+											</div>
+										</td>
+										<td>
+											<div class='ui-checkbox'>
+												<label for="ModuleDefaultCancelledPer" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-off" style="width: 160px;">Cancelled(%)</label>
+    				 	                    	<input type="checkbox" id="ModuleDefaultCancelledPer" name="ModuleDefaultCancelledPer"/>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div>
+								<table>
+								</table>
+							</div>
+                         </td>
+					  </tr>
+                 </table><br/>
+				<table>
+					<tr>
+						
+						<td>
+							<input id="generate" type="button" value="OK" style="width: 100px;"/>
+						</td>
+						<td>
+							<input id="CloseGen" type="button" value="Cancel" style="width: 100px;"/>
+						</td>
+					</tr>
+				</table>
+            </td>
+        </tr>
+	</center>
+</div>
+	</center>
+</div>

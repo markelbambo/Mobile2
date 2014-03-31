@@ -2398,7 +2398,7 @@ function createLineGraph(data,labels) {
         },
 		credits: {
 	    	enabled: false,
-            href : 'http://www.narrasystems.com',
+            href : 'https://www.narrasystems.com',
             text: 'NarraSystems'
 	    },
 		colors: [
@@ -2714,7 +2714,7 @@ function createPieGraph(data,labels,type,dev) {
         },
 		credits: {
 	    	enabled: false,
-            href : 'http://www.narrasystems.com',
+            href : 'https://www.narrasystems.com',
             text: 'NarraSystems'
 	    },
         exporting: {
@@ -2817,7 +2817,7 @@ function createBarGraph(data){
         },
 		credits: {
 	    	enabled: false,
-            href : 'http://www.narrasystems.com',
+            href : 'https://www.narrasystems.com',
             text: 'NarraSystems'
 	    },
         title: {
@@ -3047,7 +3047,7 @@ function createLineGraphReserve(data) {
         },
 		credits: {
 	    	enabled: false,
-            href : 'http://www.narrasystems.com',
+            href : 'https://www.narrasystems.com',
             text: 'NarraSystems',
 			position: {
 				align: 'right',

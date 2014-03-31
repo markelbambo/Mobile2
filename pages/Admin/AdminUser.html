@@ -1,8 +1,8 @@
 <!--Fourth Page-->
-<div data-role="page" id="administrationPage" data-theme="a">
+<div data-role="page" id="UserPage" data-theme="a">
 	<!-- header -->
     <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-iconpos="notext"  data-position="fixed">
-		<h1 class="ui-title" role="heading">Administration</h1>
+		<h1 class="ui-title" role="heading">Users</h1>
 		<a id="user-button" class="ui-btn-right" data-rel="popup" data-role="button" data-icon="user" data-iconpos="notext" data-inline="true" href="#userPanel"></a>
     </div>
     <!-- /content -->
@@ -14,42 +14,52 @@
 		<div style="float: left;margin-top:0.5em;">
 			<span>Total Matches: <span id="totalMatches">0</span></span>
         </div>
-		<table data-role="table" id="usersAdmin-table" data-mode="columntoggle" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th>Last Name</th>
-			    <th data-priority="1">First Name</th>
-			    <th data-priority="1">Username</th>
-      			<th data-priority="2">User Type</th>
-				<th data-priority="3">Resource Domain</th>
-				<th data-priority="6">Access Right</th>
-				<th data-priority="6">Status</th>
-			</tr>
-		  	</thead>
-			<tbody>
-			</tbody>
-		</table>
+		<br/><br/>
+		<div style="overflow:auto">
+			<table align='center'>
+				<tr style="padding:5px;">
+					<td>
+						<a id="addUser" href="#addUserPopUp" data-role="button" data-mini="true">Add</a>
+					</td>
+					<td>
+						<a id="editUser" href="#addUserPopUp" data-role="button" data-mini="true">Edit</a>
+					</td>
+					<td>
+						<a id="deleteUser" href="#" data-role="button" data-mini="true">Delete</a>
+					</td>
+					<td>
+						<a id="userShowInfo" href="#" data-role="button" data-mini="true">Show Information</a>
+					</td>
+					<td>
+						<a id="generateReport" href="#" data-role="button" data-mini="true">Generate Report</a>
+					</td>
+				</tr>
+			</table>
+			<table data-role="table" id="usersAdmin-table" data-mode="columntoggle" class="table-stroke ui-body-f ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+	  			<thead>
+    				<tr class="ui-bar-d">
+					    <th data-priority="1">Last Name</th>
+					    <th data-priority="1">First Name</th>
+					    <th data-priority="1">User Name</th>
+    		  			<th data-priority="2">User Type</th>
+						<th data-priority="6">Resource Domains</th>
+						<th data-priority="3">Active Domain</th>
+						<th data-priority="3">Access Rights</th>
+						<th data-priority="3">Status</th>
+					</tr>
+			  	</thead>
+				<tbody id='tbUser'>
+				</tbody>
+			</table>
+			<div>
+				<table align="center">
+					<tr>
+						<td><a id='showMore' data-role="button" data-mini="true" data-theme="d">Show More</a></td>
+					<!--	<td><a id='showLess' data-role="button" data-mini="true" data-theme="d">Show Less</a><td> -->
+					</tr>
+				</table>
+			</div>			
+		</div>
 	</div>
-	<!-- footer -->
-        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
-            <div id="dock">
-                <ul>
-                    <li>
-                        <a href="#"><span>Config</span><img class="configCar2" src="../../img/configeditor.png" alt="[Config Editor]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>Admin</span><img class="adminCar" src="../../img/Admin.png" alt="[Administration]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>RM</span><img class="rmCar" src="../../img/RM.png" alt="[Resource Management]" /></a>
-                    </li>
-                    <li>
-                        <a href="#"><span>PM</span><img class="pmCar" src="../../img/PM.png" alt="[Power Management]" /></a>
-                    </li>
-                    <li>   
-                        <a href="#"><span>Stats</span><img class="statCar" src="../../img/Statistics.png" alt="[Statistics]" /></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
 </div>
+

@@ -1,4 +1,19 @@
 <!--Fifth Page-->
+<style type="text/css">
+
+ .date  ul{
+  border: 1px solid #505050; /*#123360;*/
+  font-size: 12px;
+  width: 180px;
+  height:17px;
+  -moz-border-radius:3px;
+  -khtml-border-radius:3px;
+  -webkit-border-radius:3px;
+  border-radius:3px;
+ }
+
+
+</style>
 <div data-role="page" id="statisticsDomainPage" data-theme="a">
 	<!-- header -->
     <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
@@ -6,129 +21,557 @@
     </div>
 	<!-- /content -->
 	<div data-role="content" id="domainContent">
-		<fieldset  data-role="controlgroup" data-type="horizontal" data-mini="true" style="">
-                <select name="select-native-2" id="statComponent" onchange="changeComponent(this.value);" data-mini="true">
-					<option value="0" >Device</option>
-					<option value="1">Slot</option>
-					<option value="2">Module</option>
-					<option value="3">Port</option>
-				</select>
-                <select name="select-native-2" id="select-native-2" data-mini="true">
-					<option value="0" style="display:none">View</option>
-					<option value="1">Daily</option>
-					<option value="2">Weekly</option>
-					<option value="3">Monthly</option>
-					<option value="4">Quartery</option>
-					<option value="5">Yearly</option>
-				</select>
-				<span id="pickerContainer" ></span>
-    	</fieldset>
-
-		<table data-role="table" id="domain-table0" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th data-priority="2">ID</th>
-			    <th>Date Added</th>
-			    <th data-priority="2">HostName</th>
-      			<th data-priority="6">MgmtIP</th>
-				<th data-priority="6">Console IP</th>
-				<th data-priority="6">Manufacturer</th>
-				<th data-priority="2">Model</th>
-				<th data-priority="6">Device Type</th>
-				<th data-priority="2">Idle(Hrs/Mins)</th>
-				<th data-priority="2">Reservation</th>
-				<th data-priority="2">Idle(%)</th>
-				<th data-priority="2">Reservation (%)</th>
-				<th data-priority="6">OS Version</th>
-				<th data-priority="6">System Memory</th>
+		<div>
+			<tr>
+				<td>
+					<select id="ulDomain"><option value='Any'>Domain: All</option></select>
+					<!--<select name="select-native-2" id="ulDomain"></select>-->
+				</td>
 			</tr>
-		  	</thead>
-			<tbody id="tbodyDevice">
-		    <tr>
-			    <th>1</th>
-			    <td>2013-11-05</td>
-				<td>1</td>
-			    <td>5</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>1</td>
-				<td>1</td>
-				<td>0</td>
-                <td>0</td>
-		   	</tr>
-			</tbody>
-		<table style="display:none" data-role="table" id="domain-table1" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th data-priority="2">ID</th>
-			    <th>Date Added</th>
-			    <th data-priority="2">HostName</th>
-      			<th data-priority="6">Slot Number</th>
-				<th data-priority="6">Slot Product Identifier</th>
-				<th data-priority="6">Slot Description</th>
-				<th data-priority="2">Idle(Hrs/Mins)</th>
-				<th data-priority="2">Reservation</th>
-				<th data-priority="2">Idle(%)</th>
-				<th data-priority="2">Reservation (%)</th>
-				<th data-priority="6">OS Version</th>
-				<th data-priority="6">System Memory</th>
-			</tr>
-		  	</thead>
-			<tbody id="tbodySlot">
-			</tbody>
+		</div>
+		<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="">
+			<table data-inline="true">
+				<tr>
+					<td>			
+		                <select name="select-native-2" id="statSelect" data-mini="true" data-inline="true">
+							<option value="Device">Device</option>
+							<option value="Slot">Slot</option>
+							<option value="Module">Module</option>
+							<option value="Port">Port</option>
+						</select>
+					</td>
+					<td>
+		   	             <select name="select-native-2" id="viewStatSelect" data-mini="true" data-inline="true"> 
+							<option value="Detailed">Detailed</option>
+							<option value="Summary">Summary</option>
+						</select>
+					</td>
+					<td>
+   			             <select name="select-native-2" id="statsViewNew" data-inline="true">
+							<option value="Utilization">Utilization</option>
+							<option value="Reservation">Reservation</option>
+						</select>
+					</td>
+					<td>
+						<select  data-inline="true" id="statsView">
+							<!--option value="0" style="display:none">View</option>-->
+							<option value="Day">Daily</option>
+							<option value="Week">Weekly</option>
+							<option value="Month">Monthly</option>
+							<option value="Quarterly">Quarterly</option>
+							<option value="Annuall">Annually</option>
+							<option value="Custom">Custom</option>
+						</select>
+					</td>
+					<td id="statsView2"></td>
+					<td id="statsView3"></td>
 
+<!--					<td id="statsView2"><input name='select-native-2' data-inline='true' id='datePickerStat' onfocus='this.blur();'></td>
+				</tr>-->
+			<!--<span id="pickerContainer" ></span>-->
+			</table>
+			<table>
+				<tr>
+					<td>
+						<a id="statSelectAll" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span>Select All</span></a>
+					</td>
+					<td>
+						<select id="filterStat"></select>
+					</td>
+					<td><input type='text' placeholder='Search' class='DomainSearchFilter' id='searchDomain'/></td>
+			</table>
+			<span>Total Matches: <span id="totalMatchesDomain"></span></span>
+    	</div>
+	<div>
+
+	</div>
+		<table data-role="table" id="domain-table0" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true"></table>
+		<table data-role="table" id="domain-tableDDU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>			
+					<th data-priority='2'>Date Added</th>			
+					<th data-priority='2'>HostName</th>			
+					<th data-priority='2'>MgmtIP</th>			
+					<th data-priority='2'>Console IP</th>			
+					<th data-priority='2'>Manufacturer</th>			
+					<th data-priority='2'>Model</th>			
+					<th data-priority='2'>Device Type</th>			
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+					<th data-priority='2'>OS Version</th>
+					<th data-priority='2'>System Memory</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
 		</table>
-		<table style="display:none" data-role="table" id="domain-table2" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th data-priority="2">ID</th>
-			    <th>Date Added</th>
-			    <th data-priority="2">HostName</th>
-      			<th data-priority="6">MgmtIP</th>
-				<th data-priority="6">Console IP</th>
-				<th data-priority="6">Manufacturer</th>
-				<th data-priority="2">Model</th>
-				<th data-priority="6">Device Type</th>
-				<th data-priority="2">Idle(Hrs/Mins)</th>
-				<th data-priority="2">Reservation</th>
-				<th data-priority="2">Idle(%)</th>
-				<th data-priority="2">Reservation (%)</th>
-				<th data-priority="6">OS Version</th>
-				<th data-priority="6">System Memory</th>
-			</tr>
-		  	</thead>
-			<tbody id="tbodyModule">
-			</tbody>
-
+		<table data-role="table" id="domain-tableDDR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>			
+					<th data-priority='2'>Date Added</th>			
+					<th data-priority='2'>HostName</th>			
+					<th data-priority='2'>MgmtIP</th>			
+					<th data-priority='2'>Console IP</th>			
+					<th data-priority='2'>Manufacturer</th>			
+					<th data-priority='2'>Model</th>			
+					<th data-priority='2'>Device Type</th>			
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+					<th data-priority='2'>OS Version</th>
+					<th data-priority='2'>System Memory</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
 		</table>
-		<table style="display:none" data-role="table" id="domain-table3" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
-  			<thead>
-    		<tr class="ui-bar-d">
-			    <th data-priority="2">ID</th>
-			    <th>Date Added</th>
-			    <th data-priority="2">HostName</th>
-      			<th data-priority="6">MgmtIP</th>
-				<th data-priority="6">Console IP</th>
-				<th data-priority="6">Manufacturer</th>
-				<th data-priority="2">Model</th>
-				<th data-priority="6">Device Type</th>
-				<th data-priority="2">Idle(Hrs/Mins)</th>
-				<th data-priority="2">Reservation</th>
-				<th data-priority="2">Idle(%)</th>
-				<th data-priority="2">Reservation (%)</th>
-				<th data-priority="6">OS Version</th>
-				<th data-priority="6">System Memory</th>
-			</tr>
-		  	</thead>
-			<tbody id="tbodyPort">
-			</tbody>
-
+		<table data-role="table" id="domain-tableDSU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Model</th>
+					<th>Number Of Devices</th>
+					<th>Manaufacturer</th>
+					<th>Idle(Hrs Mins)</th>
+					<th>Reserved(Hrs Mins)</th>
+					<th>Idle(%)</th>
+					<th>Reservation(%)</th>
+				</tr>
+			</thead>
+		<tbody></tbody>
 		</table>
+		<table data-role="table" id="domain-tableDSR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Model</th>
+					<th data-priority='2'>Number Of Devices</th>
+					<th data-priority='2'>Manaufacturer</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableRDU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>DeviceID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='2'>Number</th>
+					<th data-priority='2'>ProductIdentifier</th>
+					<th data-priority='2'>Description</th>
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		<table data-role="table" id="domain-tableRDR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>DeviceID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='2'>Number</th>
+					<th data-priority='2'>ProductIdentifier</th>
+					<th data-priority='2'>Description</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		<table data-role="table" id="domain-tableRSU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th>Number of Rack</th>
+					<th>Idle(Hrs/Mins)</th>			
+					<th>Reservation</th>			
+					<th>Idle(%)</th>			
+					<th>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		<table data-role="table" id="domain-tableRSR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th data-priority='2'>Number of Rack</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableSDU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>DeviceID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='6'>RackNumber</th>
+					<th data-priority='6'>Rack ProductId</th>
+					<th data-priority='2'>Number</th>
+					<th data-priority='2'>ProductIdentifier</th>
+					<th data-priority='2'>Description</th>
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableSDR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>DeviceID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='2'>RackNumber</th>
+					<th data-priority='2'>Rack ProductId</th>
+					<th data-priority='2'>Number</th>
+					<th data-priority='2'>ProductIdentifier</th>
+					<th data-priority='2'>Description</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableSSU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>DeviceID</th>
+					<th data-priority='2'>Product Identifier</th>
+					<th data-priority='2'>Number of Slot</th>
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableSSR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th data-priority='2'>Number of Cards<</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableMDU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='6'>RackNumber</th>
+					<th data-priority='6'>Rack ProductId</th>
+					<th data-priority='6'>Slot Number</th>
+					<th data-priority='6'>Slot ProductId</th>
+					<th data-priority='6'>Module Number</th>
+					<th data-priority='6'>Module ProductId</th>
+					<th data-priority='6'>Module Description</th>
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableMDR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='6'>RackNumber</th>
+					<th data-priority='6'>Rack ProductId</th>
+					<th data-priority='6'>Slot Number</th>
+					<th data-priority='6'>Slot ProductId</th>
+					<th data-priority='2'>Module Number</th>
+					<th data-priority='2'>Module ProductId</th>
+					<th data-priority='2'>Module Description</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableMSU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th>Number of Module</th>
+					<th>Idle(Hrs/Mins)</th>			
+					<th>Reservation</th>			
+					<th>Idle(%)</th>			
+					<th>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tableMSR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th data-priority='2'>Number of Module</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tablePDU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='6'>RackNumber</th>
+					<th data-priority='6'>Rack ProductId</th>
+					<th data-priority='6'>Slot Number</th>
+					<th data-priority='6'>Slot ProductId</th>
+					<th data-priority='6'>Module Number</th>
+					<th data-priority='6'>Module ProductId</th>
+					<th data-priority='6'>PortName</th>
+					<th data-priority='6'>Port Number</th>
+					<th data-priority='6'>Media Type</th>
+					<th data-priority='6'>Speed</th>
+					<th data-priority='6'>Port Description</th>
+					<th data-priority='6'>Partner Device</th>
+					<th data-priority='6'>Idle(Hrs/Mins)</th>			
+					<th data-priority='6'>Reservation</th>			
+					<th data-priority='6'>Idle(%)</th>			
+					<th data-priority='6'>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tablePDR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>ID</th>
+					<th data-priority='2'>Date Added</th>
+					<th data-priority='2'>HostName</th>
+					<th data-priority='6'>RackNumber</th>
+					<th data-priority='6'>Rack ProductId</th>
+					<th data-priority='6'>Slot Number</th>
+					<th data-priority='6'>Slot ProductId</th>
+					<th data-priority='2'>Module Number</th>
+					<th data-priority='2'>Module ProductId</th>
+					<th data-priority='6'>PortName</th>
+					<th data-priority='6'>Port Number</th>
+					<th data-priority='6'>Media Type</th>
+					<th data-priority='6'>Speed</th>
+					<th data-priority='6'>Port Description</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tablePSU" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr>
+					<th>Product Identifier</th>
+					<th>Number of Module</th>
+					<th>Idle(Hrs/Mins)</th>			
+					<th>Reservation</th>			
+					<th>Idle(%)</th>			
+					<th>Reservation(%)</th>			
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<table data-role="table" id="domain-tablePSR" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+			<thead>
+				<tr class='ui-bar-d'>
+					<th>Product Identifier</th>
+					<th data-priority='2'>Number of Module</th>
+					<th data-priority='6'>Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Re-Scheduled</th>
+					<th data-priority='6'>Generic</th>
+					<th data-priority='6'>Explicit</th>
+					<th data-priority='6'>Cancelled</th>
+					<th data-priority='6'>Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Re-Scheduled(%)</th>
+					<th data-priority='6'>Generic(%)</th>
+					<th data-priority='6'>Explicit(%)</th>
+					<th data-priority='6'>Cancelled(%)</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div>
+			<center>
+				<span href='' id='showMoreStat' class='ShowmoreStat' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+			</center>
+		</div>	
+		<div>
+			<table data-inline="true">
+				<tr>
+					<td>
+						<input id='StatisticOptions' type='button' value='&nbsp; Options &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+					<td>
+						<input id='StatisticGraphButton' type='button' value='&nbsp; Show Graph &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+					<td>
+						<input id='StatisticReportButton' type='button' value='&nbsp; Generate Report &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+				</tr>
+			</table>
+		</div>
+<!--  			<thead id=rmResStat>
+=======
+	</div>
+		<table data-role="table" id="domain-table0" data-mode="columntoggle" class="table-stroke ui-body-d ui-shadow ui-responsive ui-table ui-table-columntoggle" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true"></table>
+		<div>
+			<center>
+				<span href='' id='showMoreStat' class='ShowmoreStat' style='cursor:pointer; color:#33CCFF;'>Show More</span>
+			</center>
+		</div>	
+		<div>
+			<table data-inline="true">
+				<tr>
+					<td>
+						<input id='StatisticOptions' type='button' value='&nbsp; Options &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+					<td>
+						<input id='ShowGraph' type='button' value='&nbsp; Show Graph &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+					<td>
+						<input id='GenReportDomain' type='button' value='&nbsp; Show Graph &nbsp;' data-inline='true' data-theme='a'>
+					</td>
+				</tr>
+			</table>
+		</div>
+<!--  			<thead id=rmResStat>
 
 	</div>
     <!-- footer -->
-        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
+<!--        <div data-role="footer" data-position="fixed" data-theme="c" class="ui-bar" data-position="fixed">
             <div id="dock">
                 <ul>
                     <li>
@@ -148,5 +591,5 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div>-->
 </div>

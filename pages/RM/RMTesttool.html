@@ -1,0 +1,88 @@
+<script src="../../scripts/ResourceManagement.js"></script>
+<div data-role="page" id="Testtool" data-theme="a">
+	<!-- header -->
+    <div id="header" data-role="header" data-theme="d" data-add-back-btn="true" data-position="fixed">
+    </div>
+	<div data-role="content" style="margin-top:50px;">
+	<nav data-role="navbar" id='TesttoolButtons' style='display:none;' class="ui-navbar ui-mini" role="navigation">
+    <ul class="ui-grid-c">
+      <li class="ui-block-d"><a href="RMReservation.html"  id='OkButtonTesttool' data-rel="page"  data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-iconpos="top" data-theme="a" data-inline="true" style='height:40px;' ><span class="ui-btn-inner"><span class="ui-btn-text">Ok</span><span class="ui-icon ui-icon-star ui-icon-shadow">&nbsp;</span></span></a></li>
+    </ul>
+  </nav>
+
+		
+		<div>
+			<div style="width:50%;float:left">
+			
+			</div>
+<!--			<div id="paginations" style="float: right;width:50%;text-align: right;">
+			</div>--!>
+		</div>
+		<div class='formTableDesign' align="left" style="height:auto;width:95.25%;margin-left:auto;margin-right:auto;">
+			<div style="padding-bottom:5px; padding-top:10px;">
+				<table class="form " style='margin-left:auto; margin-right:auto;'>
+					<tr> <!-- MAIN TR -->
+						<td id="TTHostName" style='text-align:center'></td>
+					</tr>
+					<tr>
+						<td>IP Address: </td>
+						<td id="TTIpAdd" readonly="yes">
+						</td>
+					</tr>
+					<tr>
+						<td>Model: </td>
+						<td id="TTModel" readonly="yes"></td>
+					</tr>
+					<tr>
+						<td>Version:</td>
+						<td id="TTVersion" readonly="yes"></td>
+					</tr>
+				</table>
+			</div>
+		<td>
+		<div style="float: left;margin-top:0.5em;">
+			<tr>
+				<td>
+					<a id="rmTesttoolSelectAll" style="width:100px;" data-role="button" data-mini="true" data-rel="dialog" ><span>Select All</span></a>
+				</td>
+			</tr>
+        </div>
+		<br><br><br><br>
+		<center>
+		<!--<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+		    <select name="" id="limitTableRM">
+		        <option value="10">10</option>
+		        <option value="20">20</option>
+		        <option value="50">50</option>
+		    </select>
+		    <select name="" id="select-native-15">
+				<option value="1">Table View</option>
+	            <option value="2">Calendar View</option>
+		    </select>
+		</fieldset>-->
+		<table data-role="table" id="RMTesttool-table" data-mode="reflow" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-btn-text="Columns..." data-column-popup-theme="a" data-mini="true">
+  			<thead>
+    		<tr class="ui-bar-d">
+			    <th>Port ID</th>
+			    <th data-priority="1">Port Name</th>
+			    <th data-priority="1">Port Speed</th>
+			    <th data-priority="1">Connectivity</th>
+				<th data-priority="1">Host Name</th>
+				<th data-priority="1">Partner Port</th>
+			</tr>
+		  	</thead>
+			<tbody>
+			</tbody>
+		</table>
+		</center>
+	</div>
+	<!--    <div data-rel="page" id="LogsPop" data-theme="a">
+        <div data-role="header" data-theme="d">
+            <h2>Connectivity Logs</h2>
+        </div>
+        <div data-role="content" data-theme="a">
+        </div>
+    </div>--!>
+
+
+</div>
