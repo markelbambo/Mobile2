@@ -2511,8 +2511,8 @@ function drawImage(flag,newscale){
                	initImages(group);
             }
             initZoom("reload");
-            window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
-	setTimeout(function(){
+            setTimeout(function(){
+		window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
 			window['variable' + dynamicLayer[pageCanvas]].batchDraw();
 	},50);
         }
