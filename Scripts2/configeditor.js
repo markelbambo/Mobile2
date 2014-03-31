@@ -2508,13 +2508,13 @@ function drawImage(flag,newscale){
             if (devices[i].UpdateFlag !="delete"){
             	group = drawOneImage(x2,y2,devices[i],group);
                 window['variable' + dynamicLayer[pageCanvas]].add(group);
-		setTimeout(function(){
-                	initImages(group);
-		},50);
+               	initImages(group);
             }
             initZoom("reload");
+	setTimeout(function(){
             window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
 			window['variable' + dynamicLayer[pageCanvas]].batchDraw();
+	},50);
         }
     }else{
         $("#showTooltipInfo").hide();
