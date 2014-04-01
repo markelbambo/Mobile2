@@ -46,11 +46,6 @@ function loadReserve(){
 			}
 // This part is for parsing the table content
             for(var a =0; a< json.root[0].row.length; a++){
-				if( a % 2 == 0){
-					tableClass = "alt";
-				}else{
-					tableClass = "";
-				}
 //MOBILE
 				html += "<tr class='trReserved' devId='"+json.root[0].row[a].DeviceId+"' rIds='"+json.root[0].row[a].ResourceId+"' uId='"+json.root[0].row[a].DeviceReservationUserId+"' rId='"+json.root[0].row[a].ResourceId + json.root[0].row[a].DeviceReservationUserId+"'>";
 				if(globalDeviceType != "Mobile"){
@@ -96,8 +91,8 @@ function loadReserve(){
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].ConsoleIp+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].Model+"</td>";
 					var startRes = json.root[0].row[a].StartReservation.split(" ");
-					html += "<td><input style='border:none; text-align:center;' type='text' class='datepickerdev' readonly='yes' value='"+startRes[0]+"' onchange='getResLimit(); getServerTime();'/></td>";
-					html += "<td><input style='border:none;text-align:center;' type='text' class='timepicker' readonly='yes' value='"+startRes[1]+"' onchange='getResLimit(); getServerTime();'/></td>";
+					html += "<td><input id='rStartDate"+a+"' style='border:none; text-align:center;' type='text' class='datepickerdev' readonly='yes' value='"+startRes[0]+"' onchange='getResLimit(); getServerTime();'/></td>";
+					html += "<td><input id='rStartTime"+a+"' style='border:none;text-align:center;' type='text' class='timepicker' readonly='yes' value='"+startRes[1]+"' onchange='getResLimit(); getServerTime();'/></td>";
         	        html += "<td did='td"+json.root[0].row[a].DeviceReservationUserId+a+"' class='toolTip'>"+json.root[0].row[a].DeviceReservationUserId+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceReservationUserId+a+"' style='display:none;'><ul>";
 
 					html += getTooltipInfo(json.root[0].row[a],"User");
@@ -109,8 +104,8 @@ function loadReserve(){
 					html += "<td>"+json.root[0].row[a].IterNumber+"</td>";
 					html += "<td class='ReservationReserveTable'>"+json.root[0].row[a].Exclusivity+"</td>";
 					var endRes = json.root[0].row[a].EndReservation.split(" ");
-					html += "<td><input style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[0]+"' class='datepickerdev'/></td>";
-					html += "<td><input style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[1]+"' class='timepicker'/></td>";
+					html += "<td><input id='rEndDate"+a+"' style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[0]+"' class='datepickerdev'/></td>";
+					html += "<td><input id='rEndTime"+a+"' style='border:none;text-align:center;' readonly='yes' type='text' value='"+endRes[1]+"' class='timepicker'/></td>";
         	        html += "<td>"+json.root[0].row[a].Status+"</td>";
 					html +="</tr>";
 				}
@@ -141,14 +136,19 @@ function loadReserve(){
 					$('#ReserveButtons').hide();
 				}	
 			});
-			filterReservationReserve();	
-			autoRefreshTable();
-			rmExpandedView();
-			rmHighlight();
-			disableRMButtons();
-			hoverTable();
+			setTimeout(function(){
+				rmHighlight();
+			},500);
+				filterReservationReserve();	
+				autoRefreshTable();
+				rmExpandedView();
+				disableRMButtons();
+				hoverTable();
+
 			if(globalDeviceType != 'Mobile'){
-			$('.datepickerdev').datepicker();
+			$('.datepickerdev').datepicker({
+				dateFormat: 'yy-mm-dd',
+			});
 			$('.timepicker').timepicker({
                 ampm: false,
                 showTime: true,
@@ -409,10 +409,10 @@ function loadConnectivity(){
 					}else{
 						html += "<td>"+json.root[0].row[a].SwitchPort1Number+"</td>";
 				  	}
-					if(json.root[0].row[a].SwitchSlot1Name == undefined || json.root[0].row[a].SwitchSlot1Name ==""){
+					if(json.root[0].row[a].SwitchSlot1Number == undefined || json.root[0].row[a].SwitchSlot1Number ==""){
 						html+="<td>N/A</td>";
 					}else{
-						html += "<td>"+json.root[0].row[a].SwitchSlot1Name+"</td>";
+						html += "<td>"+json.root[0].row[a].SwitchSlot1Number+"</td>";
 				  	}
 					html += "<td>"+json.root[0].row[a].SwitchHostName+"</td>";
 					html += "<td>"+json.root[0].row[a].SwitchDescription+"</td>";
@@ -448,7 +448,7 @@ function loadConnectivity(){
 //HTML5	
 				}else{
 					html += "<td class='ReservationConnectivity'>"+json.root[0].row[a].QueueTime+"</td>";
-			        html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].Device1HostName+"</td>";
+			        html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;white-space:nowrap;padding-left:2px;padding-right:2px;'>"+json.root[0].row[a].Device1HostName+"</td>";
 					html += "<td class='ReservationConnectivity'>"+json.root[0].row[a].Device2Description+"</td>";
 					if(json.root[0].row[a].Slot1Number == undefined || json.root[0].row[a].Slot1Number ==""){
 						html+="<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>N/A</td>";
@@ -475,10 +475,10 @@ function loadConnectivity(){
 					}else{
 						html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].SwitchPort1Number+"</td>";
 				  	}
-					if(json.root[0].row[a].SwitchSlot1Name == undefined || json.root[0].row[a].SwitchSlot1Name ==""){
-					html+="<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>N/A</td>";
+					if(json.root[0].row[a].SwitchSlot1Number == undefined || json.root[0].row[a].SwitchSlot1Number ==""){
+						html+="<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>N/A</td>";
 					}else{
-						html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].SwitchSlot1Name+"</td>";
+						html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].Device1HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].SwitchSlot1Number+"</td>";
 				  	}
 					html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].SwitchHostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].SwitchHostName+"</td>";
 					html += "<td onclick='ShowDeviceInformation(\""+json.root[0].row[a].SwitchHostName+"\");' style='cursor:pointer;' class='ReservationConnectivity'>"+json.root[0].row[a].SwitchDescription+"</td>";
@@ -607,7 +607,7 @@ function loadPort(){
 				if(globalDeviceType == "Mobile"){
 					loading('hide');
 					html += "<td>"+json.root[0].row[a].DeviceId+"</td>";
-			        html += "<td"+json.root[0].row[a].ResvReqTime+"</td>";
+			        html += "<td>"+json.root[0].row[a].ResvReqTime+"</td>";
 			        html += "<td>"+json.root[0].row[a].HostName+"</td>";
 					html += "<td>"+json.root[0].row[a].ManagementIp+"</td>";
 					html += "<td>"+json.root[0].row[a].Model+"</td>";
@@ -2096,7 +2096,7 @@ function getDeviceLogs(ConfigName,DeviceId,HostName) {
 	$.ajax({
 		
 //		url : 'https://'+CURRENT_IP+'/cgi-bin/Final/NFast_RM/NFastRMCGI.py?action=logs&query=path='+configname+'/device_'+DeviceId+'.txt',
-		url : getURL('RM4')+'action=logs&query={"QUERY":[{"path":'+configname+'/device_'+DeviceId+'.txt}]}',
+		url : getURL('RM4')+'action=logs&query={"QUERY":[{"path":"'+configname+'/device_'+DeviceId+'.txt"}]}',
 		dataType:'html',
 		success : function (data) {
 			$("#loading-container").dialog("close");
@@ -2904,7 +2904,7 @@ function SchedCancel(){
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data);
 
-			 if (json.RESULT[0].Return == 1) {
+			 if (json.RESULT[0].Return == "1") {
               //  eval(todo);
               	if(globalDeviceType == "Mobile"){
 					alert('Cancellation Success!');
@@ -3133,7 +3133,6 @@ function checkIfTheresAnotherUser(type){
  *#########################################################################
  */
 function releaseAllDevices(){
-	//var cgiUrl = getURL('RM3')+'action=cancel&query=ResourceId='+globalResourceId;
 	var cgiUrl = getURL('RM3')+'action=cancel&query={"RESERVATION":[{"ResourceId":"'+globalResourceId+'"}]}';
 	$.ajax({
 	
@@ -3778,7 +3777,6 @@ function checkIfDutExists() {
  *  #######################################################################
  *  */
 function createXMLdata(qstr){
-	//var url = 'https://'+CURRENT_IP+'/cgi-bin/Final/RM/RM.py?action=createxml&query='+qstr;
 	var url = getURL('RM3')+'action=createxml&query={"QUERY":[{"query":"'+qstr+'"}]}';
 	
 	$.ajax({
@@ -3793,16 +3791,10 @@ function createXMLdata(qstr){
 //			var confirmation = confirm1[0].split("^");
 			var spdata = json.RESULT[0].Result.split( "=" );
 			if(spdata[0].toLowerCase() == "resourceid" && spdata[1].split(',').length > 1){
-				if(globalDeviceType == "Mobile"){
-					alert('Device Successfully Reserved!');
-					
-				}else{
-					alerts('Device Successfully Reserved!');
-					loadDevicesHTML5();
-				}
-			}else{
-					var rmRet = data.split(",");
+		
+					var rmRet = json.RESULT[0].Result.split(",");
 					var rid = rmRet[0];
+					console.log(rmRet,'rmRet');
 					var ofTime1 = rmRet[rmRet.length-4];
 					var ofTime2 = rmRet[rmRet.length-3];
 					var ofTime3 = rmRet[rmRet.length-2];
@@ -3894,15 +3886,7 @@ function createXMLdata(qstr){
 							},
 							"No": function() {
 								$(this).dialog("close");
-								for (var i = 0; i < newdata.length; i++ ) {
-									releaseMatrix(rid,newdata[i],"");
-								}
-								if (qstr1 != ""){
-									submitReservedPort(qstr1);
-								}
-						//		resetReservedFilters();
 								loadDevicesHTML5();
-								globalPageLoad[globalLoad] = "";
 								globalTTPorts = {}
 								selectedDevice = "";
 								dateR1 = "";
@@ -3914,15 +3898,26 @@ function createXMLdata(qstr){
 							}
 						}
 					});
-					var prompt = "The following device(s) are of conflict:<br/><br/>";
-					for (var i = 0; i < newdata.length; i++ ) {
-						prompt += $('#ReservationDevices'+newdata[i]).parent().next().next().find('span span').text() + "<br/>";
+					var prompt = "<div style='color:#39599C'>The following device(s) are of conflict:<br/><br/>";
+					console.log(datainfo[1],datainfo2[1],'time1',time,time2);
+					for (var i = 0; i < DeviceId.length; i++ ) {
+						prompt += $('#'+DeviceId[i]).parent().parent().find('td').eq(2).find('span').text() + "<br/>";
 					}
-					//prompt += "<br/>Offered Time Is: <b> "+datainfo[1]+" "+time+"</b> to <b>"+datainfo2[1]+" "+time2+"</b><br/><br/>Would you like to continue or queue the reservation?<br/><br/>";
-					prompt += "<br/>Offered Time Is: <b> "+datainfo[1]+" "+time+"</b> to <b>"+datainfo2[1]+" "+time2+"</b><br/><br/>Would you like to continue?<br/><br/>";
+						prompt += "<br/>Offered Time Is: <b> "+datainfo[1]+" "+time+"</b> to <b>"+datainfo2[1]+" "+time2+"</b><br/><br/>Would you like to continue?<br/><br/></div>";
 					$('#Alert').empty().append(prompt);
 					$('#Alert').dialog('open');
+					
 					$('.ui-dialog :button').blur();
+			}else{
+				console.log('else');
+				if(globalDeviceType == "Mobile"){
+					alert('Device Successfully Reserved!');
+					
+				}else{
+					alerts('Device Successfully Reserved!');
+					loadDevicesHTML5();
+				}
+
 				}
 			}
 		});		
@@ -4870,7 +4865,7 @@ function autoRefreshTable(){
 	}else{
 		command = "";
 	}
-	autoRefresh = setInterval(command,60000);
+	autoRefresh = setInterval(command,120000);
 }
 /*
  #######################################################################
@@ -5201,17 +5196,20 @@ function rmHighlight(){
 		$('.trReserved').each(function(){
 		var val = $(this).attr("rIds");
 
-			for(var i = 0; i < globalResourceId.length; i++){
+		for(var i = 0; i < globalResourceId.length; i++){
 				if(val == globalResourceId[i]){
 					$(this).addClass('highlight');
 					ctr++
 					var deviceid = $(this).attr("devId");
-					console.log(deviceid,'deviceid');
 					$('#ReservationReserve_'+deviceid+'_'+globalResourceId[i]).prop('checked',true);
 				}	
 			}
-		
+
 		});
+		for(var a = 0;a < globalCheckboxRM.length;a++){
+			$('#ReservationReserve_'+globalCheckboxRM[a]).attr('checked',true);
+			groupHighlight('',globalCheckboxRM[a].split('_')[0]);
+		}
 		if(ctr == 0){
 			$('#ReserveButtons').hide();	
 		}else{
@@ -5293,7 +5291,7 @@ function enableInputFields() {
 	if ($('#toAppExt').val() == "Specific") {
 		$('input[name="specDevSel"]').each(function() {
     		if ($(this).is(':checked')) {
-        		//globDev = $(this).val();
+        		globDev = $(this).val();
         		if ($.inArray($(this).val(),globalDevArr) == -1) {
 					globalDevArr.push($(this).val());
 				}
@@ -5506,6 +5504,7 @@ function enableInputFields() {
 
 
 function reserveExtendApply(){
+	console.log('B');
 	var clname = "";
 	clname = "resres";
 	var starttime = "";
@@ -5541,6 +5540,7 @@ function reserveExtendApply(){
 		return;
 	}*/
 	var isvalid = verifyDateTime3(startdate,starttime,enddate,endtime);
+		console.log('I');
 		if (isvalid == 2) {
 			if (globIter == "all") {
 				globIter += "^"+iterNum;
@@ -5587,6 +5587,7 @@ function reserveExtendApply(){
 	}
 }
 function sendRequestToCGI(startDate,startTime,endDate,endTime,iteration,resourceid,device,interval,todo,str) {
+	console.log('N');
 
 	var clname = "";
 	clname = "resres";
@@ -5620,6 +5621,7 @@ var msgArr3 = new Array();
 var msgArr4 = new Array();
 
 function sendReserveApply(qstr,todo) {
+	console.log('G');
 	var cgiUrl = getURL('RM3')+qstr;
 	$.ajax({
 	
@@ -6095,7 +6097,6 @@ function changePageRM(num){
 function checkAllRM(table){
 	DeviceId = [];
 	$('input:checkbox[name="ReservationReserveReleaseSel"]').each(function(){
-			console.log('checkbox');
 		if($('#'+table).is(":checked")){
 			DeviceId.push($(this).attr('devId'));
 			$(this).parent().parent().addClass('highlight');
@@ -6210,7 +6211,7 @@ function checkAllRM(table){
 			$(this).parent().parent().removeClass('highlight');
 		}
 	});
-		enableRMButtons();	
+	enableRMButtons();	
 	$('input:checkbox[name="ManageDevicesSel"]').each(function(){
 		if($('#'+table).is(":checked")){
 			genIds.push($(this).attr('id'));	
@@ -6237,7 +6238,7 @@ function checkAllRM(table){
  *  #######################################################################
  *  */
 
-
+var globalCheckboxRM = [];
 function checkSingleRM(table,src){
 	var ctr = 0;
 	var ctrtotal = 0;
@@ -6245,19 +6246,24 @@ function checkSingleRM(table,src){
 		globalResourceId = [];
 		if($(src).is(':checked')){
 			$(src).parent().parent().addClass('highlight');
+			if(globalCheckboxRM.indexOf($(src).attr('did2')) == -1){
+				globalCheckboxRM.push($(src).attr('did2'));
+			}
 			globalResourceId.push($(src).attr('rIds'));
 			ResId = $(src).attr('rIds');
 			var devId = $(src).attr('did');
 			groupHighlight('',devId);
 			ctr++;
 		}else if($(src).is(':checked') == false){
+			if(globalCheckboxRM.indexOf($(src).attr('did2')) != -1){
+				globalCheckboxRM.push($(src).attr('did2'));
+			}
 			var val = $(src).attr('rIds');
 			var devId = $(src).attr('did');
 			groupHighlight(val,devId);
 			ctr--;
 		}
 		ctrtotal++;
-		console.log(globalResourceId.length,'asddasd');
 		enableRMButtons();	
 	}else if(table == "ReservationReserveRelease"){
 		DeviceId = [];
@@ -6437,6 +6443,7 @@ function checkSingleRM(table,src){
 				}
 				$(this).parent().parent().removeClass('highlight');
 			}
+			enDisEditDelBtnManageDev();
 		});
 		
 	}
@@ -6910,11 +6917,9 @@ function loadDevicesHTML5(){
 		day = "0"+day;
 	}
 	var dateToday = date.getMonth()+1+'/'+date.getDate()+'/'+date.getFullYear()
-//	var dateToday = date.getFullYear()+'-'+month+'-'+day;
 	var tableClass = "";
 	var page = $('#RMPageNumber').text();
 	var limit = $('#ResourceManagementPageLimit').val();
-	//var url ='https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESOURCEMANAGEMENT/NFastRMCGI.py?action=ReservationDevice&query=limit='+limit+'`page='+page+'`sort=`orderby=`user='+globalUserName+'`filter='+globalStrFilter5+'`domain='+domain+"`ZoneName="+zoneName+"`GroupName="+groupName+'&version=3.0';
 
 	var url ="https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESOURCEMANAGEMENT/NFastRMCGI.py?action=ReservationDevice&query={'QUERY':[{'limit':'"+limit+"','page':'"+page+"','sort':'','orderby':'','user':'"+globalUserName+"','filter':'"+globalStrFilter5+"','domain':'"+domain+"','ZoneName':'"+zoneName+"','GroupName':'"+groupName+"'}]}";
 
@@ -6924,7 +6929,7 @@ function loadDevicesHTML5(){
         url: url,
 		dataType: 'html',
         success: function(data) {
-         /*   var mydata = data;
+         /* var mydata = data;
             var parser = new DOMParser();
             var xmlDoc;
             xmlDoc = parser.parseFromString( mydata , "text/xml" );
@@ -6950,7 +6955,7 @@ function loadDevicesHTML5(){
 				html += "<tr class='trDevices "+tableClass+"' devId = '"+json.root[0].row[a].DeviceId+"' rId='"+json.root[0].row[a].ResourceId+"'>";
 				html += "<td><input type='checkbox' devId = '"+json.root[0].row[a].DeviceId+"' id='"+json.root[0].row[a].DeviceId+"' name='ReservationDevicesSel' hostname='"+json.root[0].row[a].HostName+"' model='"+json.root[0].row[a].Model+"' onclick='checkSingleRM(\"ReservationDevices\");'/></td>";
 		        html += "<td class='ReservationDevices'>"+json.root[0].row[a].DeviceId+"</td>";
-		        html += "<td did='td"+json.root[0].row[a].DeviceId+"' class='toolTip' onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'>"+json.root[0].row[a].HostName+"<div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceId+"' style='display:none'><ul>";
+		        html += "<td did='td"+json.root[0].row[a].DeviceId+"' class='toolTip' onclick='ShowDeviceInformation(\""+json.root[0].row[a].HostName+"\");' style='cursor:pointer;'><span>"+json.root[0].row[a].HostName+"</span><div class='tableToolTip' id='divtoolTip"+json.root[0].row[a].DeviceId+"' style='display:none'><ul>";
 				html += getTooltipInfo(json.root[0].row[a],"HostName");
 				html += "</ul></div></td>";
 				html += "<td class='ReservationDevices'>"+json.root[0].row[a].ManagementIp+"</td>";
@@ -6961,8 +6966,8 @@ function loadDevicesHTML5(){
 				html += "<td>"+json.root[0].row[a].DomainName+"</td>";
 				html += "<td>"+json.root[0].row[a].ZoneName+"</td>";
 				html += "<td>"+json.root[0].row[a].GroupName+"</td>";
-				html += "<td><input style='border:none;text-align:center;' type='text' id='StartDate' class='datepickerdev' readonly='yes' value='"+dateToday+"'/></td>";
-		        html += "<td><input style='border:none;text-align:center;' type='text' id='StartTime' class='timepicker' readonly='yes' value='"+time+"' onchange='' /></td>";
+				html += "<td><input style='border:none;text-align:center;' type='text' id='StartDate"+a+"' class='datepickerdev' readonly='yes' value='"+dateToday+"'/></td>";
+		        html += "<td><input style='border:none;text-align:center;' type='text' id='StartTime"+a+"' class='timepicker' readonly='yes' value='"+time+"' onchange='' /></td>";
 				html += "<td><input style='border:none;text-align:center;' id='intervalRR' class='interval' type='text' onkeyup='setIteration(this.value);' onkeypress='return checkNumberInputChar(event,this);' value='0'/></td>";
 		        html += "<td><input style='border:none;text-align:center;' id='iterationRR"+a+"' class='iteration' type='text' onkeyup='setIteration(this.value)' onkeypress='return checkNumberInputChar(event,this);' value='1'/></td>";
 
@@ -6976,8 +6981,8 @@ function loadDevicesHTML5(){
 				}
 				html += "</select></td>";
 
-				html += "<td><input style='border:none;text-align:center;' id='EndDate' type='text' readonly='yes' class='datepickerdev' value='"+dateToday+"'/></td>";
-		        html += "<td><input style='border:none;text-align:center;' id='EndTime' type='text' readonly='yes' class='timepicker' value='"+endTime+"' onchange=''/></td>";
+				html += "<td><input style='border:none;text-align:center;' id='EndDate"+a+"' type='text' readonly='yes' class='datepickerdev' value='"+dateToday+"'/></td>";
+		        html += "<td><input style='border:none;text-align:center;' id='EndTime"+a+"' type='text' onkeypress='return checkNumberInputChar(event,this);' class='timepicker' value='"+endTime+"'/></td>";
 				html +="</tr>";
 				
 			}
@@ -7356,7 +7361,7 @@ function openCommitRMOption(){
 		autoOpen: false,
 		resizable: false,
 		width: 250,
-		height: 300,
+		height: 200,
 		modal: true,
 		closeOnEscape: false,
 		open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide();  },
@@ -9612,6 +9617,7 @@ function applySameDuration() {
     			if ($(this).is(':checked')) {
         			//globDev = $(this).val();
         			if ($.inArray($(this).val(),globalIterArr) == -1) {
+						console.log(globalIterArr,'B1');
 						globalIterArr.push($(this).val());
 					}
     			}
@@ -9621,6 +9627,7 @@ function applySameDuration() {
 			if ($('#iterExt').parent().parent().is(':visible') == true) {
 				$('input[name="specIterSel"]').each(function() {
     	    		if ($.inArray($(this).val(),globalIterArr) == -1) {
+						console.log(globalIterArr,'B2');
 						globalIterArr.push($(this).val());
     				}
 				});
@@ -9628,6 +9635,7 @@ function applySameDuration() {
 				$('.'+clname).each(function() {
 					if ($(this).parent().parent().hasClass('highlight')) {
         				if ($.inArray($(this).attr('iter'),globalIterArr) == -1) {
+						console.log(globalIterArr,'B3');
 							globalIterArr.push($(this).attr('iter'));
     					}
 					}
@@ -9639,6 +9647,7 @@ function applySameDuration() {
 		$('.'+clname).each(function() {
 			if ($(this).parent().parent().hasClass('highlight')) {
         		if ($.inArray($(this).attr('iter'),globalIterArr) == -1) {
+						console.log(globalIterArr,'B4');
 					globalIterArr.push($(this).attr('iter'));
     			}
 			}
@@ -9653,6 +9662,7 @@ function applySameDuration() {
 			uname = $(this).parent().parent().find('td').eq(10).find('span').text();
 		}
 	});
+	console.log(globalIterArr,'globalIter');
 	var origInfo = {};
 	var sdate,stime,edate,etime,inter,diff,newdiff;
 	var newendinfo = new Array();
@@ -9788,7 +9798,7 @@ function applySameDuration() {
 	  }
 	
 	//DISPLAY USER KUNG ANO NA YUNG NEW RESERVATION INFORMATION
-	$('#Alert2').dialog({
+	$('#Alert').dialog({
 		autoOpen: false,
 		resizable: false,
 		modal: true,
@@ -9796,7 +9806,6 @@ function applySameDuration() {
 		open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide();  },
 		buttons: {
 			"Apply": function() {
-				$(this).empty().dialog('destroy');
 				$('#Alert').empty().dialog('destroy');
 				for (var d = 0; d < globalIterArr.length; d++) {
 					//MADUGONG COMPUTATION
@@ -10069,23 +10078,24 @@ function emptyEndOfReservation() {
     globalSaveConfigDetailCustom = {};
 }
 
-function converttoclient(startDate,startTime) {
+function converttoclient(ofTime1,ofTime2) {
+	console.log(ofTime1,ofTime2,'oooooooooooo');
 
     var newtime = "";
 
-    var url1 = getURL('RM4')+'action=converttoclient&query={"QUERY":[{"startdate":"'+startDate+'","starttime":"'+startTime+'"}]}';
+    var url1 = getURL('RM4')+'action=converttoclient&query={"QUERY":[{"startdate":"'+ofTime1+'","starttime":"'+ofTime2+'","timezone":"'+timezone[0]+timezone[1]+timezone[2]+'^'+timezone[3]+'"}]}';
 
     $.ajax({
         url: url1,
         dataType: 'html',
         async: false,
         success: function(data) {
-            newtime = $.trim(data);
+			data = data.replace(/'/g,'"');
+			var json = jQuery.parseJSON(data);
+			newtime = json.RESULT[0].Result;			
         }
     });
-
     return newtime;
-
 }
 
 /*

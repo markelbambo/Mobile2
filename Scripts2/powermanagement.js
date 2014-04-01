@@ -297,30 +297,32 @@ function PMAttribXML(row,tb,jsonData){
 function PMAttribJSON(jsonData,tb){
 	var str = "";
 	//JSON for loop
-	for (var a=0;a<jsonData.data[0].row.length;a++){
-		var row = jsonData.data[0].row[a];
+	if (jsonData.data[0].row){
+		for (var a=0;a<jsonData.data[0].row.length;a++){
+			var row = jsonData.data[0].row[a];
 
-		//JSON 	
- 		if(globalDeviceType != "Mobile"){
-			str += "<tr id='tr"+jsonData.data[0].row[a].DeviceId+"'><td><input type='checkbox' class='trPDU' pduid='"+jsonData.data[0].row[a].DeviceId+"' did='"+jsonData.data[0].row[a].IpAddress+"'/></td>";
-		}else{
-			str += "<tr class='trPDU' pduid='"+row[a].DeviceId+"'>";
+			//JSON 	
+	 		if(globalDeviceType != "Mobile"){
+				str += "<tr id='tr"+jsonData.data[0].row[a].DeviceId+"'><td><input type='checkbox' class='trPDU' pduid='"+jsonData.data[0].row[a].DeviceId+"' did='"+jsonData.data[0].row[a].IpAddress+"'/></td>";
+			}else{
+				str += "<tr class='trPDU' pduid='"+row[a].DeviceId+"'>";
+			}
+			str += "<td>"+jsonData.data[0].row[a].Name+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].IpAddress+"</td>";
+			str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].Manufacturer+"</td>";
+			str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].Model+"</td>";
+			str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].SerialNumber+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].MACAddress+"</td>";
+			str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].OutletCount+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].StateOnDeviceStartUp+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].DelayOnDeviceStartup+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].PowerOfPeriodPowerCycle+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].InrushGuardDelay+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].ExternalSensor+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].FirmwareVersion+"</td>";
+			str += "<td>"+jsonData.data[0].row[a].Rating+"</td>";
+			str += "</tr>";	
 		}
-		str += "<td>"+jsonData.data[0].row[a].Name+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].IpAddress+"</td>";
-		str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].Manufacturer+"</td>";
-		str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].Model+"</td>";
-		str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].SerialNumber+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].MACAddress+"</td>";
-		str += "<td class='PMexpanded'>"+jsonData.data[0].row[a].OutletCount+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].StateOnDeviceStartUp+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].DelayOnDeviceStartup+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].PowerOfPeriodPowerCycle+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].InrushGuardDelay+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].ExternalSensor+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].FirmwareVersion+"</td>";
-		str += "<td>"+jsonData.data[0].row[a].Rating+"</td>";
-		str += "</tr>";	
 	}
 	$('#'+tb+' > tbody').empty().append(str);
 	setBlank(tb);
@@ -2744,75 +2746,78 @@ var url = getURL("Power","JSON");
 function createPMTreeViewJSON(data){
 //	var parser = new DOMParser();
 //	var xmlDoc = parser.parseFromString( data , "text/xml" );
-	var device = data.MAINCONFIG[0].DEVICE;
+//	var device = data.MAINCONFIG[0].DEVICE;
 	var str2 = "<ul id='ulOutlet'>";
-	for(x=0; x<device.length; x++){
-		var outlet = device[x].OUTLET; 
-		var devName = device[x].HostName;
-		var ip = device[x].ManagementIp;
-		var devId = device[x].DeviceId;
-		var deviceOCP = device[x].availableocp;
-		if (deviceOCP != undefined && deviceOCP.toLowerCase()!="none" && deviceOCP != ''){
-			var label = devName;
-			if(devName == ""){
-				label = ip;
-			}
-			str2 += "<li><a id='powerstrip_"+devId+"' did='"+ip+"' name='"+devId+"' onclick=\"showPMTable(1);PMRibbon('','"+label+"');LoadPowerController('"+ip+"');\">"+label+"</a>";
-			str2 += "<ul>";
-			var avin=device[x].availableinlet;
-			if (avin !=null){
-			str2 += "<li id='powerInlet'>Inlet<ul>";
-				var availInlet = avin.split(",");
-				for (var a =0; a<availInlet.length; a++){
-					var inHdr = label+" >> Inlet";
-					str2 += "<li id='powerinlet_"+devId+"_"+availInlet[a]+"' did='"+ip+"' onclick=\"showPMTable(2);PMRibbon('"+inHdr+"','"+availInlet[a]+"');LoadInlet('"+ip+"',this.id);\"><a>"+availInlet[a]+"</a></li>";
+	if (data.MAINCONFIG[0].DEVICE){
+		device = data.MAINCONFIG[0].DEVICE;
+		for(x=0; x<device.length; x++){
+			var outlet = device[x].OUTLET; 
+			var devName = device[x].HostName;
+			var ip = device[x].ManagementIp;
+			var devId = device[x].DeviceId;
+			var deviceOCP = device[x].availableocp;
+			if (deviceOCP != undefined && deviceOCP.toLowerCase()!="none" && deviceOCP != ''){
+				var label = devName;
+				if(devName == ""){
+					label = ip;
 				}
-			}
-			str2+="</ul></li>";
-			var availOCP =deviceOCP.split(",");
-			for (var i=0; i<availOCP.length; i++){
-				var ocp = availOCP[i];
-					var str4 = "";
-					str2+="<li><a id='"+devId+"' did='"+ip+"' onclick=\"PMRibbon('"+label+"','"+ocp+"');showPMTable(4);LoadOCP('"+devId+"','"+ip+"','"+ocp+"');\">"+ocp+"</a>";
-					str2+="<ul id='ulDevices"+devId+"'>";
-					str4 = createOutletTreeViewOCPJSON(outlet,ip,devId,ocp,devName,ip);
+				str2 += "<li><a id='powerstrip_"+devId+"' did='"+ip+"' name='"+devId+"' onclick=\"showPMTable(1);PMRibbon('','"+label+"');LoadPowerController('"+ip+"');\">"+label+"</a>";
+				str2 += "<ul>";
+				var avin=device[x].availableinlet;
+				if (avin !=null){
+				str2 += "<li id='powerInlet'>Inlet<ul>";
+					var availInlet = avin.split(",");
+					for (var a =0; a<availInlet.length; a++){
+						var inHdr = label+" >> Inlet";
+						str2 += "<li id='powerinlet_"+devId+"_"+availInlet[a]+"' did='"+ip+"' onclick=\"showPMTable(2);PMRibbon('"+inHdr+"','"+availInlet[a]+"');LoadInlet('"+ip+"',this.id);\"><a>"+availInlet[a]+"</a></li>";
+					}
+				}
+				str2+="</ul></li>";
+				var availOCP =deviceOCP.split(",");
+				for (var i=0; i<availOCP.length; i++){
+					var ocp = availOCP[i];
+						var str4 = "";
+						str2+="<li><a id='"+devId+"' did='"+ip+"' onclick=\"PMRibbon('"+label+"','"+ocp+"');showPMTable(4);LoadOCP('"+devId+"','"+ip+"','"+ocp+"');\">"+ocp+"</a>";
+						str2+="<ul id='ulDevices"+devId+"'>";
+						str4 = createOutletTreeViewOCPJSON(outlet,ip,devId,ocp,devName,ip);
+						str2+=str4;
+						str2+="</ul></li>";
+					}
+				str2+="<li id='ocpLog"+devId+"' myname='"+devName+"' onclick=\"showPMTable(5);PMRibbon('"+label+"','Logs');LoadPDULogs('"+ip+"');\"><a>Logs</a></li>";
+				str2+="</ul></li>";
+			}else{
+	
+				var label = devName;
+				if(devName == ""){
+					label = ip;
+				}
+				str2 += "<li><a id='powerstrip_"+devId+"' did='"+ip+"' name='"+devId+"'onclick=\"showPMTable(1);PMRibbon('','"+label+"');LoadPowerController('"+ip+"')\">"+label+"</a>";
+				str2 += "<ul>";
+				var avin=device[x].availableinlet;
+				str2 += "<li id='powerInlet'>Inlet<ul>";
+				if (avin !=null){
+					var availInlet = avin.split(",");
+					for (var a =0; a<availInlet.length; a++){
+						var inHdr = label+" >> Inlet";
+						str2 += "<li id='powerinlet_"+devId+"_"+availInlet[a]+"' did='"+ip+"'  onclick=\"showPMTable(2);PMRibbon('"+inHdr+"','"+availInlet[a]+"');LoadInlet('"+ip+"',this.id)\"><a>"+availInlet[a]+"</a></li>";
+					}
+				}
+				str2+="</ul></li>";
+				str2 += "<li><a id='powerStrip"+devId+"' did='"+ip+"'  onclick=\"showPMTable(3);PMRibbon('"+label+"','Outlet');LoadOutlet('"+ip+"')\">Outlet</a><ul id='ulDevices"+devId+"'>";
+				var str4 = "";
+				str4 = createOutletTreeViewJSON(outlet,ip,devId);
+				if(str4 != ""){
 					str2+=str4;
-					str2+="</ul></li>";
 				}
-			str2+="<li id='ocpLog"+devId+"' myname='"+devName+"' onclick=\"showPMTable(5);PMRibbon('"+label+"','Logs');LoadPDULogs('"+ip+"');\"><a>Logs</a></li>";
-			str2+="</ul></li>";
-		}else{
-
-			var label = devName;
-			if(devName == ""){
-				label = ip;
+				str2+="</ul></li>";
+	
+				str2+="<li id='ocpLog"+devId+"' myname='"+devName+"' did='"+ip+"' onclick=\"showPMTable(5);PMRibbon('"+label+"','Logs');LoadPDULogs('"+ip+"')\"><a>Logs</a></li>";
+				str2+="</ul></li>";
 			}
-			str2 += "<li><a id='powerstrip_"+devId+"' did='"+ip+"' name='"+devId+"'onclick=\"showPMTable(1);PMRibbon('','"+label+"');LoadPowerController('"+ip+"')\">"+label+"</a>";
-			str2 += "<ul>";
-			var avin=device[x].availableinlet;
-			str2 += "<li id='powerInlet'>Inlet<ul>";
-			if (avin !=null){
-				var availInlet = avin.split(",");
-				for (var a =0; a<availInlet.length; a++){
-					var inHdr = label+" >> Inlet";
-					str2 += "<li id='powerinlet_"+devId+"_"+availInlet[a]+"' did='"+ip+"'  onclick=\"showPMTable(2);PMRibbon('"+inHdr+"','"+availInlet[a]+"');LoadInlet('"+ip+"',this.id)\"><a>"+availInlet[a]+"</a></li>";
-				}
-			}
-			str2+="</ul></li>";
-			str2 += "<li><a id='powerStrip"+devId+"' did='"+ip+"'  onclick=\"showPMTable(3);PMRibbon('"+label+"','Outlet');LoadOutlet('"+ip+"')\">Outlet</a><ul id='ulDevices"+devId+"'>";
-			var str4 = "";
-			str4 = createOutletTreeViewJSON(outlet,ip,devId);
-			if(str4 != ""){
-				str2+=str4;
-			}
-			str2+="</ul></li>";
-
-			str2+="<li id='ocpLog"+devId+"' myname='"+devName+"' did='"+ip+"' onclick=\"showPMTable(5);PMRibbon('"+label+"','Logs');LoadPDULogs('"+ip+"')\"><a>Logs</a></li>";
-			str2+="</ul></li>";
 		}
+		$('#ulPDU').html(str2);
+		$("#PMtree").treeview({collapsed: true});
 	}
-	$('#ulPDU').html(str2);
-	$("#PMtree").treeview({collapsed: true});
 }
 
 function createOutletTreeViewJSON(outlet,ip,devId){

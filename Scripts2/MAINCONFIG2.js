@@ -466,9 +466,9 @@ function getDataFromJSON(obj){
         window['variable' + dynamicMainId[pageCanvas] ] = checkValue(obj.MAINCONFIG[0].MainId);
 	}
 	drawImage();
-	setTimeout(function(){
+	/*setTimeout(function(){
 		drawImage();
-	},300);
+	},300);*/
 }
 /*
  *

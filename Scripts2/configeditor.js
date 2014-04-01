@@ -67,13 +67,10 @@ function checkInputLeave(ths){
 	var id = $(ths).attr('id');
 	var vlan = str.split(",");
 	var value = [];
-	console.log(ths);
 	for(var a=0;a<vlan.length;a++){	
-		console.log("vlan",vlan[a]);
 		if (vlan[a]>4094){
 			alerts("Input cannot be greater than 4094")
 			$("#"+id).val(value);
-			console.log("ID",id);	
 			return 0;
 		}
 		value.push(vlan[a]);
@@ -100,8 +97,6 @@ function checkInputReservedVlan(evt,ths){
 	var value = [];
 	if (charCode==44){
 		str = $(ths).val();
-		//console.log('comma');
-		//console.log('str',str);
 		vlan = str.split(",");
 		for(var a=0;a<vlan.length;a++){
 			if (vlan[a]>4094){
@@ -1089,25 +1084,32 @@ function deviceListPopupTable(load,tab){
 								$("#DevlistGraphical").addClass("ui-btn-active");
 							},300);
 							appendToDeviceListTable(data,condition,load,tab);
+							//filterManageDevice();
 						}else{
 							setTimeout(function(){
 								$("#DevlistTableView").addClass("ui-btn-active");
 							},300);
 							appendToDeviceListTable2(data,condition,load,tab);
+							//searchBoxDevList();
 						}
 					}else{
 						appendToDeviceListTable2(data,condition,load,tab);
+						//searchBoxDevList();
 					}
 				}else{	
 					if(globalDevListType == "graphical"){
 						if((browserInfoObj[0].BrowserName.toLowerCase() == "chrome" && Number(browserInfoObj[0].MajorVersion) > 31) || (browserInfoObj[0].BrowserName.toLowerCase() == "safari" && Number(browserInfoObj[0].MajorVersion)  >=7 && browserInfoObj[0].WebView == false) || (browserInfoObj[0].BrowserName.toLowerCase() == "safari" || browserInfoObj[0].BrowserName.toLowerCase() == "netscape" && Number(browserInfoObj[0].MajorVersion)  >=5 && browserInfoObj[0].WebView == true)){
                             appendToDeviceListTable(data,condition,load,tab);
+							//filterManageDevice();
                         }else{
                             appendToDeviceListTable2(data,condition,load,tab);
+							//searchBoxDevList();
                         }
                         appendToDeviceListTable(data,condition,load,tab);
+						//filterManageDevice();
                     }else{
                         appendToDeviceListTable2(data,condition,load,tab);
+						//searchBoxDevList();
                     }
 				}
 			}		
@@ -1542,7 +1544,7 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 	var html ='';
 	var btns='';
 
-	html += '<div style="overflow:auto;height: 300px;" class = "datagrid">';
+	html += '<div style="overflow:auto;height: 400px;" class = "datagrid">';
 	html += '<table data-role="table" id="manageConfigTable'+condition+'" style="width:100%" class="table-stroke ui-body-d ui-shadow ui-responsive" data-column-btn-theme="a" data-column-popup-theme="a" data-mini="true">';
 	html += '<thead class="header">';
 	html += '<tr class="ui-bar-d">';
@@ -1619,7 +1621,7 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 			html += "<td>"+row[a].getAttribute('PortType')+"</td>";
 			html +="</tr>";
 		}else{
-			var devName = row[a].DeviceName;
+			var devName = row[a].HostName;
             if(a % 2 == 0){
                     tableClass = 'alt';
             }else{
@@ -1682,9 +1684,11 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 		if (load.toLowerCase()=="tooltipdevice" ){
 			$('.trManageDevice').each(function(){
 				$(this).removeClass('highlight');
+				highlightTr(this,false);
 			});
 			if($(this).hasClass('highlight') == false){
 				$(this).addClass('highlight');
+				highlightTr(this,true);
 				var devName = $(this).attr('DeviceName');
 				if ($.inArray(devName,globalSelectedDeviceList)== -1){
 					globalSelectedDeviceList.push(devName);
@@ -1704,11 +1708,13 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 				var devId= $(this).attr('DeviceId');
 				$('#'+devId).prop('checked', true);
 				$(this).addClass('highlight');
+				highlightTr(this,true);
 				if(globalSelectedDeviceList.indexOf(devName) == -1){
 					globalSelectedDeviceList.push(devName);
 				}
 			}else{
 				$(this).removeClass('highlight');
+				highlightTr(this,false);
 				var devId= $(this).attr('DeviceId');
 				var devName1 = $(this).attr('DeviceName');
 				for(var a=0; a<globalSelectedDeviceList.length; a++){
@@ -1718,6 +1724,11 @@ function appendToDeviceListTable2(data,condition,load, tabSelected)	{
 				}
 				$('#'+devId).prop('checked', false);
 			}
+		}
+		if(globalSelectedDeviceList.length==$('.trManageDevice').length){
+			$('#checkAlllocal').prop('checked',true);
+		}else{
+			$('#checkAlllocal').attr('checked',false);
 		}
 		fullHubDisEna();
 	});
@@ -2102,15 +2113,16 @@ function createInterface(src){
  *  PARAMETERS    : 
  *
  */
-var pdragY = 0;
-var pdragX = 0;
-var prectX = 0;
-var prectY = 0;
-var sdragY = 0;
-var sdragX = 0;
-var srectX = 0;
-var srectY = 0;
+//var pdragY = 0;
+//var pdragX = 0;
+//var prectX = 0;
+//var prectY = 0;
+//var sdragY = 0;
+//var sdragX = 0;
+//var srectX = 0;
+//var srectY = 0;
 function draw() {
+			
 	trashW = ((window.innerWidth) -40)-80;
 	trashH = ((window.innerHeight) - 100)-80;
 	window['variable' + dynamicFlagCommitted[pageCanvas] ]= false;
@@ -2119,8 +2131,8 @@ function draw() {
 //		var context = canvas.getContext("2d");
 		gblCanvasWidth = (window.innerWidth) -40;
 		gblCanvasHeight = (window.innerHeight) - 120;
-		rectX = (gblCanvasWidth*.2)/4;
-		rectY = (gblCanvasHeight*.2)/4;
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = (gblCanvasWidth*.2)/4;
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = (gblCanvasHeight*.2)/4;
 		window['variable' + dynamicResourceId[pageCanvas] ]= '';
 		window['variable' + dynamicMainId[pageCanvas] ]= '';
 		window['variable' + dynamicZoomOrigin[pageCanvas]] = makePos(0,0);
@@ -2146,11 +2158,12 @@ function draw() {
 			});	
 			/*************************ON DRAG CANVAS***********************/
 			window['variable' + dynamicVar[pageCanvas]].on('dragend', function() {
-				dragX= -this.getX();
-				dragY = -this.getY();
+				window['globalNavigator'+ pageCanvas]['fromNavigator'] = "stage";
+				window['globalNavigator'+ pageCanvas]['Stage']['dragX']= -this.getX();
+				window['globalNavigator'+ pageCanvas]['Stage']['dragY'] = -this.getY();
 				window['variable' + dynamicMinimap[pageCanvas]].clear().clearCache();	
 				var miniLayerCloned = window['variable' + dynamicLayer[pageCanvas]].clone();
-				var scle = 0.1*globalscale;
+				var scle = 0.1*window['globalNavigator'+ pageCanvas]['Scale'];
 				miniLayerCloned.setScale(scle);
 				var rectnglLayer = new Kinetic.Layer();
 				var rectngl = new Kinetic.Rect({
@@ -2161,59 +2174,60 @@ function draw() {
 					strokeWidth: 1,
 					draggable: true
 				});
-				rectX = -this.getX()*.10;
-				rectY = -this.getY()*.10;	
-//				console.log("dragonC",dragX,dragY);
-//				console.log("pdragOnC",pdragX,pdragY);
-				rectX = ((dragX - pdragX) * .1);
-				rectY = ((dragY - pdragY) * .1);
-//				console.log("RECT After computation",rectX,rectY);
-				rectngl.setAttrs({x:rectX, y:rectY});
+				dragX = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+				dragY = window['globalNavigator'+ pageCanvas]['Stage']['dragY'];
+				window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = -this.getX()*.10;
+				window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = -this.getY()*.10;	
+				window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = ((dragX - window['globalNavigator'+ pageCanvas]['Stage']['pdragX'])* .1);
+				window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = ((dragY - window['globalNavigator'+ pageCanvas]['Stage']['pdragY']) * .1);
+				rectngl.setAttrs({x:window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'], y:window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']});
+				
+				/****************************************************/
+				if(window['globalNavigator'+ pageCanvas]['fromNavigator'] == "stage"){
+					rectnglLayer.add(rectngl);
+					miniLayerCloned.setAttrs({x:0,y:0});
+					window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
+					window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
+					/**SET S VARIABLE***/
+					window['globalNavigator'+ pageCanvas]['fromNavigator'] = "stage";
+					window['globalNavigator'+ pageCanvas]['MiniMap']['srectX'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'];
+					window['globalNavigator'+ pageCanvas]['MiniMap']['srectY'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'];
+					window['globalNavigator'+ pageCanvas]['Stage']['sdragX'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+					window['globalNavigator'+ pageCanvas]['Stage']['sdragY'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+				}
 				/***************ON DRAG RECTANGLE******************/
 				rectngl.on('dragend', function() {
-					
-					rectX = -this.getX();
-					rectY = -this.getY();
-//					console.log("from stage drag rectangle rect",rectX,rectY);
-					dragX = ((rectX) - (-srectX)) *10;
-					dragY = ((rectY) - (-srectY)) *10;
-//					console.log("from stage drag rectabgle DRAG",dragX,dragY);
+					window['globalNavigator'+ pageCanvas]['fromNavigator'] = "rectangle";
+					window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = -this.getX();
+					window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = -this.getY();
+					dragX = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectX']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectX'])) *10;
+					dragY = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectY'])) *10;
+					window['globalNavigator'+ pageCanvas]['Stage']['dragX'] = dragX;
+					window['globalNavigator'+ pageCanvas]['Stage']['dragY'] = dragY;
 					window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
 					drawImage("true");
 					window['variable' + dynamicLayer[pageCanvas]].draw();
+					return;
 
 				});
-
-				/****************************************************/
-				rectnglLayer.add(rectngl);
-				miniLayerCloned.setAttrs({x:0,y:0});
-				window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
-				window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-				fromNavigator = "stage";
-				srectX = rectX;
-				srectY = rectY;
-				sdragX = dragX;
-				sdragY = dragY;
-//				console.log("set srect",srectX,srectY);
-//				console.log("set sdrag",sdragX,sdragY);
 			});
 
 			/**********************************************/	
-			if (globalDeviceType != "Mobile"){
-				window['variable' + dynamicMinimap[pageCanvas]] = new Kinetic.Stage({ // initialize the canvas
-					container: "miniMap0",
-					width: gblCanvasWidth * 0.2,
-					height: gblCanvasHeight * 0.2,
+//			if (globalDeviceType != "Mobile"){
+			window['variable' + dynamicMinimap[pageCanvas]] = new Kinetic.Stage({ // initialize the canvas
+				container: "miniMap0",
+				width: gblCanvasWidth * 0.2,
+				height: gblCanvasHeight * 0.2,
 //					draggable:true,
-					border : "2px solid gray"
-				});	
-			}
+				border : "2px solid gray"
+			});	
+//			}
 			window['variable' + dynamicLayer[pageCanvas]]="";
 			window['variable' + dynamicLayer[pageCanvas]] = new Kinetic.Layer(); // initialize per layer of images or object in canvas
-			if (globalDeviceType != "Mobile"){
+//			if (globalDeviceType != "Mobile"){
 				window['variable' + dynamicMiniLayer[pageCanvas]]="";
 				window['variable' + dynamicMiniLayer[pageCanvas]] = new Kinetic.Layer(); // initialize per layer of images or object in canvas
-			}
+//			}
 			$(document).ready(function(){
 				var view = new initZoom();
 			});
@@ -2417,8 +2431,8 @@ function reDrawImage(){
 var layerOffsetX="";
 var layerOffsetY="";
 var layerScale = "";
-var dragX = 0;
-var dragY =0;
+//var dragX = 0;
+//var dragY =0;
 //var canvasRedraw = setInterval(function(){drawImage();},500);
 function drawImage(flag,newscale){
     var countXpos = 50;
@@ -2508,13 +2522,11 @@ function drawImage(flag,newscale){
             if (devices[i].UpdateFlag !="delete"){
             	group = drawOneImage(x2,y2,devices[i],group);
                 window['variable' + dynamicLayer[pageCanvas]].add(group);
-               	initImages(group);
+                initImages(group);
             }
             initZoom("reload");
-	setTimeout(function(){
             window['variable' + dynamicVar[pageCanvas]].add(window['variable' + dynamicLayer[pageCanvas]]);
 			window['variable' + dynamicLayer[pageCanvas]].batchDraw();
-	},50);
         }
     }else{
         $("#showTooltipInfo").hide();
@@ -2524,13 +2536,14 @@ function drawImage(flag,newscale){
     $("#configContent"+pageCanvas+" canvas").attr("id", "canvasID"+pageCanvas);
 
     if (flag=="true"){
-        window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
+        window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: window['globalNavigator'+ pageCanvas]['Stage']['dragX'], y:window['globalNavigator'+ pageCanvas]['Stage']['dragY']});
         duplicateOnMinimap("true");
         return;
 	}else if(flag == "zoom"){
 		duplicateOnMinimap("scale",newscale);
 		return;
     }else{
+		window['globalNavigator'+ pageCanvas]['fromNavigator'] = "";
         duplicateOnMinimap();
 		return;
     }
@@ -2551,17 +2564,17 @@ function drawImage(flag,newscale){
  *
  * #####################################################################
  */
-var rectX = 0;
-var rectY = 0;
+//var rectX = 0;
+//var rectY = 0;
 function duplicateOnMinimap(from,newscale){
-	if (globalDeviceType == "Mobile"){
-		return;
-	}
+//	if (globalDeviceType == "Mobile"){
+//		return;
+//	}
 	window['variable' + dynamicMinimap[pageCanvas]].clear().clearCache();
 /*******************************CLONE CANVAS*******************************/
 	if(from != "scale"){
 		var miniLayerCloned = window['variable' + dynamicLayer[pageCanvas]].clone();
-		var scle = 0.1*globalscale;
+		var scle = 0.1*window['globalNavigator'+ pageCanvas]['Scale'];
 		miniLayerCloned.setScale(scle);
 	}
 /*******************************CREATE RECTANGLE***************************/
@@ -2575,96 +2588,61 @@ function duplicateOnMinimap(from,newscale){
 		draggable: true
 	});	
 	rectnglLayer.add(rectngl);
-/**************************************************************************/
-/*************************************************************************/
-/*	if(from == "" && fromNavigator == "rectangle"){
-		rectngl.setPosition(-(rectX), -(rectY));
-		rectnglLayer.clear().add(rectngl);
-		miniLayerCloned.setAttrs({x:0,y:0});
-		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
-		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-		fromNavigator = "rectangle";		
-		pdragX = dragX;
-		pdragY = dragY;
-		prectX = rectX;
-		prectY = rectY;
-		return;
-	}
-	if(from == "" && fromNavigator == "stage"){
-		rectX = ((dragX - pdragX) * .1);
-		rectY = ((dragY - pdragY) * .1);						
-		rectngl.setAttrs({x:rectX, y:rectY});
-		rectnglLayer.clear().add(rectngl);
-		miniLayerCloned.setAttrs({x:0,y:0});
-		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
-		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-		fromNavigator = "stage";
-		srectX = rectX;
-		srectY = rectY;
-		sdragX = dragX;
-		sdragY = dragY;
-		return;
-p
-	}
-*/
 /*******************************DRAG RECTANGLE*****************************/
 
 	rectngl.on('dragend', function() {
-					
-		rectX = -this.getX();
-		rectY = -this.getY();
-//		console.log("rect this", rectX,rectY);
-		dragX = ((rectX) - (-srectX)) *10;
-		dragY = ((rectY) - (-srectY)) *10;
-//		console.log("drag after computation",dragX,dragY);
-		window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
+		window['globalNavigator'+ pageCanvas]['fromNavigator'] = "rectangle";		
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = -this.getX();
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = -this.getY();
+		window['globalNavigator'+ pageCanvas]['Stage']['dragX'] = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectX']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectX'])) *10;
+		window['globalNavigator'+ pageCanvas]['Stage']['dragY'] = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectY'])) *10;
+		window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: window['globalNavigator'+ pageCanvas]['Stage']['dragX'], y:window['globalNavigator'+ pageCanvas]['Stage']['dragY']});
 		drawImage("true");
 		window['variable' + dynamicLayer[pageCanvas]].draw();
 
 	});
-
+/***************************SET INITIAL POSITION*******************************/
+	if(from != "scale" && window['globalNavigator'+ pageCanvas]['fromNavigator'] == ""){
+		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer).setPosition(window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'],window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']);
+		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
+	}
 /**************************ON DRAG SET NEW POSITION***************************/
 	if(from == "true"){
-		rectngl.setPosition(-(rectX), -(rectY));
+		rectngl.setPosition(-(window['globalNavigator'+ pageCanvas]['MiniMap']['rectX']), -(window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']));
 		rectnglLayer.clear().add(rectngl);
 		miniLayerCloned.setAttrs({x:0,y:0});
 		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
 		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-		fromNavigator = "rectangle";		
-		pdragX = dragX;
-		pdragY = dragY;
-		prectX = rectX;
-		prectY = rectY;
-//		console.log("set pdrag", pdragX, pdragY);
-//		console.log("set prect", prectX,prectY);
+		window['globalNavigator'+ pageCanvas]['fromNavigator'] = "rectangle";		
+		window['globalNavigator'+ pageCanvas]['Stage']['pdragX'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+		window['globalNavigator'+ pageCanvas]['Stage']['pdragY'] = window['globalNavigator'+ pageCanvas]['Stage']['dragY'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['prectX'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['prectY'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'];
 		return;
 	}
 /*************************ON ZOOM SET POSITION*******************************/
 	if(from == "scale"){
-		rectX = ((dragX - pdragX) * .1);
-		rectY = ((dragY - pdragY) * .1);
-		globalscale = newscale;
+		pdragX = window['globalNavigator'+ pageCanvas]['Stage']['pdragX'];
+		pdragY = window['globalNavigator'+ pageCanvas]['Stage']['pdragY'];
+		dragX = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+		dragY = window['globalNavigator'+ pageCanvas]['Stage']['dragY'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = ((dragX - pdragX) * .1);
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = ((dragY - pdragY) * .1);
+		window['globalNavigator'+ pageCanvas]['Scale'] = newscale;
 		var miniLayerCloned = window['variable' + dynamicLayer[pageCanvas]].clone();
-		scl = 0.1*newscale;
+		scl = 0.1*window['globalNavigator'+ pageCanvas]['Scale'];
 		miniLayerCloned.setScale(scl);
-		rectngl.setPosition(-(rectX),-(rectY));
+		rectngl.setPosition(-(window['globalNavigator'+ pageCanvas]['MiniMap']['rectX']),-(window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']));
 		rectnglLayer.clear().add(rectngl);
 		miniLayerCloned.setAttrs({x:0, y:0});
 		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
 		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
-		fromNavigator = "zoom";
-		pdragX = dragX;
-		pdragY = dragY;
-		prectX = rectX;
-		prectY = rectY;
+		window['globalNavigator'+ pageCanvas]['fromNavigator'] = "zoom";
+		window['globalNavigator'+ pageCanvas]['Stage']['pdragX'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+		window['globalNavigator'+ pageCanvas]['Stage']['pdragY'] = window['globalNavigator'+ pageCanvas]['Stage']['dragY'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['prectX'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['prectY'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'];
 		return;
-	}
-/********************************* START CREATE DEVICE *********************************/
-
-/***************************SET INITIAL POSITION*******************************/
-	if(from != "scale" && fromNavigator == ""){
-		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer).setPosition(rectX,rectY);
-		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
 	}
 
 }
@@ -2798,7 +2776,7 @@ function zoom(newscale, center) { // zoom around center
 			window['variable' + dynamiclayerOffsetY[pageCanvas]]  = zoomOrigin.y; // GLOBAL FOR RETURN ZOOM ON fcn drawImage function
 
 			window['variable' + dynamicLayer[pageCanvas]].setOffset(caX,caY);	
-			window['variable' + dynamicLayer[pageCanvas]].setScale(newscale);			
+			window['variable' + dynamicLayer[pageCanvas]].setScale(newscale);
 			drawImage("zoom",newscale);
 		}else{ return;}
     }
@@ -3012,7 +2990,7 @@ function initImages(devImg){
 //			drawImage(); //for hang issue
 		});	
 		devImg.on('mouseover mousedown touchstart', function() {
-			addEvent2History("Device clicked");
+//			addEvent2History("Device clicked");
 			var imgId = this.getAttr('id');
 			$('#showTooltipInfo').show();	 
 			var imgXpos2 = this.getPosition().x;
@@ -4501,7 +4479,6 @@ function autoDCompleteDevInfo(ip,type,idx){
 					//$('#autoDSaveRP2AuxPort').val();
 					//$('#').val();
 				}else{
-					console.log(data);
 					var dat = data.replace(/'/g,'"');
 			        var dat2 = $.parseJSON(dat);
 					if(type){
@@ -5656,7 +5633,7 @@ function createLine(id){
 			x: xTp1,
 			y: yTp1
 		});
-		var tp1 = checkLineCount(allline[i],"destination");
+		var tp1 = checkLineCount(allline[i],"source");
 		tooltip.add(new Kinetic.Text({
 			text: tp1,
 			fontFamily: 'Arial',
@@ -5671,7 +5648,7 @@ function createLine(id){
             y: yTp2,
 			opacity: 0.75
 		});
-		var tp2 = checkLineCount(allline[i],"source");					
+		var tp2 = checkLineCount(allline[i],"destination");					
 		tooltip2.add(new Kinetic.Text({
 			text: tp2,
 			fontFamily: 'Arial',
@@ -5836,25 +5813,40 @@ function allLinkMenu(lineId){
  * 
  */
 function checkLineCount(line,portlocation){
-	var lineCon = window['variable' + dynamicLineConnected[pageCanvas]];
+	var lineCon = new Array();
+	var deviceObject;
+	if(portlocation == "source"){
+		var devPath = line.Source; 
+		var devArr = devPath.split(".");
+		deviceObject = getDeviceObject2(devArr[0]);
+		lineCon = gettargetmap(devArr[0],lineCon);
+	}else{
+		var devPath = line.Destination; 
+		var devArr = devPath.split(".");
+		deviceObject = getDeviceObject2(devArr[0]);
+		lineCon = gettargetmap(devArr[0],lineCon);
+	}
 	var count = 0;
-
 	var str ="";
+	var sourceLine = line.Source.split(".");
+	var destinationLine = line.Destination.split(".");
 	for(var a=0; a<lineCon.length; a++){
-		if (line.DestinationDeviceObjectPath == lineCon[a].DestinationDeviceObjectPath && line.SourceDeviceObjectPath == lineCon[a].SourceDeviceObjectPath){
-			count +=1;	
+		var srcArr = lineCon[a].Source.split(".");
+		var dstArr = lineCon[a].Destination.split(".");
+		if((sourceLine[0] == srcArr[0] && destinationLine[0] == dstArr[0]) || (sourceLine[0] == dstArr[0] &&  destinationLine[0] == srcArr[0])){
+			count ++;	
 		}
 	}
 	if (count>1){
 			str = count+" ports";
 	}else{
-		if (portlocation =="source" && line.SourceDeviceDeviceName == ""){
+		if (portlocation =="source" && deviceObject.DeviceName == ""){
 			str = getPortName(line.Source);
-		}else if (portlocation =="source" && line.SourceDeviceDeviceName != ""){
+		}else if (portlocation =="source" && deviceObject.DeviceName != ""){
 			str = getPortName2(line.Source);
-		}else if (portlocation == "destination" && line.DestinationDeviceDeviceName == ""){
+		}else if (portlocation == "destination" && deviceObject.DeviceName == ""){
 			str = getPortName(line.Destination);
-		}else if (portlocation == "destination" && line.DestinationDeviceDeviceName != ""){
+		}else if (portlocation == "destination" && deviceObject.DeviceName != ""){
 			str = getPortName2(line.Destination);
 		}
 	}
@@ -6584,6 +6576,11 @@ function createLinkForDevicelist(device,device2){
 			checkPortOfDeviceList(device2.ObjectPath,"destination");
 			portflag = true;
 		}
+		if(device.DeviceName == ""){
+			portflag2 = true;
+		}else if(device2.DeviceName == ""){
+			portflag = true;
+		}
 	}
 }
 /*
@@ -6639,21 +6636,35 @@ function checkPortOfDeviceList(devPath,action){
 		getPort(devPath,action,"1000","L1");
 		if(!portflag &&  action == "source"){
 			getPort(devPath,action,"10-100","L1");
-		}else if(!portflag2 &&  action == "destination"){
-			getPort(devPath,action,"10-100","L1");
-		}else if(!portflag &&  action == "source"){
-			getPort(devPath,action,"10000","L1");
-		}else if(!portflag2 &&  action == "destination"){
-			getPort(devPath,action,"10000","L1");
-		}else if(!portflag &&  action == "source"){
-			getPort(devPath,action,"40000","L1");
-		}else if(!portflag2 &&  action == "destination"){
-			getPort(devPath,action,"40000","L1");
-		}else if(!portflag &&  action == "source"){
-			getPort(devPath,action,"100000","L1");
-		}else if(!portflag2 &&  action == "destination"){
-			getPort(devPath,action,"100000","L1");
+			if(!portflag &&  action == "source"){
+				getPort(devPath,action,"10000","L1");
+				if(!portflag &&  action == "source"){
+					getPort(devPath,action,"40000","L1");
+					if(!portflag &&  action == "source"){
+						getPort(devPath,action,"100000","L1");
+						if(!portflag){
+						getPort(devPath,action,"100000","L2");
+						}
+					}
+				}
+			}
 		}
+		if(!portflag2 &&  action == "destination"){
+			getPort(devPath,action,"10-100","L1");
+			if(!portflag2 &&  action == "destination"){
+				getPort(devPath,action,"10000","L1");
+				if(!portflag2 &&  action == "destination"){
+					getPort(devPath,action,"40000","L1");
+					if(!portflag2 &&  action == "destination"){
+						getPort(devPath,action,"100000","L1");
+						if(!portflag2){
+							getPort(devPath,action,"100000","L2");
+						}
+					}
+				}
+			}
+		}
+
 	}else{
 		getPort(devPath,action,lineSpeed,lineType);
 	}
@@ -6678,7 +6689,10 @@ function getPort(devPath,action,speed,type){
     }
 	for(var t=0; t<prtArr.length; t++){
 		var port = prtArr[t];
-		if(port.PortFlag != "true" && speed == "10-100" && (port.Speed == "10" || port.Speed == "100") && type == port.PortType){
+		if(lineType == "Any" && type == "L2" && port.PortFlag != "true"){
+			setPortObject(port,action);
+			t = prtArr.length;
+		}else if(port.PortFlag != "true" && speed == "10-100" && (port.Speed == "10" || port.Speed == "100") && type == port.PortType){
 			setPortObject(port,action);
 			t = prtArr.length;
 		}else if(port.PortFlag != "true" && speed == port.Speed && type == port.PortType){
@@ -8301,7 +8315,78 @@ function createLineTooltip(id){
  *  PARAMETERS    : type
  *	MODIFICATIONS : added resend to appendToDeviceListTable
  */
-function filterManageDevice(type){
+/*------revised---kmmabignay--mar31-----*/
+function filterManageDevice(type,filterx){
+	var filter = $("#dlistddown").val();
+	if(filterx!=undefined){filter=filterx;}
+	if(filter=='managementip'){filter='mgmtip';}
+	if(filter=='consoleip'){filter='console ip';}
+	var rows = $(".trManageDevice");
+	tableFilter($('.dFilter').val(),filter,rows);
+	$('.dFilter').keyup(function() {
+		var val = $(this).val();
+		tableFilter(val,filter,rows);
+	});
+	$(document).on("change", "#dlistddown", function(){
+		devListFilterId=[];
+		$('.dFilter').val("");
+		filterManageDevice();
+	});
+	$(document).on("change", "#testlistddown", function(){
+		devListFilterId=[];
+		$('.dFilter').val("");
+		filterManageDevice('testTool',$(this).val());
+	});
+}
+/*--------------------------------------------*/
+
+/*---kmmabignay---mar31----------------------*/
+function tableFilter(val,filter,rows){
+	val = val.toLowerCase();
+	for(var a=0; a<rows.length; a++){
+		var colIndx = 0;
+		var theads = $(rows[a]).closest('table').find('th');
+		for(var x=0; x<theads.length; x++){
+			var thead = $(theads[x]).text();
+			if(thead.toLowerCase()==filter){colIndx = x;}	
+		}
+		var devId = $(rows[a]).attr('deviceid');
+		var devName = $(rows[a]).attr('devicename').toLowerCase();
+		var hostflag = (devName.indexOf(val)!=-1);
+		var colTd = $(rows[a]).find('td')[colIndx];
+		var value = $(colTd).text().toLowerCase();
+		var flag = (value.indexOf(val)!=-1);
+		if(filter=='hostname' && val!='' && !hostflag){
+			$(rows[a]).css({'display':'none'});
+			if(devListFilterId.indexOf(devId)==-1){
+				devListFilterId.push(devId);
+			}
+		}else if(val!='' && !flag){
+			$(rows[a]).css({'display':'none'});
+			if(devListFilterId.indexOf(devId)==-1){
+				devListFilterId.push(devId);
+			}
+		}else{
+			$(rows[a]).attr('style','');
+			var index = devListFilterId.indexOf(devId);
+			devListFilterId.splice(index,1);
+		}
+	}
+	if(globalDevListType=='graphical' && globalDevListRow.length > 0){
+		imgXPos = 152;
+		imgYPos = 24;
+		globalFlag = false;
+		checkLCArray=[]
+		var data = globalDevListRow[0].data;
+		var condition = globalDevListRow[0].condition;
+		var load = globalDevListRow[0].load;
+		var tabSelected = globalDevListRow[0].tabSelected;
+		appendToDeviceListTable(data,condition,load, tabSelected);
+	}
+}
+/*--------------------------------------------*/
+
+function filterManageDevice1(type){
 	$('.dFilter').keyup(function() {
 		devListFilterId=[];
 		
@@ -8392,6 +8477,9 @@ function createQueryMapLink(deviceArrDev){
 		async : false,
 		success : function(data){
 			setJSONData();
+			if(globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Name == ""){
+				createConfigName();
+			}
 			globalSelectedDeviceList=[];
 			var mydata = data;
 			if(globalInfoType == "XML"){
@@ -8412,6 +8500,9 @@ function createQueryMapLink(deviceArrDev){
 				if(globalDeviceType == "Mobile"){
 	        		loading('hide');
 			    }else{
+					$('#cbFull').prop('checked',false);		
+					$('#cbHub').prop('checked',false);		
+
 					ajaxLoader('hide');
 				}
 			},1000);
@@ -8486,7 +8577,6 @@ function setLineConnectedAttributes(LineConnected, devObjPath,lineLocation,srcOb
  *
  */
 function checkAvPortForConnect(lineConnectedDevice, toConnectDevice,lineLocation,srcObj,devObj){
-	console.log('??????>>>',lineConnectedDevice);
 	if(globalInfoType == "JSON"){
 		var pathArr = lineConnectedDevice.split(".");
     	var prtArr = getAllPortOfDevice(pathArr[0]);
@@ -10452,10 +10542,13 @@ function setDataToBeDeleted(destination,source){
 function selectAllConnectivivty(src,level,srcid){
 	if(level == "all"){
 		$('.'+srcid).each(function(){
+			var did = $(this).attr('did');
 			if($(src).is(':checked')){
 				$(this).prop('checked',true);
+				$('#open_'+did).removeAttr("disabled");
 			}else{
 				$(this).prop('checked',false);
+				$('#open_'+did).attr("disabled",true);
 			}
 		});
 	}else{
@@ -11196,6 +11289,9 @@ function deviceTablePopUp(type){
 
 
 function doneDevListTable(type){
+	if(globalSelectedDeviceList.length == 0 && globalDeviceType != "Mobile"){
+		return
+	}
 	dragtoTrashDeviceOnly(glblDevMenImg,gblDevMenX,gblDevMenY,"true");
 	var load ="";
 	var device = [];
@@ -11208,7 +11304,7 @@ function doneDevListTable(type){
 		$( "#configPopUp" ).dialog('destroy');
 	}else{
 		setTimeout(function(){
-			$( "#configPopUp" ).dialog('destroy');
+	//		$( "#configPopUp" ).dialog('destroy');
 			deviceListPopupTable('deviceMenu','local');	
 		}, 2000);
 	}
@@ -11840,7 +11936,7 @@ function dynamicCanvas(num){
 	dynamicLine.push("redLine"+divctr);
 	dynamicResourceId.push("ResourceId"+divctr);
 	ConnectivityFlag.push("ConnectivityFlag"+divctr);
-
+	
 	dynamicZoomOrigin.push("zoomOrigin"+divctr)
 	dynamicZoomFactor.push("zoomFactor"+divctr);
 	dynamicPinchLastDist.push("pinchLastDist"+divctr);
@@ -11870,13 +11966,23 @@ function dynamicCanvas(num){
 	if(dynamicVar.length > 1){
 		$('#closCanvaseBtn').show();
 	}
-
+	window['globalNavigator'+divctr]={
+		'Stage': {'dragX':'0', 'dragY':'0', 'pdragX': '0','pdragY': '0','sdragX': '0','sdragY': '0'},
+		'MiniMap':{'rectX':'0', 'rectY':'0','prectX': '0', 'prectY': '0', 'srectX': '0', 'srectY': '0'},
+		'fromNavigator': '',
+		'Scale': '1'
+	};
+	window['globalNavigator'+ divctr]['MiniMap']['rectX'] = (gblCanvasWidth*.2)/4;
+	window['globalNavigator'+ divctr]['MiniMap']['rectY'] = (gblCanvasHeight*.2)/4;
 	window['variable' + dynamicVar[divctr] ] = new Kinetic.Stage({ // initialize the canvas
 		container: "configContent"+divctr,
 		width: gblCanvasWidth,
 		height: gblCanvasHeight,
+		draggable:true,
 		border : "4px solid gray"
 	});
+
+
 	window['variable' + dynamicMinimap[divctr] ] = new Kinetic.Stage({ // initialize the canvas
 		container: "miniMap"+divctr,
 		width: gblCanvasWidth * 0.2,
@@ -11895,6 +12001,59 @@ function dynamicCanvas(num){
 	window['variable' + dynamicDebug[divctr] ]= 'false';
 	window['variable' + dynamicDomain[divctr] ]= window['variable' + dynamicDomain[pageCanvas] ];
 	window['variable' + dynamicVar[divctr]].add(window['variable' + dynamicLayer[divctr]]);
+	
+	/*************************ON DRAG CANVAS***********************/
+	window['variable' + dynamicVar[divctr]].on('dragend', function() {
+		window['globalNavigator'+ pageCanvas]['Stage']['dragX']= -this.getX();
+		window['globalNavigator'+ pageCanvas]['Stage']['dragY'] = -this.getY();
+		window['variable' + dynamicMinimap[pageCanvas]].clear().clearCache();	
+		var miniLayerCloned = window['variable' + dynamicLayer[pageCanvas]].clone();
+		var scle = 0.1*window['globalNavigator'+ pageCanvas]['Scale'];
+		miniLayerCloned.setScale(scle);
+		var rectnglLayer = new Kinetic.Layer();
+		var rectngl = new Kinetic.Rect({
+			width: gblCanvasWidth * 0.1,
+			height: gblCanvasHeight * 0.1,
+			fill: 'transparent',
+			stroke: 'black',
+			strokeWidth: 1,
+			draggable: true
+		});
+		dragX = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+		dragY = window['globalNavigator'+ pageCanvas]['Stage']['dragY'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = -this.getX()*.10;
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = -this.getY()*.10;	
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = ((dragX - window['globalNavigator'+ pageCanvas]['Stage']['pdragX'])* .1);
+		window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = ((dragY - window['globalNavigator'+ pageCanvas]['Stage']['pdragY']) * .1);
+		rectngl.setAttrs({x:window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'], y:window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']});
+		/***************ON DRAG RECTANGLE******************/
+		rectngl.on('dragend', function() {
+			
+			window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'] = -this.getX();
+			window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'] = -this.getY();
+			dragX = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectX']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectX'])) *10;
+			dragY = ((window['globalNavigator'+ pageCanvas]['MiniMap']['rectY']) - (-window['globalNavigator'+ pageCanvas]['MiniMap']['srectY'])) *10;
+			window['globalNavigator'+ pageCanvas]['Stage']['dragX'] = dragX;
+			window['globalNavigator'+ pageCanvas]['Stage']['dragY'] = dragY;
+			window['variable' + dynamicLayer[pageCanvas]].setAttrs({x: dragX, y:dragY});
+			drawImage("true");
+			window['variable' + dynamicLayer[pageCanvas]].draw();
+			return;
+		});
+		/****************************************************/
+		rectnglLayer.add(rectngl);
+		miniLayerCloned.setAttrs({x:0,y:0});
+		window['variable' + dynamicMinimap[pageCanvas]].add(rectnglLayer);
+		window['variable' + dynamicMinimap[pageCanvas]].add(miniLayerCloned);
+		/**SET S VARIABLE***/
+		window['globalNavigator'+ pageCanvas]['fromNavigator'] = "stage";
+		window['globalNavigator'+ pageCanvas]['MiniMap']['srectX'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectX'];
+		window['globalNavigator'+ pageCanvas]['MiniMap']['srectY'] = window['globalNavigator'+ pageCanvas]['MiniMap']['rectY'];
+		window['globalNavigator'+ pageCanvas]['Stage']['sdragX'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+		window['globalNavigator'+ pageCanvas]['Stage']['sdragY'] = window['globalNavigator'+ pageCanvas]['Stage']['dragX'];
+	});
+
+	/**********************************************/
 	$("#configContent"+divctr+" canvas").attr("id", "canvasID"+divctr);
 	window['variable' + dynamicGreenRouletteArr[divctr]] = [];
 	$('#paginationcanvas').empty().append(str2);
@@ -12998,7 +13157,7 @@ function emailOption(){
 		$('#sendCc').show();
 		});
 	$("#emailPopup").empty().load("pages/ConfigEditor/emailOption.html",function (){
-		$('span.ui-dialog-title').text('Email');
+		$('#emailPop span.ui-dialog-title').text('Email');
 		setTimeout(function(){
 			$(".ui-dialog").position({
 				my:"center",
@@ -13057,11 +13216,16 @@ function attach(){
 */
 
 function sendEmail(){
+	var sendTo = $('#emailAccount').val();
+	var sendCC =$('#emailAccountCC').val();
 	var userTo = $('#sendTo').val();
 	var cc = $('#sendCc').val();
 	var subject =$('#Subject').val();
 	var msg =$('#emailMsg').val(); 
-	var url ="https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=sendemail&query={'QUERY': [{'userFrom':'"+globalUserName+"','cc':'"+cc+"','userTo':'"+userTo+"','msg':'"+msg+"','subject':'"+subject+"'}]}";
+	var device =$('#deviceLogs').val();
+	var user = $('#userLogs').val();
+	var group =$('#groupLogs').val();
+	var url ="https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=sendemail&query={'QUERY': [{'userFrom':'"+globalUserName+"','cc':'"+cc+"','userTo':'"+userTo+"','msg':'"+msg+"','subject':'"+subject+"','sendTo':'"+sendTo+"','sendCC':'"+sendCC+"','device':'"+device+"','user':'"+userLogs+"','group'='"+group+"'}]}";
 
   $.ajax({
         url: url,
@@ -13074,10 +13238,9 @@ function sendEmail(){
 			var data = data.replace(/'/g,'"');
 			var json = $.parseJSON(data);
 			var msg = json.RESULT[0].Result;
-			alerts(msg);
+			alerts(msg)
 			$("#consolePopUpClose").dialog();	
-		}
-			
+			}
 	});	
 }
 
@@ -13112,7 +13275,6 @@ function getEmail(){
 			var	str='';
 	 		for(var i=0; i< w.length; i++){
 				str+="<option >"+w[i]+"</option>"
-				console.log("email",str);
 			}
 			$('#emailAccount').empty().append(str);			 	
 			$('#emailAccountCC').empty().append(str);
@@ -13218,16 +13380,21 @@ function getOnlineUsers(){
 			var row = xmlDoc.getElementsByTagName("row");*/
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data);
-
-			for(var i = 0; i < json.data[0].row.length; i++){
-				var name = json.data[0].row[i].Name;	
-				str += "<li style='font-size:12px;list-style:none;cursor:pointer;text-align:left;margin-left:4px;' class='activeUser'><input type='checkbox' class='addtogroup' style='display:none;' value='"+name+"' />"+name+"</li>"
-			}
-			if(globalDeviceType=="Mobile"){
-				$('#listonline').html(str);	
-			}else{
-				$('#onlineUser').empty().append(str);
-				$("#user").multiselect();
+			if(json.data[0].row != undefined && json.data[0].row != null ){
+				for(var i = 0; i < json.data[0].row.length; i++){
+					var name = json.data[0].row[i].Name;	
+					str += "<li style='font-size:12px;list-style:none;cursor:pointer;text-align:left;margin-left:4px;' class='activeUser'><input type='checkbox' class='addtogroup' style='display:none;' value='"+name+"' />"+name+"</li>"
+				}
+				if(globalDeviceType=="Mobile"){
+					$('#listonline').html(str);	
+				}else{
+					$('#onlineUser').empty().append(str);
+					$("#user").multiselect();
+				}
+				$(".activeUser").click(function(){
+				globalReciever=$(this).text();
+				$("#receiverUserName").html(globalReciever);
+			});	
 			}
 		}
 	});
@@ -16189,7 +16356,7 @@ function refreshConsole(){
         clearInterval(setInt);
 		setInt ="";
         setInt = setInterval(function(){
-                loadConsole();
+                loadConsole(validDevices);
         },8000);
     }else if (globalRefresh == false){
         clearInterval(setInt);
@@ -16233,11 +16400,11 @@ function refreshChat(){
 */
 
 
-function loadConsole(){
+function loadConsole(device){
 	var selectArr = seletedSessionId.split("__");
 	//var url =getURL('Console') + "action=readuserlogs&query={'row':[{'username':'"+globalUserName+"','sessionId':'"+selectArr[1]+"'}]}" 
 	var devicesStr = deviceQstr(device); 
- 	var url = getURL('Console') + "action=sessionIdCreator&query={'MAINCONFIG': [{'UserName': '"+globalUserName+"','ResourceId': '"+globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId+"','To': '','ActiveSession':'"+selectArr[1]+"','DEVICE' : "+devicesStr + "}]}";
+ 	var url = getURL('Console') + "action=readuserlogs&query={'MAINCONFIG': [{'UserName': '"+globalUserName+"','ResourceId': '"+globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ResourceId+"','To': '','ActiveSession':'"+selectArr[1]+"','DEVICE' : "+devicesStr + "}]}";
 	$.ajax({
 		url: url,
 		dataType: 'html',
@@ -16295,23 +16462,19 @@ if (e.charCode == 13 || e=='send') {
 		async:false,
 		success: function(data) {
 		    var str ='' ;
-			/*var parser = new DOMP
-			var xmlDoc =parser.parseFromString(data, "text/xml");
-			var row = xmlDoc.getElementsByTagName("row");*/
 			dat = data.replace(/'/g,'"');
-			var json = $.parseJSON(dat);
-			var parsed =json.data[0].row;
-			for (var i=0; i<parsed.length; i++){
-				var sender = parsed[i].usernameSender;
-				var receiver = parsed[i].usernameReceiver;
-				var time = parsed[i].timestamp;
-				var message = parsed[i].message;
+			var json = jQuery.parseJSON(dat);
+	//		for (var i=0; i<json.data[0].length; i++){
+				var sender = json.data[0].usernameSender;
+				var receiver = json.data[0].usernameReceiver;
+				var time = json.data[0].timestamp;
+				var message = json.data[0].message;
 				if (sender == globalUserName){
 					str += "<div style ='text-align:right; border-bottom:1px solid #bdbdbd;'><div style='text-align:left; width:10px;'> "+ time +" </div> "+ message +" </div>";
 				}else{
 					str += "<div style ='text-align:right; border-bottom:1px solid #bdbdbd;'> "+ message +" <div style ='text-align:left;width:10px;'> "+ time +" </div></div>";
 				}
-			}
+		//	}
 				$("#chatMsg").append(str);
 				loadChatSession();
 			}
@@ -16351,7 +16514,7 @@ function loadChatSession(){
 //	var url ="https://"+CURRENT_IP +"/cgi-bin/Final/NFast_RM/NFastRMCGI.py?"
 //	var url = 'https://'+CURRENT_IP+'/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query=username='+globalReciever+'^userFrom='+globalUserName;
 //	var query = "username="+globalReciever+"^userfrom="+globalUserName";
-	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query={'QUERY': [{'userName':'"+globalReciever+"','userFrom:'"+globalUserName+"'}]}";
+	var url = "https://"+CURRENT_IP+"/cgi-bin/NFast_3-0/CGI/RESERVATIONMANAGER/FastConsoleCgi.py?action=getmessage&query={'QUERY':[{'userName':'"+globalReciever+"','userFrom':'"+globalUserName+"'}]}";
 
 	$.ajax({
 		url: url,
@@ -16363,22 +16526,27 @@ function loadChatSession(){
 		    var str ='' ;
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data); 
-			var parsed = json.data[0].row;
-			for (var i = 0;i<parsed.length; i++){
-				var sender = parsed[i].UsernameTo;
-				var receiver = parsed[i].UsernameFrom;
-				var time = parsed[i].TimeStamp;
-				var message = parsed[i].Message;	
+		
+			for (var i = 0;i<json.data[0].row.length; i++){
+				var sender = json.data[0].row[i].UsernameTo;
+				var receiver = json.data[0].row[i].UsernameFrom;
+				var time = json.data[0].row[i].TimeStamp;
+				var message = json.data[0].row[i].Message;	
 				if (receiver == globalUserName || sender== globalUserName){
 			str += "<div style ='text-align:right; border-bottom:1px solid #bdbdbd;'><div style='text-align:left; width:10px;'> "+ time +" </div> "+ message +" </div>";
 				}else{
 					str += "<div style ='text-align:right; border-bottom:1px solid #bdbdbd;'> "+ message +" <div style ='text-align:left;width:10px;'> "+ time +" </div></div>";
 				}
 			}
+			clearInterval(setInt);
+				setInt ="";
+				globalRefresh = true;
+           		refreshChat();
 			$("#chatMsg").html(str);
 			data = $.trim(data);
 			if (data != "0"){
 			$("#textLogs").html(data);
+	
 			}	
 		}		
 	});
@@ -16525,6 +16693,7 @@ function showGroupName(){
 			data = $.trim(data);
 			data = data.replace(/'/g,'"');
 			var json = jQuery.parseJSON(data);
+				console.log("getGROUP",data)
 				for (var i = 0; i< json.data[0].row.length; i++ ){
 					var groupname = json.data[0].row[i].GroupName;
 					var hostname =	json.data[0].row[i].HostName;
@@ -16623,6 +16792,7 @@ function autoCreateLine(){
 						storeLinkInformation(name,dev[i],dev[x],"","","","","","","",lineInfo[2],lineInfo[1],"","","","","","","","","");	
 					}
 				}
+
 			}
 		}
 	
@@ -16646,211 +16816,51 @@ function checkSamePort(devices,devices2){
     var prtArr = getAllPortOfDevice(devices.ObjectPath);
     var portTempArr = getAllPortOfDevice(devices2.ObjectPath);
 
-	for(var a=0; a<prtArr.length; a++){
-		var dev = prtArr[a].ObjectPath.split(".");
-		var portDev=dev[0];
-			var LCPortName = prtArr[a].PortName;
-			var LCPortFlag = prtArr[a].PortFlag;
-			var LCSpeed = prtArr[a].Speed;
-			var LCPortType = prtArr[a].PortType;
-			var LCPath = prtArr[a].ObjectPath;
-			var LCSwitch = prtArr[a].SwitchInfo;
-			for (var q=0; q<portTempArr.length; q++){
-				var TCPortName = portTempArr[q].PortName;
-				var TCSwitch = portTempArr[q].SwitchInfo;
-				var TCSpeed = portTempArr[q].Speed;
-				var TCPortType = portTempArr[q].PortType;
-				var TCPortFlag = portTempArr[q].PortFlag;
-				var TCPath = portTempArr[q].ObjectPath;
-				var name= 't'+TCSpeed.substring(0,TCSpeed.length - 3)+'gb';
-				if(LCPortType == "L1" && LCSpeed == TCSpeed && TCPortType == LCPortType && TCPortFlag ==""){
-					
-					portTempArr[q].PortFlag = true;
-					prtArr[a].PortFlag = true;
-					q = portTempArr.length;
-					a = prtArr.length;
-					dataArr.push(name,LCPath,TCPath);
-					
-				}				
-			}
-	}
-	
-/// SOURCE
-/*	if(devices.PORT){
-		for(var a = 0; a < devices.PORT.length; a++){
-			if(devices.PORT[a].PortFlag == "" && devices.PORT[a].PortType.toLowerCase() != 'open'){
-				var type = devices.PORT[a].PortType;
-				var speed = devices.PORT[a].Speed;
-				var switchinfo = devices.PORT[a].SwitchInfo.split('^');
-				var sourcePath = devices.PORT[a].ObjectPath;
-				var sourceFlag = devices.PORT[a];			        	
-				a = devices.PORT.length;
-				break;
-			}
+    for(var a=0; a<prtArr.length; a++){
+        var srcFlag = prtArr[a].PortFlag;
+        var srcType = prtArr[a].PortType;
+        if(srcFlag == "" && srcType.toLowerCase() != "open"){
+            var srcName = prtArr[a].PortName;
+            var srcSpeed = prtArr[a].Speed;
+            var srcPath = prtArr[a].ObjectPath;
+            var srcSwitch = prtArr[a].SwitchInfo.split('^')[0];
+     //       prtArr[a].PortFlag = true;
+            var ind = a;
 
-		}
-		dataArr = destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag);
-		return dataArr;
+            break;
+        }
+    }
+    for (var q=0; q<portTempArr.length; q++){
+        var destType = portTempArr[q].PortType;
+        var destFlag = portTempArr[q].PortFlag;
+        if(destFlag == "" && destType.toLowerCase() != "open"){
+            var destName = portTempArr[q].PortName;
+            var destSwitch = portTempArr[q].SwitchInfo.split('^')[0];
+            var destSpeed = portTempArr[q].Speed;
+            var destPath = portTempArr[q].ObjectPath;
+        }
+        if(srcType == "L1" && destSpeed == srcSpeed && destType == srcType && destSwitch == srcSwitch){
+            var name= 't'+srcSpeed.substring(0,srcSpeed.length - 3)+'gb';
+            portTempArr[q].PortFlag = "true";
+            prtArr[a].PortFlag = "true";
+            dataArr.push(name,srcPath,destPath);
+            q = portTempArr.length;
+            a = prtArr.length;
+            break
+        }else if(destType == "L2" && destType == srcType && destFlag == "" && srcFlag == "" && destSwitch == srcSwitch){
+            var name= 't'+srcSpeed.substring(0,srcSpeed.length - 3)+'gb';
+            portTempArr[q].PortFlag = "true";
+            prtArr[a].PortFlag = "true";
+            dataArr.push(name,srcPath,destPath);
+            q = portTempArr.length;
+            break;
+        }
+    }
 
-	}else if(devices.SLOT){
-		for(var a = 0; a < devices.SLOT.length; a++){
-			if(devices.SLOT[a].MODULE){
-				for(var b=0; b < devices.SLOT[a].MODULE.length; b++){
-					for(var c = 0; c < devices.SLOT[a].MODULE[b].PORT.length; c++){
-						if(devices.SLOT[a].MODULE[b].PORT[c].PortFlag == "" && devices.SLOT[a].MODULE[b].PORT[c].PortType.toLowerCase() != 'open'){
-							var type = devices.SLOT[a].MODULE[b].PORT[c].PortType;
-							var speed = devices.SLOT[a].MODULE[b].PORT[c].Speed;
-							var switchinfo =devices.SLOT[a].MODULE[b].PORT[c].SwitchInfo.split('^');
-							var sourcePath = devices.SLOT[a].MODULE[b].PORT[c].ObjectPath;
-							var sourceFlag = devices.SLOT[a].MODULE[b].PORT[c];			        	
-							break;
-							a = devices.SLOT.length;
-						}
-					}
-				}
-				dataArr = destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag);
-				return dataArr;
 
-			}else if(devices.SLOT[a].PORT){
-				for(var b=0; b < devices.SLOT[a].PORT.length; b++){
-					if(devices.SLOT[a].PORT[b].PortFlag == "" && devices.SLOT[a].PORT[b].PortType.toLowerCase() != 'open'){
-						var type = devices.SLOT[a].PORT[b].PortType;
-						var speed = devices.SLOT[a].PORT[b].Speed;
-						var switchinfo =devices.SLOT[a].PORT[b].SwitchInfo.split('^');
-						var sourcePath = devices.SLOT[a].PORT[b].ObjectPath;
-						var sourceFlag = devices.SLOT[a].PORT[b];
-						break;
-						a = devices.SLOT.length;
-					}
 
-				}
-				dataArr = destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag);
-
-			}
-		}
-	}*/
-// DESTINATION
-	return dataArr;
+   	return dataArr;
 }
-function destinationPort(devices2,type,speed,sourcePath,switchinfo,sourceFlag){
-	var dataArr=[];
-	if(devices2.PORT){
-		for(var x = 0; x < devices2.PORT.length; x++){
-			if(devices2.PORT[x].PortFlag == "" && devices2.PORT[x].PortType.toLowerCase() != 'open'){
-				var type2 = devices2.PORT[x].PortType;
-				var speed2 = devices2.PORT[x].Speed;
-				var switchinfo2 = devices2.PORT[x].SwitchInfo.split('^');
-				if(devices2.PORT[x].PortType == "L1" && devices2.PORT[x].PortFlag == "" && type == type2 && speed == speed2 && switchinfo[0] == switchinfo2[0] ){  /// L1 checking
-					var destPath = devices2.PORT[x].ObjectPath;
-					var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-//			    	        if(sourcePath != destPath){
-							dataArr = [];		    	        				
-						dataArr.push(name,sourcePath,destPath);
-						devices2.PORT[x].PortFlag = "true";
-						sourceFlag = "true";
-						break;
-						x =  devices2.PORT.length;
-//		                	}
-				}else if(type == type2 && switchinfo[0] == switchinfo2[0] && devices2.PORT[x].PortType == "L2" ){ // L2 checking
-					var destPath = devices2.PORT[x].ObjectPath;
-					var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-							dataArr = [];		    	        				
-					dataArr.push(name,sourcePath,destPath);
-					devices2.PORT[x].PortFlag = "true";
-					x =  devices2.PORT.length;
-					sourceFlag = "true";
-					break;
-				}
-			}
-
-		}
-		return dataArr;
-	}else if( devices2.SLOT){
-		dataArr =  destinationSlotChild(devices2, type,speed,sourcePath,switchinfo,sourceFlag);
-		return dataArr;
-	}else if(device2.RACK){
-
-	}else if(devices2.MODULE){
-
-	}
-}
-
-function destinationSlotChild(devices2,type,speed,sourcePath,switchinfo,sourceFlag){
-	
-	var dataArr=[];
-	for(var x = 0; x < devices2.SLOT.length; x++){
-		if(devices2.SLOT[x].MODULE){
-			for(var y=0; y < devices2.SLOT[x].MODULE.length; y++){
-				for(var z = 0; z < devices2.SLOT[x].MODULE[y].PORT.length; z++){
-					if(devices2.SLOT[x].MODULE[y].PORT[z].PortFlag == "" && devices2.SLOT[x].MODULE[y].PORT[z].PortType.toLowerCase() != 'open'){
-						var type2 = devices2.SLOT[x].MODULE[y].PORT[z].PortType;
-						var speed2 = devices2.SLOT[x].MODULE[y].PORT[z].Speed;
-						var switchinfo2 = devices2.SLOT[x].MODULE[y].PORT[z].SwitchInfo.split('^');
-						if(devices2.SLOT[x].MODULE[y].PORT[z].PortType == "L1" && devices2.SLOT[x].MODULE[y].PORT[z].PortFlag == "" && type == type2 && speed == speed2 && switchinfo[0] == switchinfo2[0] ){  /// L1 checking
-							var destPath = devices2.SLOT[x].MODULE[y].PORT[z].ObjectPath;
-							var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-//			    	        if(sourcePath != destPath){
-								dataArr = [];			    	        
-								dataArr.push(name,sourcePath,destPath);
-								devices2.SLOT[x].MODULE[y].PORT[z].PortFlag = "true";
-								sourceFlag = "true";
-								break;
-								x = devices2.SLOT.length;
-//		                	}
-						}else if(type == type2 && switchinfo[0] == switchinfo2[0] && devices2.SLOT[x].MODULE[y].PORT[z].PortType == "L2" ){ // L2 checking
-							var destPath = devices2.SLOT[x].MODULE[y].PORT[z].ObjectPath;
-							var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-//			    	        if(sourcePath != destPath){
-								dataArr = [];			    	        
-								dataArr.push(name,sourcePath,destPath);
-								devices2.SLOT[x].MODULE[y].PORT[z].PortFlag = "true";
-								sourceFlag = "true";
-								break;
-								x = devices2.SLOT.length;
-//		                	}
-						}
-					}
-
-				}
-
-			}
-		}else if(devices2.SLOT[x].PORT){
-			for(var x1=0; x1 < devices2.SLOT[x].PORT.length; x1++){
-				if(devices2.SLOT[x].PORT[x1].PortFlag == "" && devices2.SLOT[x].PORT[x1].PortType.toLowerCase() != 'open'){
-					var type2 = devices2.SLOT[x].PORT[x1].PortType;
-					var speed2 =devices2.SLOT[x].PORT[x1].Speed;
-					var switchinfo2 = devices2.SLOT[x].PORT[x1].SwitchInfo.split('^');
-					if(devices2.SLOT[x].PORT[x1].PortType == "L1" && devices2.SLOT[x].PORT[x1].PortFlag == "" && type == type2 && speed == speed2 && switchinfo[0] == switchinfo2[0] ){  /// L1 checking
-						var destPath = devices2.SLOT[x].PORT[x1].ObjectPath;
-						var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-//		    	        if(sourcePath != destPath){
-							dataArr = [];			    	        
-							dataArr.push(name,sourcePath,destPath);
-							devices2.SLOT[x].PORT[x1].PortFlag = "true";
-							sourceFlag = "true";
-							break;
-							x =  devices2.SLOT.length;
-//		               	}
-					}else if(type == type2 && switchinfo[0] == switchinfo2[0] && devices2.SLOT[x].PORT[x1].PortType == "L2" ){ // L2 checking
-						var destPath = devices2.SLOT[x].PORT[x1].ObjectPath;
-						var name= 't'+speed2.substring(0,speed2.length - 3)+'gb';
-//		    	        if(s	ourcePath != destPath){
-							dataArr = [];		    	        				
-							dataArr.push(name,sourcePath,destPath);
-							devices2.SLOT[x].PORT[x1].PortFlag = "true";
-							sourceFlag = "true";
-							break;
-							x =  devices2.SLOT.length;
-//		               	}
-
-					}
-				}
-
-			}
-		}
-	}
-	return dataArr;
-} 
 /*
  *
  *  FUNCTION NAME : checkAvailablePorts
@@ -16957,13 +16967,14 @@ function serverListPopupTable(load,tab){
 			if(globalDeviceType == "Mobile"){
 				loading("hide");
 				appendToDeviceListTable(data,condition,load,tab);
+				filterManageDevice();
 			}else{
 				appendToDeviceListTable2(data,condition,load,tab);
+				searchBoxDevList();
 			}
 		
 		}
 	 });
-	filterManageDevice();
 
 }
 
@@ -17032,8 +17043,14 @@ function linkBackBtn(){
 function chooseHubFull(type){
 	if(type == 'hub'){
 		$('#cbFull').prop('checked',false);		
+		$('#dlistApply').attr('disabled',false);
 	}else{
 		$('#cbHub').prop('checked',false);		
+
+		$('#dlistApply').attr('disabled',false);
+	}
+	if( $('#cbFull').is(':checked') == false && $('#cbHub').is(':checked') == false){
+		$('#dlistApply').attr('disabled',true);
 	}
 }
 
@@ -17864,6 +17881,7 @@ function gatherDataAutoD(type){
 				}
 			}
 			if($('#autoDPartnerInfoTableCont').is(':visible')){
+				data.PartnerSlotNumber = "";
 				$.each($('#autoDPartnerInfoTbody > tr'), function(index,object){
 					if(globalDeviceType == "Mobile") {
 						if(object.getAttribute('class')=='trAutoDP highlight'){
@@ -17951,6 +17969,7 @@ function gatherDataAutoD(type){
 				}
 			}
 			if($('#autoDTestTPartnerInfoTableCont').is(':visible')){
+				data.PartnerSlotNumber = "";
 				$.each($('#autoDTestTPartnerInfoTbody > tr'), function(index,object){
 					if(globalDeviceType=="Mobile"){
 						if(object.getAttribute('class')=='trAutoDP highlight'){
@@ -18174,7 +18193,6 @@ function checkPortSlotTotal(evt){
 			tmpcount += parseInt(object.children[3].getAttribute('value'));
 		}
 	});
-	console.log(tmpcount);
 }
 
 
@@ -25306,7 +25324,7 @@ function showConsolePopUp(device,devicesArr){
 		$("#Console" ).empty().load("pages/ConfigEditor/Chatbox2.html",function (event){
 			$(document).on("click", ".addtogroup",function(){
 				addUserToGroup();
-			});	
+			});
 			createDynamicTabForConsole(validDevices);
 		});
 	} 
@@ -25344,6 +25362,8 @@ function closeButtonPopUp(){
         	proccessData: false,
 	        async:false,
     	    success: function(data) {
+				clearInterval(setInt);
+	            setInt ="";
 			}
     	});
 
@@ -25386,7 +25406,7 @@ function createDynamicTabForConsole(device){
 	clearInterval(setInt);
 	globalRefresh = true;
     setInt = setInterval(function(){
-        loadConsole();
+        loadConsole(validDevices);
        	loadChatSession();
     },10000);
 }
@@ -25412,7 +25432,7 @@ function showSelectedOpenConsoleTab(device){
 	$("#open_"+device).removeClass("ui-state-default ui-corner-top");
 	$("#open_"+device).addClass("ui-tabs-active ui-state-active ui-corner-top");
 	getActiveUser();
-    loadConsole();
+    loadConsole(validDevices);
 }
 /*
  *
@@ -25605,7 +25625,6 @@ function savedatainsession(id){
 	closeDialog(id);
 	var sessionid = seletedSessionId.split("__");
 	var url = getURL('Console') + "action=putConsoleInvitation&query={'MAINCONFIG': [{'user': '"+globalUserName+"','addeduser': '"+addeduser+"','sessionid': '"+sessionid[1]+"'}]}";
-	console.log("url putConsoleInvitation >>>" + url);
     $.ajax({
         url: url,
         dataType: 'html',
@@ -25663,16 +25682,17 @@ function getActiveUser(){
 				}
 			}
 			str += "</select>";
-			console.log("ctr >>>" + ctr);
 			if(ctr > 1){
-				$("#activeusercontainer").html(str);
+				$("#activeusercontainer").empty().append(str);
 			}else if(ctr != 0){
-				$("#activeusercontainer").html(str2);
+				$("#activeusercontainer").empty().append(str2);
 				if($('#enableactiveuser').is(':checked') == false){	
 					$('#activeuserlabel').css('color','gray');
 				}else{
 					$('#activeuserlabel').css('color','black');
 				}
+			}else{
+				$("#activeusercontainer").empty();
 			}
 			if(creator == globalUserName && ctr > 1){
             	$("#selectActiveUser").removeAttr("disabled");
@@ -25681,11 +25701,14 @@ function getActiveUser(){
 			}
 			if(active == globalUserName){
             	$("#consoletext").removeAttr("disabled");
-				if(userArr.length > 0 && users != "" && globalUserName == creator){
+				if(users != "" && globalUserName == creator){
 					$('#enableactiveuser').show();
 				}else{
 					$('#enableactiveuser').hide();
 				}
+			}else if(globalUserName == creator){
+				$('#enableactiveuser').show();
+            	$("#consoletext").attr("disabled",true);
 			}else{
             	$("#consoletext").attr("disabled",true);
 				$('#enableactiveuser').hide();
@@ -25753,49 +25776,65 @@ function changeActiveUser(flag){
  *
  */
 function checkUserNotfication(){
-	setTimeout(function(){
-		var url = getURL('Console') + "action=getnotification&query={'MAINCONFIG': [{'username':'"+globalUserName+"'}]}";
-	   	$.ajax({
-    	   	url: url,
-        	dataType: 'html',
-	   	    method: 'POST',
-    	   	proccessData: false,
-        	async:false,
-	   	    success: function(data) {
-				console.log("data >>>" + data);
-				var dat = data.replace(/'/g,'"');
-			    var dat2 = $.parseJSON(dat);
-			    var row = dat2.MAINCONFIG[0];
-				if(row != null && row != undefined && row != ""){
-					var flag = row.flag;
-					var count = row.count;
-					if(flag == "true"){
-						consoleNotificationFlag = true;
-						if(count != "" && count != null && count != undefined){
-							count = parseInt(count);
-							if(count > 0){
-								$('#countnotification').empty().append(count);
-								$('#notificationConsole2').removeAttr('style');
-								$('#notificationConsole').removeAttr('style');
-								$('#notificationConsole').attr('style','display:none;');
-							}else{
-								$('#notificationConsole').removeAttr('style');
-								$('#notificationConsole2').removeAttr('style');
-								$('#notificationConsole2').attr('style','display:none;');
-							}
-						}	
-					}else{
-						consoleNotificationFlag = false;
-						$('#notificationConsole').removeAttr('style');
-						$('#notificationConsole2').removeAttr('style');
-						$('#notificationConsole2').attr('style','display:none');
-					}
+    clearInterval(getNotificationInterval);
+    getNotificationInterval ="";
+	getUserNotificationSession();
+	getNotificationInterval = setInterval(function(){
+		getUserNotificationSession();
+	},60000);
+}
+/*
+ *
+ *  FUNCTION NAME : getUserNotificationSession
+ *  AUTHOR        :	Juvindle C Tina
+ *  DATE          : March 26, 2014
+ *  MODIFIED BY   : 
+ *  REVISION DATE : 
+ *  REVISION #    : 
+ *  DESCRIPTION   : check notification console 
+ *  PARAMETERS    : 
+ *
+ */
+function getUserNotificationSession(){
+	var url = getURL('Console') + "action=getnotification&query={'MAINCONFIG': [{'username':'"+globalUserName+"'}]}";
+	$.ajax({
+       	url: url,
+       	dataType: 'html',
+	    method: 'POST',
+       	proccessData: false,
+       	async:false,
+	    success: function(data) {
+			var dat = data.replace(/'/g,'"');
+		    var dat2 = $.parseJSON(dat);
+		    var row = dat2.MAINCONFIG[0];
+			if(row != null && row != undefined && row != ""){
+				var flag = row.flag;
+				var count = row.count;
+				if(flag == "true"){
+					consoleNotificationFlag = true;
+					if(count != "" && count != null && count != undefined){
+						count = parseInt(count);
+						if(count > 0){
+							$('#countnotification').empty().append(count);
+							$('#notificationConsole2').removeAttr('style');
+							$('#notificationConsole').removeAttr('style');
+							$('#notificationConsole').attr('style','display:none;');
+						}else{
+							$('#notificationConsole').removeAttr('style');
+							$('#notificationConsole2').removeAttr('style');
+							$('#notificationConsole2').attr('style','display:none;');
+						}
+					}	
+				}else{
+					consoleNotificationFlag = false;
+					$('#notificationConsole').removeAttr('style');
+					$('#notificationConsole2').removeAttr('style');
+					$('#notificationConsole2').attr('style','display:none');
 				}
 			}
-   		});
-	},1000);
+		}
+   	});
 }
-
 /*
  *
  *  FUNCTION NAME : shownotification
@@ -25856,4 +25895,61 @@ function clearCanvasHistory(){
 	window['variableHistory'+pageCanvas] = [];
 	$("#historyDiv .ulDeco").html("");
 	$('#clearHistory').hide();
+}
+
+/*
+ #######################################################################
+ #
+ #  FUNCTION NAME : searchBoxDevList 
+ #  AUTHOR        : James Turingan
+ #  DATE          : March 31,2014
+ #  MODIFIED BY   : 
+ #  REVISION DATE :
+ #  REVISION #    : 
+ #  DESCRIPTION   : 
+ #  PARAMETERS    : 
+ #
+ #######################################################################
+*/
+function searchBoxDevList(){
+	var $rows = $('#manageConfigTablelocal tr:gt(0)');
+	$('.dFilter').keyup(function(){
+		var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+        	reg = RegExp(val, 'i'),
+        	text;
+	
+		var colval = $('#dlistddown option:selected').text();
+		var colval = $('#dlistddown').val();
+		var colnum = '';
+		if(colval == "hostname"){
+			colnum = 1
+		}else if(colval == "model"){
+			colnum = 5
+		}else if(colval == "managementip"){
+			colnum = 2
+		}else if(colval == "manufacturer"){
+			colnum = 4
+		}else if(colval == "consoleip"){
+			colnum = 3
+		}
+    	$rows.show().filter(function() {
+			if(colnum != ''){
+        		text = $(this).find("td").eq(colnum).text().replace(/\s+/g, ' ');
+			}else{
+        		text = $(this).text().replace(/\s+/g, ' ');
+			}
+        	return !reg.test(text);
+    	}).hide();
+
+	});
+}
+function highlightTr(tr,flag){
+	var tdArr = $(tr).find('td');
+	for(var xx=0; xx<tdArr.length; xx++){
+		if(flag){
+			$(tdArr[xx]).css({'background':'#c9e3f0','color':'#000'});
+		}else{
+			$(tdArr[xx]).css({'background':'','color':''});
+		}
+	}
 }

@@ -88,8 +88,12 @@ window['variable' + dynamicLineConnected2[pageCanvas]] = [];
 var loadConfigName = '';
 var dynamicGreenRouletteArr= ['greenRouletteArr'];
 window['variable' + dynamicGreenRouletteArr[pageCanvas]]=[];
-var fromNavigator = "";
-var globalscale = 1;
+window['globalNavigator0'] = {
+	'Stage': {'dragX': '0','dragY': '0','pdragX': '0','pdragY': '0','sdragX': '0','sdragY': '0'},
+    'MiniMap':{'rectX': '0', 'rectY': '0', 'prectX': '0', 'prectY': '0', 'srectX': '0', 'srectY': '0'},
+    'fromNavigator': '',
+    'Scale': '1'
+};
 /****varibale for main config *****/
 var GlobalSlotID = "";
 var GlobalPortIP = "";
@@ -409,17 +413,23 @@ var globaldate = '';
 var statId = [];
 
 /* ADMINISTRATION */
+var remActiveDom = new Array();
 var globalUserLoad = "";
 var globalAddUserPolIds = new Array();
 var globalSelectedAdminMain = new Array();
 var globalUserDomainIds = new Array();
+var globalUserDomain2Ids = new Array();
 var globalUserDomainNames = new Array();
+var globalUserDomain2Names = new Array();
 var globalUserZoneIds = new Array();
+var globalUserZone2Ids = new Array();
 var globalUserZoneNames = new Array();
+var globalUserZone2Names = new Array();
 var globalUserGroupIds = new Array();
+var globalUserGroup2Ids = new Array();
 var globalDynamicSelected = new Array();
 var globalAdminPage = "";
-var pagelimit = 10;
+var pagelimit = 20;
 var globalName = "";
 var globalDesc = "";
 var accRiAction = "";
@@ -483,6 +493,7 @@ var autoDcomplete = false;
 /* Open Console*/
 var sessionId = "";
 var setInt = "";
+var getNotificationInterval = "";
 var globalRefresh = false;
 var consoleNotificationFlag = false;
 var typeID = "";

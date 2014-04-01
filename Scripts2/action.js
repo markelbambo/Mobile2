@@ -749,26 +749,31 @@ function cancelReservation(flag){
 	                var obj = jQuery.parseJSON(data);
 					if(obj.MAINCONFIG != null && obj.MAINCONFIG != undefined && obj.MAINCONFIG != ""){
     	            	removespecificconfig();
+						console.log("flag >>>" + flag);
 						if(flag != true){
 		                	getDataFromJSON(obj);
+							globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Interval = "";
+							globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Iteration = "";
+							globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DateTIME = "";
+							globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ReservationType = "";
+					    	globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Offset = "";
+							window['variable' + dynamicOtherUser[pageCanvas]]="";;
+							createConfigName();
+
+						}else{
+							drawImage();
 						}
-						globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Interval = "";
-					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Iteration = "";
-					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].DateTIME = "";
-					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].ReservationType = "";
-					    globalMAINCONFIG[pageCanvas].MAINCONFIG[0].Offset = "";
-						window['variable' + dynamicOtherUser[pageCanvas]]="";;
-						createConfigName();
+						setTimeout(function(){
+							if(globalDeviceType == "Mobile"){
+			            		loading('hide');
+						    }else{
+								ajaxLoader('hide');
+							}
+						},300);
 					}else{
 						checkProcessExecuted(obj,flag);	
 					}
-				}
-				if(globalDeviceType == "Mobile"){
-            		loading('hide');
-			    }else{
-					ajaxLoader('hide');
-				}
-
+				}	
         	}
      	});
 	}
@@ -1274,6 +1279,7 @@ function checkProcessExecuted(data,flag){
 		}else if(resultData == "databasetimeout"){
 			alerts("Cannot continue the process.\n Unable to connect to the database","Notification");
 		}else if(resultData.match(/Alert/gi) != null){
+			console.log("device >>>" + resultData);
 			alerts(resultData,"Notification");
 		}
 
